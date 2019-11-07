@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Cfhs_StationSet</class>
+ <widget class="QDialog" name="Cfhs_StationSet">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1018</width>
+    <height>738</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>工位设置</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,4">
+   <item>
+    <widget class="QListWidget" name="stationListWidget"/>
+   </item>
+   <item>
+    <widget class="QFrame" name="stationFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1,0,1">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="stationBaseLabel">
+        <property name="text">
+         <string>工位基础信息设置</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="stationIpLabel">
+          <property name="text">
+           <string>工位IP地址设置：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="stationIpLineEdit"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="stationEnableLabel">
+          <property name="text">
+           <string>工位检测启用（开/关）：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="stationEnablePushButton"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="stationPortLabel">
+          <property name="text">
+           <string>工位端口（Port）设置：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="stationPortSpinBox"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="defectNumLabel">
+          <property name="text">
+           <string>缺陷数量设置：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="defectNumSpinBox"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="stationDefectLabel">
+        <property name="text">
+         <string>工位缺陷定义设置</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Cfhs_Frame" name="defectFrame"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="stationNgLabel">
+        <property name="text">
+         <string>工位NG判定</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Cfhs_Frame" name="ngFrame"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Cfhs_Frame</class>
+   <extends>QFrame</extends>
+   <header location="global">cfhs_frame.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Cfhs_MainWindow</class>
+ <widget class="QMainWindow" name="Cfhs_MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1237</width>
+    <height>779</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Cfhs_MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,0">
+    <property name="spacing">
+     <number>6</number>
+    </property>
+    <property name="leftMargin">
+     <number>4</number>
+    </property>
+    <property name="topMargin">
+     <number>4</number>
+    </property>
+    <property name="rightMargin">
+     <number>4</number>
+    </property>
+    <property name="bottomMargin">
+     <number>4</number>
+    </property>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>30</number>
+        </property>
+        <property name="leftMargin">
+         <number>4</number>
+        </property>
+        <property name="topMargin">
+         <number>4</number>
+        </property>
+        <property name="rightMargin">
+         <number>4</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="programPushButton"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="programTextLabel">
+          <property name="text">
+           <string>图标</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="userImageLabel">
+          <property name="minimumSize">
+           <size>
+            <width>36</width>
+            <height>36</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>36</width>
+            <height>36</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>图标</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="userTextLabel">
+          <property name="text">
+           <string>操作员</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="sysStatusLabel">
+          <property name="text">
+           <string>系统状态</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="startPushButton">
+          <property name="text">
+           <string>开始</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="stopPushButton">
+          <property name="text">
+           <string>暂停</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="connectPushButton">
+          <property name="text">
+           <string>连接</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="closePushButton">
+          <property name="text">
+           <string>关闭</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,1">
+        <property name="leftMargin">
+         <number>9</number>
+        </property>
+        <property name="topMargin">
+         <number>9</number>
+        </property>
+        <property name="rightMargin">
+         <number>9</number>
+        </property>
+        <property name="bottomMargin">
+         <number>9</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3,1">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QFrame" name="leftFrame">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1">
+             <property name="leftMargin">
+              <number>6</number>
+             </property>
+             <property name="topMargin">
+              <number>6</number>
+             </property>
+             <property name="rightMargin">
+              <number>6</number>
+             </property>
+             <property name="bottomMargin">
+              <number>6</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,0,0,0,0,0,0,1">
+               <property name="spacing">
+                <number>10</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="functionPushButton"/>
+               </item>
+               <item>
+                <widget class="QLabel" name="functionLabel">
+                 <property name="text">
+                  <string>功能</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="controlPushButton"/>
+               </item>
+               <item>
+                <widget class="QLabel" name="controlLabel">
+                 <property name="text">
+                  <string>控制</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="settingPushButton"/>
+               </item>
+               <item>
+                <widget class="QLabel" name="settingLabel">
+                 <property name="text">
+                  <string>设置</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="helpPushButton"/>
+               </item>
+               <item>
+                <widget class="QLabel" name="helpLabel">
+                 <property name="text">
+                  <string>帮助</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="Cfhs_Frame" name="taskFrame">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,1">
+               <item>
+                <widget class="Cfhs_Frame" name="mainFrame">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
+                 <item>
+                  <widget class="Cfhs_Frame" name="zoomFrame">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_8">
+                   <item>
+                    <widget class="Cfhs_Frame" name="sub1Frame">
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="Cfhs_Frame" name="sub2Frame">
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="Cfhs_Frame" name="sub3Frame">
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="2,1">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="Cfhs_Frame" name="featureFormFrame">
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Cfhs_Frame" name="RoiFrame">
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QFrame" name="rightFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,2,1,6">
+           <property name="spacing">
+            <number>15</number>
+           </property>
+           <property name="leftMargin">
+            <number>4</number>
+           </property>
+           <property name="topMargin">
+            <number>4</number>
+           </property>
+           <property name="rightMargin">
+            <number>4</number>
+           </property>
+           <property name="bottomMargin">
+            <number>4</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,1,0,1,0">
+             <property name="spacing">
+              <number>20</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <spacer name="horizontalSpacer_10">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="readCodePushButton"/>
+             </item>
+             <item>
+              <widget class="QLabel" name="readCodeLabel">
+               <property name="text">
+                <string>解码率80%</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="mesReportPushButton"/>
+             </item>
+             <item>
+              <widget class="QLabel" name="mesReportLabel">
+               <property name="text">
+                <string>上报率90%</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_9">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <spacer name="horizontalSpacer_11">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="resultLabel">
+               <property name="text">
+                <string>结果输出：</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="normalRadioButton">
+               <property name="text">
+                <string>正常</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="okRadioButton">
+               <property name="text">
+                <string>强制OK</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_7">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="ngRadioButton">
+               <property name="text">
+                <string>强制NG</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_8">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="Cfhs_Frame" name="resultFrame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Cfhs_Frame" name="batchFormFrame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Cfhs_Frame" name="batchChartFrame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="Cfhs_Frame" name="sideFrame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>Cfhs_Frame</class>
+   <extends>QFrame</extends>
+   <header location="global">cfhs_frame.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

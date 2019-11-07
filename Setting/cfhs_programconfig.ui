@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Cfhs_ProgramConfig</class>
+ <widget class="QMainWindow" name="Cfhs_ProgramConfig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1131</width>
+    <height>766</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>产品方案配置</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1">
+    <item>
+     <widget class="Cfhs_Frame" name="windowFrame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="stationAddPushButton">
+          <property name="text">
+           <string>添加工位</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="stationDelPushButton">
+          <property name="text">
+           <string>删除工位</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="stationSetPushButton">
+          <property name="text">
+           <string>工位设置</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="Cfhs_Frame" name="toolFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+          <item>
+           <widget class="Cfhs_Frame" name="processFrame">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="outputGroupBox">
+            <property name="title">
+             <string>结果输出工具类</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <property name="spacing">
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="resloutionSetPushButton">
+               <property name="text">
+                <string>结果图像标定（分辨率设置）</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1">
+               <item>
+                <widget class="QCheckBox" name="stationsJudgeCheckBox"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="stationJudgePushButton">
+                 <property name="text">
+                  <string>工位判定逻辑</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
+               <item>
+                <widget class="QCheckBox" name="ngFilterCheckBox"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="ngFilterPushButton">
+                 <property name="text">
+                  <string>NG筛选</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:16px;
+font-family:Mircosoft Yahei;
+font-weight:bold;
+color:#0077FF;
+</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="newProgramAction"/>
+   <addaction name="readProgramAction"/>
+   <addaction name="saveProgramAction"/>
+   <addaction name="deleteProgramAction"/>
+  </widget>
+  <action name="newProgramAction">
+   <property name="icon">
+    <iconset resource="../Resource/resource.qrc">
+     <normaloff>:/new_file_normal.png</normaloff>:/new_file_normal.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
+  <action name="readProgramAction">
+   <property name="icon">
+    <iconset resource="../Resource/resource.qrc">
+     <normaloff>:/read_file_normal.png</normaloff>:/read_file_normal.png</iconset>
+   </property>
+   <property name="text">
+    <string>读取</string>
+   </property>
+  </action>
+  <action name="saveProgramAction">
+   <property name="icon">
+    <iconset resource="../Resource/resource.qrc">
+     <normaloff>:/save_file_normal.png</normaloff>:/save_file_normal.png</iconset>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="deleteProgramAction">
+   <property name="icon">
+    <iconset resource="../Resource/resource.qrc">
+     <normaloff>:/delete_file_normal.png</normaloff>:/delete_file_normal.png</iconset>
+   </property>
+   <property name="text">
+    <string>删除</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Cfhs_Frame</class>
+   <extends>QFrame</extends>
+   <header location="global">cfhs_frame.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../Resource/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
