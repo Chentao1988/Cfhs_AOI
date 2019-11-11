@@ -41,7 +41,6 @@
         <file>import_normal.png</file>
         <file>import_press.png</file>
         <file>lang_En.ts</file>
-        <file>lang_Fr.ts</file>
         <file>load_normal.png</file>
         <file>load_press.png</file>
         <file>logo.png</file>
@@ -117,5 +116,6 @@
         <file>line_edit_password.png</file>
         <file>line_edit_user.png</file>
         <file>login_show.png</file>
+        <file>lang_Cht.ts</file>
     </qresource>
 </RCC>

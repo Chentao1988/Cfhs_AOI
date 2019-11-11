@@ -12,6 +12,8 @@ class Cfhs_AlgorithmTable;
 //算法膨胀滤波
 class Cfhs_WaveFilterConfig : public QDialog
 {
+    Q_OBJECT
+
 public:
     Cfhs_WaveFilterConfig(QWidget *parent = nullptr);
     ~Cfhs_WaveFilterConfig();

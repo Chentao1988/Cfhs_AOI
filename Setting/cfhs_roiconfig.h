@@ -9,6 +9,8 @@ class QPushButton;
 
 class Cfhs_RoiConfig : public QDialog
 {
+    Q_OBJECT
+
 public:
     Cfhs_RoiConfig(QWidget *parent = nullptr);
     ~Cfhs_RoiConfig();

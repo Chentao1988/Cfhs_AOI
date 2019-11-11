@@ -399,25 +399,6 @@ void Cfhs_MainWindow::helpInit()
     m_listConsumablesAction = new QAction(tr("易损件清单"), this);
     connect(m_listConsumablesAction, &QAction::triggered,
             this, &Cfhs_MainWindow::listConsumablesAction_triggered);
-    //简体中文
-    m_langSimpChAction = new QAction(tr("简体中文"), this);
-    m_langSimpChAction->setCheckable(true);
-    m_langSimpChAction->setChecked(true);
-    connect(m_langSimpChAction, &QAction::triggered,
-            this, &Cfhs_MainWindow::langSimpChAction_triggered);
-    //英文
-    m_langEnAction = new QAction(tr("英文"), this);
-    m_langEnAction->setCheckable(true);
-    connect(m_langEnAction, &QAction::triggered,
-            this, &Cfhs_MainWindow::langEnAction_triggered);
-    //添加到langMenu中
-    m_langMenu = new QMenu(tr("软件语言设置"), this);
-    m_langMenu->addAction(m_langEnAction);
-    m_langMenu->addAction(m_langSimpChAction);
-    //添加到ActionGroup中
-    m_langGroup = new QActionGroup(this);
-    m_langGroup->addAction(m_langEnAction);
-    m_langGroup->addAction(m_langSimpChAction);
     //远程协助
     m_teamviewerAction = new QAction(tr("远程协助"), this);
     connect(m_teamviewerAction, &QAction::triggered,
@@ -427,7 +408,6 @@ void Cfhs_MainWindow::helpInit()
     m_helpMenu->addAction(m_faultManualAction);
     m_helpMenu->addAction(m_softManualAction);
     m_helpMenu->addAction(m_listConsumablesAction);
-    m_helpMenu->addMenu(m_langMenu);
     m_helpMenu->addAction(m_teamviewerAction);
     //设置到button上
     ui->helpPushButton->setMenu(m_helpMenu);
@@ -469,60 +449,6 @@ bool Cfhs_MainWindow::setProgram(const stProgramme &stPro)
     m_roiTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     //良率统计表
     m_batchChart->clearContent();
-#if 0
-    QString strHourName = "";
-    const int num  = 12;
-    for(int i=0; i<num; i++)
-    {
-        QString str = "";
-        if(i<(num-1))
-            str = QString("%1#").arg(i+1);
-        else
-            str = QString("%1").arg(i+1);
-        strHourName.append(str);
-    }
-    QString strHourInput = "";
-    for(int i=0; i<num; i++)
-    {
-        QString str = "";
-        if(i<(num-1))
-            str = QString("%1#").arg(5*(i+1)*20+12*i);
-        else
-            str = QString("%1").arg(5*(i+1)*20+12*i);
-        strHourInput.append(str);
-    }
-    QString strHourYield = "" ;
-    for(int i=0; i<num; i++)
-    {
-        QString str = "";
-        if(i<(num-1))
-        {
-            if(i%2)
-                str = QString("%1#").arg(3*(i+1)+8);
-            else
-                str = QString("%1#").arg(5*(i+1)-2);
-        }
-        else
-            str = QString("%1").arg(3*(i+1)+8);
-        strHourYield.append(str);
-    }
-    QString strTotalYield = "";
-    for(int i=0; i<num; i++)
-    {
-        QString str = "";
-        if(i<(num-1))
-        {
-            if(i%2)
-                str = QString("%1#").arg((12-i)*(i+1)+8);
-            else
-                str = QString("%1#").arg(3*(i+1)+50-i);
-        }
-        else
-            str = QString("%1").arg(5*(i+1)+8);
-        strTotalYield.append(str);
-    }
-    m_batchChart->setData(strHourName, strHourInput, strHourYield, strTotalYield);
-#endif
     //缺陷小图
     m_defectSmallImage[0]->clearContent();
     m_defectSmallImage[1]->clearContent();
@@ -538,19 +464,19 @@ bool Cfhs_MainWindow::setProgram(const stProgramme &stPro)
     QString strFeature;
     //默认添加“产品ID”，“缺陷排序ID”，“缺陷名称”
     QStringList realFeatureList;
-    if(m_currentLang == SimplifiedChinese)
-    {
-        strFeature = stFeat.strCH;
-        realFeatureList.append("产品ID");
-        realFeatureList.append("缺陷排序ID");
-        realFeatureList.append("缺陷名称");
-    }
-    else
+    if(m_currentLang == English)
     {
         strFeature = stFeat.strEN;
         realFeatureList.append("Product ID");
         realFeatureList.append("Defect ID");
         realFeatureList.append("Defect name");
+    }
+    else
+    {
+        strFeature = stFeat.strCH;
+        realFeatureList.append("产品ID");
+        realFeatureList.append("缺陷排序ID");
+        realFeatureList.append("缺陷名称");
     }
     QStringList listFeature = getListFromQString(strFeature);
     realFeatureList.append(listFeature);
@@ -1196,16 +1122,6 @@ void Cfhs_MainWindow::softManualAction_triggered()
 }
 
 void Cfhs_MainWindow::listConsumablesAction_triggered()
-{
-
-}
-
-void Cfhs_MainWindow::langSimpChAction_triggered()
-{
-
-}
-
-void Cfhs_MainWindow::langEnAction_triggered()
 {
 
 }

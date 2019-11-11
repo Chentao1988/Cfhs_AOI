@@ -99,10 +99,10 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
     }
     QString strFeature;
     QStringList realFeatureList;
-    if(m_currentLang == SimplifiedChinese)
-        strFeature = stFeat.strCH;
-    else
+    if(m_currentLang == English)
         strFeature = stFeat.strEN;
+    else
+        strFeature = stFeat.strCH;
     m_featureList = getListFromQString(strFeature);
     //更新到流程栏中
     m_processBar->setStationList(m_stationList);

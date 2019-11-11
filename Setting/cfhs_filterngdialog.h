@@ -10,6 +10,8 @@ class QPushButton;
 
 class Cfhs_FilterNgDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
     Cfhs_FilterNgDialog(const QStringList &featureList, QWidget *parent = nullptr);
     ~Cfhs_FilterNgDialog();

@@ -11,6 +11,8 @@ class QPushButton;
 //该类主要用于修改缺陷名称
 class Cfhs_ModifyDefectNameWidget : public QDialog
 {
+    Q_OBJECT
+
 public:
     Cfhs_ModifyDefectNameWidget(const QString& curName, QWidget *parent = nullptr);
     ~Cfhs_ModifyDefectNameWidget();

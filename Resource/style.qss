@@ -5,6 +5,7 @@
     font-family:"Microsoft YaHei";
     color: #2193AB;
 }
+
 /*  item内置的是QLineEdit */
 QTableView::item
 {
@@ -24,6 +25,13 @@ QTableView::item::selected:!active
     color: #0077FF;
 }
 
+/* 用于QTableView::item::selected:!active状态显示  */
+QTableView QLineEdit:hover, QTableView QLineEdit:focus
+{
+    background: #0077FF;
+    color: lightGray;
+}
+
 QLineEdit
 {
     background:transparent;
@@ -36,11 +44,9 @@ QLineEdit
     padding-left:4px;
 }
 
-/* 用于QTableView::item::selected:!active状态显示  */
-QLineEdit:hover, QLineEdit:focus
+QLineEdit:hover
 {
-    background: #0077FF;
-    color: lightGray;
+    color: #2193AB;
 }
 
 /*  表格左上角样式 */
@@ -234,7 +240,6 @@ QPushButton
     font-family: "Microsoft YaHei";
     font-size: 16px;
     padding: 2px;  /* 内边距 */
-    width: 60px;
 }
 
 QPushButton:normal
@@ -534,8 +539,8 @@ QTabBar::tab
     border:1px solid #419CF8;
     border-top-left-radius:4px;
     border-top-right-radius:4px;
-    width:60px;
-    height:22px;
+    min-width:60px;
+    min-height:22px;
     font-size: 16px;
     font-family: Mircosoft Yahei;
     padding: 2px;
@@ -552,7 +557,7 @@ QTabBar::tab:hover
 /* 标签被选中时 */
 QTabBar::tab:selected
 {
-    border:none;
+    border:1px solid red;
     background:#3954C9;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -600,5 +605,6 @@ QToolTip
     border: 1px solid #0077FF;
     background: #071C50;
     color: #0077FF;
+    font-size: 16px;
+    font-family: Mircosoft Yahei;
 }
-

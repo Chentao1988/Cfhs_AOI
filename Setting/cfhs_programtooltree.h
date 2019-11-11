@@ -12,6 +12,8 @@ class QPoint;
 
 class Cfhs_ProgramToolTree : public QTreeWidget
 {
+    Q_OBJECT
+
 public:
     Cfhs_ProgramToolTree(QWidget *parent = nullptr);
     ~Cfhs_ProgramToolTree();

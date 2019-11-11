@@ -424,7 +424,7 @@ bool Cfhs_TableWidget::exportToExcel(const QString& filename, const int& topRow,
         vrange.append("A2:");
         vrange.append(columnCount - 1 + 'A');
         vrange.append(QString::number(rowCount + 1));
-        range = worksheet->querySubObject("Range(const QString )", vrange);
+        range = worksheet->querySubObject("Range(const QString&)", vrange);
         range->dynamicCall("SetValue(const QVariant&)", varData);
 #endif
 

@@ -7,6 +7,8 @@
 //该类主要用于设置算法参数表
 class Cfhs_AlgorithmTable : public QTableWidget
 {
+    Q_OBJECT
+
 public:
     Cfhs_AlgorithmTable(QWidget *parent = nullptr);
     ~Cfhs_AlgorithmTable();

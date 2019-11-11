@@ -17,6 +17,8 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QFrame>
+#include <QEvent>
+#include <QTranslator>
 
 
 Cfhs_LoginDialog::Cfhs_LoginDialog(QWidget *parent) :
@@ -41,6 +43,57 @@ PermissionEnum Cfhs_LoginDialog::getUserPermission()
     return m_user.m_Permission;
 }
 
+void Cfhs_LoginDialog::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange)
+    {
+        QString windownTitle = "";
+        QString title1 = "";
+        QString title2 = "";
+        QString strPd = "";
+        QString strLogin = "";
+        QStringList listUser;
+        if(m_currentLang == English)
+        {
+            windownTitle = "CFHS";
+            title1 = "Screen defect detection";
+            title2 = "Technology enhances product quality\n"
+                     "      Creates customer value";
+            strPd = "Password modify";
+            strLogin = "Login";
+            listUser.append("Administrator");
+            listUser.append("Operator");
+        }
+        else if(m_currentLang == TraditionalChinese)
+        {
+            windownTitle = "創富華視";
+            title1 = "屏幕缺陷檢測";
+            title2 = "科技提升產品質量，創造客戶價值";
+            strPd = "修改密碼";
+            strLogin = "登錄";
+            listUser.append("管理員");
+            listUser.append("操作員");
+        }
+        else if(m_currentLang == SimplifiedChinese)
+        {
+            windownTitle = "创富华视";
+            title1 = "屏幕缺陷检测";
+            title2 = "科技提升产品质量，创造客户价值";
+            strPd = "修改密码";
+            strLogin = "登录";
+            listUser.append("管理员");
+            listUser.append("操作员");
+        }
+        this->setWindowTitle(windownTitle);
+        m_title1Label->setText(title1);
+        m_title2Label->setText(title2);
+        m_modifyPwdButton->setText(strPd);
+        m_loginButton->setText(strLogin);
+        m_userComboBox->clear();
+        m_userComboBox->addItems(listUser);
+    }
+}
+
 void Cfhs_LoginDialog::setWindowStyle()
 {
     //logo显示
@@ -59,17 +112,28 @@ void Cfhs_LoginDialog::setWindowStyle()
                                   "background:transparent;border:none;color:#0077FF;"
                                   "font-size:18px; font-family:Mircosoft Yahei;"
                                   "padding-left:50px; font-weight:blod;border-radius:0px;}"
-                                  "QComboBox:hover{color: black;}"
                                   "QComboBox::drop-down{background:transparent; border:none;}"
                                   "QComboBox::down-arrow{image: url(:/login_combo_arrow.png)}"
                                   "QListView{background:white;border:none;}"
                                   "QListView::item{background:transparent; color:#0077FF;"
-                                  "border-left:1px solid #c2c2c2; font-size:18px;"
-                                  "border-bottom: 1px solid #c2c2c2;height:30px;"
+                                  "border:1px solid #c2c2c2; font-size:18px;"
+                                  "border-top: none;height:30px;"
                                   "font-family:Mircosoft Yahei;}"
                                   "QListView::item:selected{background:#0077FF; color:white;}");
     m_userComboBox->setFixedSize(300, 32);
-    m_userLabel->setFixedSize(100, 32);
+    //语言切换
+    m_langCombo->setStyleSheet("QComboBox{background:transparent;border:1px solid #c2c2c2;"
+                                  "border-radius:6px; color:#0077FF; height:30px;"
+                                  "font-size:18px; font-family:Mircosoft Yahei;"
+                                  "padding-left:6px; font-weight:blod;border-radius:0px;}"
+                                  "QComboBox::drop-down{background:transparent; border:none;}"
+                                  "QComboBox::down-arrow{image: url(:/login_combo_arrow.png)}"
+                                  "QListView{background:white;border:none;}"
+                                  "QListView::item{background:transparent; color:#0077FF;"
+                                  "border:1px solid #c2c2c2; font-size:18px;"
+                                  "border-top: none;height:30px;"
+                                  "font-family:Mircosoft Yahei;}"
+                                  "QListView::item:selected{background:#0077FF; color:white;}");
     //密码
     m_pwdLineEdit->setStyleSheet("QLineEdit{border-image: url(:/line_edit_password.png);"
                                  "background:transparent;border:none;color:#0077FF;"
@@ -81,9 +145,8 @@ void Cfhs_LoginDialog::setWindowStyle()
     //修改密码
     m_modifyPwdButton->setStyleSheet("QPushButton{background:transparent; border:none;"
                                      "color:#0077FF; font-size:18px; font-family:Mircosoft Yahei;"
-                                     "padding: 2px 2px;}"
+                                     "padding: 0px 0px;}"
                                      "QPushButton:pressed{color:black;}");
-    m_modifyPwdButton->setFixedSize(100, 32);
     //登录
     m_loginButton->setStyleSheet("QPushButton{background:#0077FF; border:none;"
                                  "color:white; font-size:26px; font-family:Mircosoft Yahei;"
@@ -118,19 +181,27 @@ void Cfhs_LoginDialog::init()
     showLayout->setSpacing(20);
     m_showFrame->setLayout(showLayout);
     //账号
-    m_userLabel = new QLabel(this);
     QStringList userList;
     userList.append(tr("管理员"));
     userList.append(tr("操作员"));
     m_userComboBox = new Cfhs_ComboBox(this);
     m_userComboBox->addItems(userList);
     m_userComboBox->setCurrentIndex(0);
+    //语言切换
+    m_langCombo = new Cfhs_ComboBox(this);
+    QStringList langList;
+    langList.append("English");
+    langList.append("简体中文");
+    langList.append("繁體中文");
+    m_langCombo->addItems(langList);
+    m_langCombo->setCurrentIndex(1);
+    m_translator = new QTranslator(this);
+    connect(m_langCombo, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(on_langCombo_currentIndex_changed(int)));
     QPointer<QHBoxLayout> userLayout = new QHBoxLayout();
-    userLayout->addStretch(2);
     userLayout->addWidget(m_userComboBox);
-    userLayout->addWidget(m_userLabel);
-    userLayout->addStretch(1);
-    userLayout->setSpacing(10);
+    userLayout->addWidget(m_langCombo);
+    userLayout->setSpacing(20);
     //密码
     m_pwdLineEdit = new QLineEdit(this);
     m_pwdLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
@@ -138,17 +209,21 @@ void Cfhs_LoginDialog::init()
     //修改密码
     m_modifyPwdButton = new QPushButton(tr("修改密码"), this);
     QPointer<QHBoxLayout> pwdLayout = new QHBoxLayout();
-    pwdLayout->addStretch(2);
     pwdLayout->addWidget(m_pwdLineEdit);
     pwdLayout->addWidget(m_modifyPwdButton);
-    pwdLayout->addStretch(1);
-    pwdLayout->setSpacing(10);
+    pwdLayout->setSpacing(20);
+    QPointer<QVBoxLayout> contentLayout = new QVBoxLayout;
+    contentLayout->addLayout(userLayout);
+    contentLayout->addLayout(pwdLayout);
+    QPointer<QHBoxLayout> midLayout = new QHBoxLayout;
+    midLayout->addStretch();
+    midLayout->addLayout(contentLayout);
+    midLayout->addStretch();
     //登录
     m_loginButton = new QPushButton(tr("登录"), this);
     m_loginButton->setDefault(true);
     QPointer<QVBoxLayout> bottomLayout = new QVBoxLayout;
-    bottomLayout->addLayout(userLayout);
-    bottomLayout->addLayout(pwdLayout);
+    bottomLayout->addLayout(midLayout);
     bottomLayout->addWidget(m_loginButton);
     bottomLayout->setSpacing(20);
     bottomLayout->setContentsMargins(20, 0, 20, 0);
@@ -224,4 +299,52 @@ void Cfhs_LoginDialog::on_userComboBox_currentIndexChanged(int index)
     m_pwdLineEdit->setEnabled(isUsed);
     if(!isUsed)
         m_pwdLineEdit->clear();
+}
+
+void Cfhs_LoginDialog::on_langCombo_currentIndex_changed(int index)
+{
+    if(index < 0)
+        return;
+    switch (index)
+    {
+    case 0:
+        m_currentLang = English;
+        break;
+    case 1:
+        m_currentLang = SimplifiedChinese;
+        break;
+    case 2:
+        m_currentLang = TraditionalChinese;
+        break;
+    default:
+        m_currentLang = English;
+        break;
+    }
+    //加载翻译器
+    if(m_currentLang == SimplifiedChinese)
+        qApp->removeTranslator(m_translator);
+    else
+    {
+        QString path = "";
+        if(m_currentLang == English)
+        {
+            path = QCoreApplication::applicationDirPath()+"/Resource/lang_En.qm";
+            if(!m_translator->load(path))
+            {
+                QMessageBox::warning(this, " ", "Loading translator failed");
+                return;
+            }
+        }
+        else if(m_currentLang == TraditionalChinese)
+        {
+            path = QCoreApplication::applicationDirPath()+"/Resource/lang_Cht.qm";
+            if(!m_translator->load(path))
+            {
+                QMessageBox::warning(this, " ", "加載翻譯文件失敗");
+                return;
+            }
+        }
+        //切换语言
+        qApp->installTranslator(m_translator);
+    }
 }

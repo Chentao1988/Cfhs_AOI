@@ -106,7 +106,7 @@ RESOURCES += \
     Resource/resource.qrc
 
 TRANSLATIONS += Resource/lang_En.ts \
-                Resource/lang_Fr.ts
+                Resource/lang_Cht.ts
 
 include(Function/Function.pri);
 include(Control/Control.pri);

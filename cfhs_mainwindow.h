@@ -198,8 +198,6 @@ private:
     void faultManualAction_triggered(); //常用问题sop
     void softManualAction_triggered(); //软件使用说明书
     void listConsumablesAction_triggered(); //易损件清单
-    void langSimpChAction_triggered();  //简体中文
-    void langEnAction_triggered(); //英文
     void teamviewerAction_triggered();  //远程协助
 
 private slots:
@@ -286,10 +284,6 @@ private:
     QPointer<QAction> m_faultManualAction; //常用问题sop
     QPointer<QAction> m_softManualAction; //软件使用说明书
     QPointer<QAction> m_listConsumablesAction; //易损件清单
-    QPointer<QAction> m_langSimpChAction;  //简体中文
-    QPointer<QAction> m_langEnAction; //英文
-    QPointer<QMenu> m_langMenu;
-    QPointer<QActionGroup> m_langGroup;
     QPointer<QAction> m_teamviewerAction;  //远程协助
     //配置功能项
     QPointer<QMenu> m_functionMenu;

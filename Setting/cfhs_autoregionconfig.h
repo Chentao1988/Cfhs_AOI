@@ -12,6 +12,8 @@ class Cfhs_AlgorithmTable;
 //算法自动AA区
 class Cfhs_AutoRegionConfig : public QDialog
 {
+    Q_OBJECT
+
 public:
     Cfhs_AutoRegionConfig(QWidget *parent = nullptr);
     ~Cfhs_AutoRegionConfig();

@@ -12,6 +12,8 @@ class Cfhs_AlgorithmTable;
 //算法瑕疵检测，黄工版
 class Cfhs_DefectConfig_hjh : public QDialog
 {
+    Q_OBJECT
+
 public:
     Cfhs_DefectConfig_hjh(QWidget *parent = nullptr);
     ~Cfhs_DefectConfig_hjh();
