@@ -10,11 +10,14 @@ class lineedit_button:public QWidget
 {
     Q_OBJECT
 public:
-    lineedit_button(QString text,QWidget *parent = nullptr);
+    enum FileType{FileImage, FileCcf};
+    lineedit_button(QString text,QWidget *parent = nullptr,
+                    const lineedit_button::FileType &type = FileImage);
     ~lineedit_button();
 private:
     QLineEdit * lineedit;
     QLabel *label_text;
+    FileType file_type;
 public slots:
     void button_click();
     QString Get_Text();

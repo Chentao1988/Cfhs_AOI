@@ -1,8 +1,8 @@
 ﻿#include "lineedit_button.h"
 #pragma execution_character_set("utf-8")
 
-lineedit_button::lineedit_button(QString text,QWidget *parent) :
-    QWidget(parent)
+lineedit_button::lineedit_button(QString text, QWidget *parent, const FileType &type)
+    : QWidget(parent), file_type(type)
 {
     resize(200,100);
     QHBoxLayout * layout_all = new QHBoxLayout();
@@ -20,6 +20,7 @@ lineedit_button::lineedit_button(QString text,QWidget *parent) :
     lineedit->setLayout(layout);
     layout_all->addWidget(label_text,0,Qt::AlignLeft);
     layout_all->addWidget(lineedit);
+    layout_all->setContentsMargins(0,0,0,0);
     setLayout(layout_all);
     connect(button,SIGNAL(clicked()),this,SLOT(button_click()));
 }
@@ -31,7 +32,11 @@ lineedit_button::~lineedit_button()
 
 void lineedit_button::button_click()
 {
-    QString file_path = QFileDialog::getOpenFileName(this, tr("请选择图片"), "", "Image(*.png *.jpg *.bmp)");
+    QString file_path = "";
+    if(file_type == FileImage)
+        file_path = QFileDialog::getOpenFileName(this, tr("请选择图片"), "", "Image(*.png *.jpg *.bmp)");
+    else if(file_type == FileCcf)
+        file_path = QFileDialog::getOpenFileName(this, tr("请选择相机配置文件"), "", "Config file(*.ccf)");
     lineedit->setText(file_path);
 }
 

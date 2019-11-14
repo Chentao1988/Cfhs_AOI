@@ -86,6 +86,7 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
                 QMessageBox::warning(this, " ", strInfo);
                 return false;
             }
+            qDebug()<<"Read station" << station.strToolPara;
             //添加到list中
             m_stationList.append(station);
         }
@@ -143,8 +144,8 @@ void Cfhs_ProgramConfig::init()
     m_stationSetWidget = new Cfhs_StationSet(this);
     //Roi绘图
     m_imageWindow = new Cfhs_ImageWindow(this);
-    QString path = QCoreApplication::applicationDirPath()+"/Resource/1.bmp";
-    m_imageWindow->setImage(path);
+    //QString path = QCoreApplication::applicationDirPath()+"/Resource/1.bmp";
+    //m_imageWindow->setImage(path);
     ui->windowFrame->setWidget(m_imageWindow);
     //工具箱
     m_toolTree = new Cfhs_ProgramToolTree(this);
@@ -327,6 +328,7 @@ void Cfhs_ProgramConfig::on_saveProgramAction_triggered()
             QMessageBox::warning(this, " ", strInfo);
             return;
         }
+        qDebug()<<"Save station"<<station.strToolPara;
     }
     strInfo = QString(tr("方案(%1)保存成功")).arg(m_strProgramName);
     m_isProgramSaved = true;

@@ -168,6 +168,11 @@ public:
     //strCameraInfo:相机信息（取值格式：相机类型1#相机规格1#ccf文件路径1@相机类型N#相机规格N#ccf文件路径N)
     //strInfo:执行信息
     bool GetCameraInfo(QString &strCameraInfo, QString &strInfo);
+    //插入新的相机记录
+    //输出
+    //stCamera:相机记录
+    //strInfo:执行日志
+    bool InsertNewCameraInfo(stCameraInfo stCamera, QString &strInfo);
 
     //---获取指定时间的分析信息
     //iHour:前几小时

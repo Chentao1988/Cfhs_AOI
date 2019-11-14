@@ -4,6 +4,7 @@
 #include "Function/img_show_managent.h"
 #include "Function/imgsavemode.h"
 #include "Help/cfhs_softwareversion.h"
+#include "cfhs_addcamerainfo.h"
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QLabel>
@@ -129,18 +130,26 @@ void Cfhs_MainWindow::settingInit()
     m_signalNgAction->setText(tr("NG/OK信号管理"));
     connect(m_signalNgAction, &QAction::triggered,
             this, &Cfhs_MainWindow::signalNgAction_triggered);
+    //添加相机记录
+    m_addCameraAction = new QAction(this);
+    m_addCameraAction->setText(tr("添加相机记录"));
+    connect(m_addCameraAction, &QAction::triggered,
+            this, &Cfhs_MainWindow::addCameraAction_triggered);
     //Menu 设置
     m_settingMenu = new QMenu(this);
     //Action添加到Menu中
     m_settingMenu->addAction(m_programConfigAction);
     m_settingMenu->addAction(m_imageSpliceAction);
     m_settingMenu->addAction(m_signalNgAction);
+    m_settingMenu->addAction(m_addCameraAction);
     //将menu添加到设置Button上
     ui->settingPushButton->setMenu(m_settingMenu);
     //方案配置窗口
     m_programConfigWidget = nullptr;
     //添加事件过滤器
     ui->settingLabel->installEventFilter(this);
+    //默认隐藏“添加相机记录”功能
+    showAdditionalFunction(false);
 }
 
 
@@ -941,6 +950,38 @@ bool Cfhs_MainWindow::eventFilter(QObject* obj, QEvent* event)
     }
 }
 
+void Cfhs_MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    static QString strEdit;
+    if(event->text() =="c"||event->text() =="C")
+        strEdit = event->text();
+    else
+        strEdit.append(event->text());
+    //转换为大写
+    strEdit = strEdit.toUpper();
+    if(strEdit == "CFHS")
+    {
+        QMessageBox *msg = new QMessageBox(QMessageBox::Information,
+                                           tr("提示"),
+                                           tr("是否显示附加功能？"),
+                                           QMessageBox::Yes|
+                                           QMessageBox::No,
+                                           this);
+        msg->setButtonText(QMessageBox::Yes, tr("显示"));
+        msg->setButtonText(QMessageBox::No, tr("隐藏"));
+        msg->setDefaultButton(QMessageBox::Yes);
+        bool isShowed = false;
+        if(msg->exec() == QMessageBox::Yes)
+            isShowed = true;
+        showAdditionalFunction(isShowed);
+        //重置strEdit
+        strEdit.clear();
+        //释放msg
+        delete msg;
+        msg = nullptr;
+    }
+}
+
 void Cfhs_MainWindow::on_closePushButton_clicked()
 {
     this->close();
@@ -1044,40 +1085,25 @@ void Cfhs_MainWindow::signalNgAction_triggered() // NG/OK信号管理
 
 }
 
+void Cfhs_MainWindow::addCameraAction_triggered()
+{
+    Cfhs_AddCameraInfo camera(this);
+    if(camera.DialogShow() == QDialog::Accepted)
+    {
+        QMessageBox::information(this, " ", tr("相机记录添加成功"));
+    }
+}
+
 void Cfhs_MainWindow::imageManageAction_triggered()
 {
-    //获取工位数量
-    QString strAllStation;
-    QString strInfo;
-    if(!m_logicInterface->GetAllStationNo(m_curProgramName, strAllStation, strInfo))
-    {
-        QMessageBox::warning(this, " ", strInfo);
-        return;
-    }
-    int stationNum = getListFromQString(strAllStation).size();
-    Img_Show_Managent dialog(stationNum, this);
+    Img_Show_Managent dialog(this);
     dialog.DialogShow();
 }
 
 void Cfhs_MainWindow::imageSaveAction_triggered()
 {
-    stConfig conf;
-    QString strInfo;
-    if(!m_logicInterface->GetConfigInfo(conf, strInfo))
-    {
-        QMessageBox::warning(this, " ", strInfo);
-        return;
-    }
     ImgSaveMode img(this);
-    img.SetImg_bool(conf.bSaveImg, conf.bCompressedImg);
-    if(img.exec() == QDialog::Accepted)
-    {
-        img.GetImg_bool(conf.bSaveImg, conf.bCompressedImg);
-        if(m_logicInterface->SetConfigInfo(conf, strInfo))
-            QMessageBox::information(this, " ", tr("设置成功"));
-        else
-            QMessageBox::warning(this, " ", strInfo);
-    }
+    img.DialogShow();
 }
 
 void Cfhs_MainWindow::imageSubsetAction_triggered()
@@ -1217,6 +1243,15 @@ void Cfhs_MainWindow::setMesReportOpen(const bool& isOpened)
     QString style = switch_button::getSwitchButtonStyle(m_isMesReported);
 
     ui->mesReportPushButton->setStyleSheet(style);
+}
+
+void Cfhs_MainWindow::showAdditionalFunction(const bool &isShowed)
+{
+    //添加相机记录
+    m_addCameraAction->setVisible(isShowed);
+    //如果显示附加功能则弹出设置menu
+    if(isShowed)
+        ui->settingPushButton->click();
 }
 
 

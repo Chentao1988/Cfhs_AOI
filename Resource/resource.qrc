@@ -43,7 +43,7 @@
         <file>lang_En.ts</file>
         <file>load_normal.png</file>
         <file>load_press.png</file>
-        <file>logo.png</file>
+        <file>logo_cfdr.png</file>
         <file>login_combo_arrow.png</file>
         <file>main_background.png</file>
         <file>main_left_show.png</file>
@@ -117,5 +117,6 @@
         <file>line_edit_user.png</file>
         <file>login_show.png</file>
         <file>lang_Cht.ts</file>
+        <file>logo_shh.png</file>
     </qresource>
 </RCC>

@@ -55,7 +55,11 @@ void Cfhs_LoginDialog::changeEvent(QEvent *event)
         QStringList listUser;
         if(m_currentLang == English)
         {
+#if logo_cfdr
             windownTitle = "CFHS";
+#elif logo_shh
+            windownTitle = "SHH";
+#endif
             title1 = "Screen defect detection";
             title2 = "Technology enhances product quality\n"
                      "      Creates customer value";
@@ -66,7 +70,11 @@ void Cfhs_LoginDialog::changeEvent(QEvent *event)
         }
         else if(m_currentLang == TraditionalChinese)
         {
+#if logo_cfdr
             windownTitle = "創富華視";
+#elif logo_shh
+            windownTitle = "深鴻海";
+#endif
             title1 = "屏幕缺陷檢測";
             title2 = "科技提升產品質量，創造客戶價值";
             strPd = "修改密碼";
@@ -76,7 +84,11 @@ void Cfhs_LoginDialog::changeEvent(QEvent *event)
         }
         else if(m_currentLang == SimplifiedChinese)
         {
+#if logo_cfdr
             windownTitle = "创富华视";
+#elif logo_shh
+            windownTitle = "深鸿海";
+#endif
             title1 = "屏幕缺陷检测";
             title2 = "科技提升产品质量，创造客户价值";
             strPd = "修改密码";
@@ -97,8 +109,13 @@ void Cfhs_LoginDialog::changeEvent(QEvent *event)
 void Cfhs_LoginDialog::setWindowStyle()
 {
     //logo显示
-    m_logoLabel->setStyleSheet("QLabel{border-image: url(:/logo.png);}");
+#if logo_cfdr
+    m_logoLabel->setStyleSheet("QLabel{border-image: url(:/logo_cfdr.png);}");
     m_logoLabel->setFixedSize(52, 40);
+#elif logo_shh
+    m_logoLabel->setStyleSheet("QLabel{border-image: url(:/logo_shh.png);}");
+    m_logoLabel->setFixedSize(200, 67);
+#endif
     //标题1
     m_title1Label->setStyleSheet("QLabel{font-size:36px; font-family:Mircosoft Yahei;"
                                  "font-weight:bold; color:white;border-image:none;}");
@@ -161,7 +178,11 @@ void Cfhs_LoginDialog::init()
 {
     this->setWindowFlags(this->windowFlags() | Qt::WindowMinimizeButtonHint);
     //公司名
+#if logo_cfdr
     QString name = QString(tr("创富华视"));
+#elif logo_shh
+    QString name = QString(tr("深鸿海"));
+#endif
     this->setWindowTitle(name);
     //公司logo
     m_logoLabel = new QLabel(this);
@@ -346,5 +367,13 @@ void Cfhs_LoginDialog::on_langCombo_currentIndex_changed(int index)
         }
         //切换语言
         qApp->installTranslator(m_translator);
+    }
+    //发送到数据库
+    stConfig stConf;
+    QString strInfo;
+    if(!m_logicInterface->GetConfigInfo(stConf, strInfo))
+    {
+        QMessageBox::warning(this, " ", strInfo);
+        return;
     }
 }

@@ -29,7 +29,7 @@ void Cfhs_SoftwareVersion::init()
     m_versionLabel = new QLabel(tr("软件版本："));
     m_versionLineEdit = new QLineEdit(this);
     m_versionLineEdit->setReadOnly(true);
-    m_versionLineEdit->setText("V2.0.0620");
+    m_versionLineEdit->setText("V2.2.0620");
     QPointer<QHBoxLayout> versionLayout = new QHBoxLayout;
     versionLayout->addWidget(m_versionLabel);
     versionLayout->addWidget(m_versionLineEdit,1);
@@ -94,7 +94,7 @@ void Cfhs_SoftwareVersion::init()
     mainLayout->addWidget(m_releaseTimeLabel, 0, Qt::AlignCenter);
     mainLayout->addLayout(buttonLayout);
     mainLayout->setSpacing(20);
-    mainLayout->setContentsMargins(10, 10, 10, 20);
+    mainLayout->setContentsMargins(10, 20, 10, 20);
     this->setLayout(mainLayout);
     this->setWindowTitle(tr("版本相关"));
     this->resize(600, 500);
@@ -103,8 +103,13 @@ void Cfhs_SoftwareVersion::init()
 void Cfhs_SoftwareVersion::setWindowStyle()
 {
     //logo
-    m_logoLabel->setStyleSheet("QLabel{border-image:url(:/logo.png)};");
+#if logo_cfdr
+    m_logoLabel->setStyleSheet("QLabel{border-image: url(:/logo_cfdr.png);}");
     m_logoLabel->setFixedSize(52, 40);
+#elif logo_shh
+    m_logoLabel->setStyleSheet("QLabel{border-image: url(:/logo_shh.png);}");
+    m_logoLabel->setFixedSize(200, 67);
+#endif
     //网址
     m_companyButton->setStyleSheet("QPushButton{background:transparent; border:none;"
                                    "color:#0077FF; font-size:24px;"

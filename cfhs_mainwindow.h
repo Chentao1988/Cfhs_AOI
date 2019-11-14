@@ -16,6 +16,7 @@
 #include <QMap>
 #include <QPolygon>
 #include <QActionGroup>
+#include <QKeyEvent>
 #include "cfhs_tablewidget.h"
 #include "cfhs_statusbar.h"
 #include "cfhs_productresultwidget.h"
@@ -54,6 +55,7 @@ public:
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event);
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     void controlInit();  //控制模块初始化
@@ -79,6 +81,8 @@ private:
     void setReadCodingOpen(const bool& isOpened);
     //MES上传开关
     void setMesReportOpen(const bool& isOpened);
+    //显示附加功能，只供内部人员使用
+    void showAdditionalFunction(const bool &isShowed);
 
 signals:
     //---显示当前产品结果
@@ -188,7 +192,8 @@ private:
     //设置模块
     void programConfigAction_triggered(); //方案配置
     void imageSpliceAction_triggered();  //图像拼接管理
-    void signalNgAction_triggered();  // NG/OK信号管理
+    void signalNgAction_triggered();   //NG/OK信号管理
+    void addCameraAction_triggered();  //添加相机记录
     //功能模块
     void imageManageAction_triggered(); //图像显示管理
     void imageSaveAction_triggered();  //图像保存功能
@@ -278,6 +283,7 @@ private:
     QPointer<QAction> m_imageSpliceAction;  //图像拼接管理
     QPointer<QAction> m_signalNgAction;  // NG/OK信号管理
     Cfhs_ProgramConfig *m_programConfigWidget;  //方案配置窗口
+    QPointer<QAction> m_addCameraAction; //添加相机记录
     //配置帮助项
     QPointer<QMenu> m_helpMenu;
     QPointer<QAction> m_softVersionAction; //软件版本

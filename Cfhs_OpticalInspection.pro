@@ -3,6 +3,8 @@
 # Project created by QtCreator 2019-08-09T09:30:21
 #
 #-------------------------------------------------
+DEFINES += logo_cfdr
+#DEFINES += logo_shh
 
 QT       += core gui axcontainer
 
@@ -67,7 +69,8 @@ SOURCES += \
         cfhs_combobox.cpp \
         cfhs_lineedit.cpp \
         cfhs_showzoomimage.cpp \
-        cfhs_mainwindows_img.cpp
+        cfhs_mainwindows_img.cpp \
+    cfhs_addcamerainfo.cpp
 
 HEADERS += \
         cfhs_base.h \
@@ -92,7 +95,8 @@ HEADERS += \
         cfhs_showzoomimage.h \
         Lib/Cfhs_Global.h \
         Lib/Cfhs_IBusiness.h \
-        cfhs_mainwindows_img.h
+        cfhs_mainwindows_img.h \
+    cfhs_addcamerainfo.h
 
 FORMS += \
         cfhs_mainwindow.ui

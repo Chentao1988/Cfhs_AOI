@@ -14,12 +14,11 @@ switch_button::switch_button(QString left, QString right  ,QWidget *parent)
     label_right = new QLabel(this);
     label_left->setText(left);
     button_center->setFixedSize(75,34);
-    button_center->setStyleSheet("QPushButton{background-image: url(:/button_uncheck.png);background-color:transparent;border:none}");
     label_right->setText(right);
     layout_orbutton->addWidget(label_left,0,Qt::AlignCenter);
     layout_orbutton->addWidget(button_center,0,Qt::AlignCenter);
     layout_orbutton->addWidget(label_right,0,Qt::AlignCenter);
-    Flg_LeftOrRight = false;
+    Set_Switch(false);
 }
 
 switch_button::~switch_button()

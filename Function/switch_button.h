@@ -9,7 +9,7 @@ class switch_button: public QWidget
 {
      Q_OBJECT
 public:
-    switch_button(QString data1 = "",QString data2 = "",QWidget *parent = nullptr);
+    switch_button(QString strFalse = "",QString strTrue = "",QWidget *parent = nullptr);
     ~switch_button();
 
     void Set_Left_Label(QString Left);

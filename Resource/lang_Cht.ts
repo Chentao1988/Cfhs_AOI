@@ -2,6 +2,59 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_TW">
 <context>
+    <name>Cfhs_AddCameraInfo</name>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="19"/>
+        <source>相机品牌</source>
+        <translation>相機品牌</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="31"/>
+        <source>相机型号</source>
+        <translation>相機型號</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="38"/>
+        <source>CCF配置文件</source>
+        <translation>CCF配置文件</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="41"/>
+        <source>确定</source>
+        <translation>確定</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="47"/>
+        <source>取消</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="65"/>
+        <source>添加相机记录</source>
+        <translation>添加相機記錄</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="180"/>
+        <source>相机品牌不能为空</source>
+        <translation>相機品牌不能為空</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="186"/>
+        <source>相机型号不能为空</source>
+        <translation>相機型號不能為空</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="192"/>
+        <source>CCF配置文件不能为空</source>
+        <translation>CCF配置文件不能為空</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_addcamerainfo.cpp" line="207"/>
+        <source>该记录已存在，请重新设置</source>
+        <translation>該記錄已存在，請重新設置</translation>
+    </message>
+</context>
+<context>
     <name>Cfhs_AlgorithmTable</name>
     <message>
         <location filename="../Setting/cfhs_algorithmtable.cpp" line="16"/>
@@ -771,47 +824,52 @@
 <context>
     <name>Cfhs_LoginDialog</name>
     <message>
-        <location filename="../cfhs_logindialog.cpp" line="185"/>
+        <location filename="../cfhs_logindialog.cpp" line="206"/>
         <source>管理员</source>
         <translation>管理員</translation>
     </message>
     <message>
-        <location filename="../cfhs_logindialog.cpp" line="186"/>
+        <location filename="../cfhs_logindialog.cpp" line="207"/>
         <source>操作员</source>
         <translation>操作員</translation>
     </message>
     <message>
-        <location filename="../cfhs_logindialog.cpp" line="266"/>
+        <location filename="../cfhs_logindialog.cpp" line="287"/>
         <source>请输入密码</source>
         <translation>請輸入密碼</translation>
     </message>
     <message>
-        <location filename="../cfhs_logindialog.cpp" line="210"/>
+        <location filename="../cfhs_logindialog.cpp" line="231"/>
         <source>修改密码</source>
         <translation>修改密碼</translation>
     </message>
     <message>
-        <location filename="../cfhs_logindialog.cpp" line="164"/>
+        <location filename="../cfhs_logindialog.cpp" line="182"/>
         <source>创富华视</source>
         <translation>創富華視</translation>
     </message>
     <message>
-        <location filename="../cfhs_logindialog.cpp" line="170"/>
+        <location filename="../cfhs_logindialog.cpp" line="184"/>
+        <source>深鸿海</source>
+        <translation>深鴻海</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_logindialog.cpp" line="191"/>
         <source>屏幕缺陷检测</source>
         <translation>屏幕缺陷檢測</translation>
     </message>
     <message>
-        <location filename="../cfhs_logindialog.cpp" line="173"/>
+        <location filename="../cfhs_logindialog.cpp" line="194"/>
         <source>科技提升产品质量，创造客户价值</source>
         <translation>科技提升產品質量，創造客戶價值</translation>
     </message>
     <message>
-        <location filename="../cfhs_logindialog.cpp" line="223"/>
+        <location filename="../cfhs_logindialog.cpp" line="244"/>
         <source>登录</source>
         <translation>登錄</translation>
     </message>
     <message>
-        <location filename="../cfhs_logindialog.cpp" line="255"/>
+        <location filename="../cfhs_logindialog.cpp" line="276"/>
         <source>密码修改成功</source>
         <translation>密碼修改成功</translation>
     </message>
@@ -856,7 +914,7 @@
     </message>
     <message>
         <location filename="../cfhs_mainwindow.ui" line="148"/>
-        <location filename="../cfhs_mainwindow.cpp" line="866"/>
+        <location filename="../cfhs_mainwindow.cpp" line="875"/>
         <source>关闭</source>
         <translation>關閉</translation>
     </message>
@@ -911,180 +969,209 @@
         <translation>強制NG</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="309"/>
-        <location filename="../cfhs_mainwindow.cpp" line="310"/>
+        <location filename="../cfhs_mainwindow.cpp" line="135"/>
+        <source>添加相机记录</source>
+        <translation>添加相機記錄</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_mainwindow.cpp" line="318"/>
+        <location filename="../cfhs_mainwindow.cpp" line="319"/>
         <source>日志显示</source>
         <translation>日誌顯示</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="360"/>
+        <location filename="../cfhs_mainwindow.cpp" line="369"/>
         <source>图像显示管理</source>
         <translation>圖像顯示管理</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="364"/>
+        <location filename="../cfhs_mainwindow.cpp" line="373"/>
         <source>图像保存功能</source>
         <translation>圖像保存功能</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="368"/>
+        <location filename="../cfhs_mainwindow.cpp" line="377"/>
         <source>图像分区设置</source>
         <translation>圖像分區設置</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="387"/>
+        <location filename="../cfhs_mainwindow.cpp" line="396"/>
         <source>软件版本</source>
         <translation>軟件版本</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="391"/>
+        <location filename="../cfhs_mainwindow.cpp" line="400"/>
         <source>软件常见问题sop</source>
         <translation>軟件常見問題sop</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="395"/>
+        <location filename="../cfhs_mainwindow.cpp" line="404"/>
         <source>软件使用说明</source>
         <translation>軟件使用說明</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="399"/>
+        <location filename="../cfhs_mainwindow.cpp" line="408"/>
         <source>易损件清单</source>
         <translation>易損件清單</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="403"/>
+        <location filename="../cfhs_mainwindow.cpp" line="412"/>
         <source>远程协助</source>
         <translation>遠程協助</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="435"/>
+        <location filename="../cfhs_mainwindow.cpp" line="444"/>
         <source>检测批次</source>
         <translation>檢測批次</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="436"/>
+        <location filename="../cfhs_mainwindow.cpp" line="445"/>
         <source>检测总量</source>
         <translation>檢測總量</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="437"/>
+        <location filename="../cfhs_mainwindow.cpp" line="446"/>
         <source>合格数量</source>
         <translation>合格數量</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="438"/>
+        <location filename="../cfhs_mainwindow.cpp" line="447"/>
         <source>次品数量</source>
         <translation>次品數量</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="439"/>
+        <location filename="../cfhs_mainwindow.cpp" line="448"/>
         <source>产品良率</source>
         <translation>產品良率</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="445"/>
+        <location filename="../cfhs_mainwindow.cpp" line="454"/>
         <source>执行区名称</source>
         <translation>執行區名稱</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="446"/>
+        <location filename="../cfhs_mainwindow.cpp" line="455"/>
         <source>使用算法汇总</source>
         <translation>使用算法彙總</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="537"/>
+        <location filename="../cfhs_mainwindow.cpp" line="546"/>
         <source>解码率%1</source>
         <translation>解碼率%1</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="543"/>
+        <location filename="../cfhs_mainwindow.cpp" line="552"/>
         <source>上报率%1</source>
         <translation>上報率%1</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="867"/>
+        <location filename="../cfhs_mainwindow.cpp" line="876"/>
         <source>确定关闭软件和电脑？</source>
         <translation>確定關閉軟件和電腦？</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="885"/>
+        <location filename="../cfhs_mainwindow.cpp" line="894"/>
         <source>前%1小时</source>
         <translation>前%1小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="886"/>
+        <location filename="../cfhs_mainwindow.cpp" line="895"/>
         <source>统计缺陷点的时间段</source>
         <translation>統計缺陷點的時間段</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="888"/>
+        <location filename="../cfhs_mainwindow.cpp" line="897"/>
         <source>前1小时</source>
         <translation>前1小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="889"/>
+        <location filename="../cfhs_mainwindow.cpp" line="898"/>
         <source>前6小时</source>
         <translation>前6小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="890"/>
+        <location filename="../cfhs_mainwindow.cpp" line="899"/>
         <source>前8小时</source>
         <translation>前8小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="891"/>
+        <location filename="../cfhs_mainwindow.cpp" line="900"/>
         <source>前12小时</source>
         <translation>前12小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="892"/>
+        <location filename="../cfhs_mainwindow.cpp" line="901"/>
         <source>前24小时</source>
         <translation>前24小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="994"/>
-        <location filename="../cfhs_mainwindow.cpp" line="1021"/>
-        <location filename="../cfhs_mainwindow.cpp" line="1077"/>
+        <location filename="../cfhs_mainwindow.cpp" line="965"/>
+        <source>提示</source>
+        <translation>提示</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_mainwindow.cpp" line="966"/>
+        <source>是否显示附加功能？</source>
+        <translation>是否顯示附加功能？</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_mainwindow.cpp" line="970"/>
+        <source>显示</source>
+        <translation>顯示</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_mainwindow.cpp" line="971"/>
+        <source>隐藏</source>
+        <translation>隱藏</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_mainwindow.cpp" line="1035"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1062"/>
         <source>设置成功</source>
         <translation>設置成功</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1266"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1093"/>
+        <source>相机记录添加成功</source>
+        <translation>相機記錄添加成功</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_mainwindow.cpp" line="1301"/>
         <source>方案名</source>
         <translation>方案名</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1287"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1322"/>
         <source>方案选择成功</source>
         <translation>方案選擇成功</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="92"/>
+        <location filename="../cfhs_mainwindow.cpp" line="93"/>
         <source>电脑硬盘监控管理</source>
         <translation>電腦硬盤監控管理</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="97"/>
+        <location filename="../cfhs_mainwindow.cpp" line="98"/>
         <source>软件维护功能</source>
         <translation>軟件維護功能</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="102"/>
+        <location filename="../cfhs_mainwindow.cpp" line="103"/>
         <source>实时良率预警</source>
         <translation>實時良率預警</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="119"/>
+        <location filename="../cfhs_mainwindow.cpp" line="120"/>
         <source>方案配置</source>
         <translation>方案配置</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="124"/>
+        <location filename="../cfhs_mainwindow.cpp" line="125"/>
         <source>图像拼接管理</source>
         <translation>圖像拼接管理</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="129"/>
+        <location filename="../cfhs_mainwindow.cpp" line="130"/>
         <source>NG/OK信号管理</source>
         <translation>NG/OK信號管理</translation>
     </message>
@@ -1232,7 +1319,7 @@
     </message>
     <message>
         <location filename="../Setting/cfhs_programconfig.ui" line="256"/>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="414"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="416"/>
         <source>删除</source>
         <translation>刪除</translation>
     </message>
@@ -1242,115 +1329,115 @@
         <translation>請選擇要讀取的方案名</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="122"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="123"/>
         <source>当前方案(%1)未保存，是否保存？</source>
         <translation>當前方案(%1)未保存，是否保存？</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="124"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="125"/>
         <source>提示</source>
         <translation>提示</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="129"/>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="419"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="130"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="421"/>
         <source>是</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="130"/>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="420"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="131"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="422"/>
         <source>否</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="186"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="187"/>
         <source>请新建或者读取方案</source>
         <translation>請新建或者讀取方案</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="197"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="198"/>
         <source>方案(%1)没有工位信息，请添加</source>
         <translation>方案(%1)沒有工位信息，請添加</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="210"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="211"/>
         <source>方案(%1)不是多工位，不支持该功能</source>
         <translation>方案(%1)不是多工位，不支持該功能</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="231"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="232"/>
         <source>当前方案为空</source>
         <translation>當前方案為空</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="236"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="237"/>
         <source>当前方案为：%1</source>
         <translation>當前方案為：%1</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="245"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="246"/>
         <source>新建方案</source>
         <translation>新建方案</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="268"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="269"/>
         <source>方案(%1)新建成功</source>
         <translation>方案(%1)新建成功</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="284"/>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="346"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="285"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="348"/>
         <source>方案名</source>
         <translation>方案名</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="293"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="294"/>
         <source>方案(%1)读取成功</source>
         <translation>方案(%1)讀取成功</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="314"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="315"/>
         <source>获取的流程栏信息错误，与工位个数不匹配</source>
         <translation>獲取的流程欄信息錯誤，與工位個數不匹配</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="331"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="333"/>
         <source>方案(%1)保存成功</source>
         <translation>方案(%1)保存成功</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="373"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="375"/>
         <source>方案(%1)删除成功</source>
         <translation>方案(%1)刪除成功</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="412"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="414"/>
         <source>确定删除工位%1</source>
         <translation>確定刪除工位%1?</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="464"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="466"/>
         <source>工位%1的缺陷定义参数错误：%2</source>
         <translation>工位%1的缺陷定義參數錯誤：%2</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="470"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="472"/>
         <source>工位%1的NG判定参数错误：%2</source>
         <translation>工位%1的NG判定參數錯誤：%2</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="485"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="487"/>
         <source>生成的工位参数有误，与该方案的工位数量不匹配</source>
         <translation>生成的工位參數有誤，與該方案的工位數量不匹配</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="540"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="542"/>
         <source>设置成功</source>
         <translation>設置成功</translation>
     </message>
     <message>
-        <location filename="../Setting/cfhs_programconfig.cpp" line="557"/>
+        <location filename="../Setting/cfhs_programconfig.cpp" line="559"/>
         <source>NG筛选参数设置成功</source>
         <translation>NG篩選參數設置成功</translation>
     </message>
@@ -2112,29 +2199,52 @@
 <context>
     <name>ImgSaveMode</name>
     <message>
-        <location filename="../Function/imgsavemode.cpp" line="9"/>
+        <location filename="../Function/imgsavemode.cpp" line="52"/>
         <source>图片保存</source>
         <translation>圖片保存</translation>
     </message>
     <message>
-        <location filename="../Function/imgsavemode.cpp" line="14"/>
+        <location filename="../Function/imgsavemode.cpp" line="16"/>
         <source>确定</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../Function/imgsavemode.cpp" line="15"/>
+        <location filename="../Function/imgsavemode.cpp" line="22"/>
         <source>取消</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../Function/imgsavemode.cpp" line="16"/>
-        <source>保存原图</source>
-        <translation>保存原圖</translation>
+        <location filename="../Function/imgsavemode.cpp" line="30"/>
+        <source>保存OK原图</source>
+        <translation>保存OK原圖</translation>
     </message>
     <message>
-        <location filename="../Function/imgsavemode.cpp" line="17"/>
+        <location filename="../Function/imgsavemode.cpp" line="32"/>
+        <source>保存OK压缩图</source>
+        <translation>保存OK壓縮圖</translation>
+    </message>
+    <message>
+        <location filename="../Function/imgsavemode.cpp" line="38"/>
+        <source>保存NG原图</source>
+        <translation>保存NG原圖</translation>
+    </message>
+    <message>
+        <location filename="../Function/imgsavemode.cpp" line="40"/>
+        <source>保存NG压缩图</source>
+        <translation>保存NG壓縮圖</translation>
+    </message>
+    <message>
+        <location filename="../Function/imgsavemode.cpp" line="95"/>
+        <source>设置成功</source>
+        <translation>設置成功</translation>
+    </message>
+    <message>
+        <source>保存原图</source>
+        <translation type="vanished">保存原圖</translation>
+    </message>
+    <message>
         <source>是否压缩</source>
-        <translation>是否壓縮</translation>
+        <translation type="vanished">是否壓縮</translation>
     </message>
 </context>
 <context>
@@ -2233,79 +2343,86 @@
 <context>
     <name>Img_Show_Managent</name>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="12"/>
+        <location filename="../Function/img_show_managent.cpp" line="51"/>
         <source>图像显示管理</source>
         <translation>圖像顯示管理</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="14"/>
         <source>结果图像路径</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">結果圖像路徑</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="15"/>
         <source>分析图像路径</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">分析圖像路徑</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="21"/>
-        <location filename="../Function/img_show_managent.cpp" line="22"/>
         <source>静态</source>
-        <translation>靜態</translation>
+        <translation type="vanished">靜態</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="21"/>
-        <location filename="../Function/img_show_managent.cpp" line="22"/>
         <source>动态</source>
-        <translation>動態</translation>
+        <translation type="vanished">動態</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="32"/>
         <source>结果图同步: </source>
-        <translation>結果圖同步:</translation>
+        <translation type="vanished">結果圖同步:</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="33"/>
         <source>分析图同步: </source>
-        <translation>分析圖同步:</translation>
+        <translation type="vanished">分析圖同步:</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="37"/>
+        <location filename="../Function/img_show_managent.cpp" line="11"/>
+        <source>算法禁用</source>
+        <translation>算法禁用</translation>
+    </message>
+    <message>
+        <location filename="../Function/img_show_managent.cpp" line="11"/>
+        <source>算法启用</source>
+        <translation>算法啟用</translation>
+    </message>
+    <message>
+        <location filename="../Function/img_show_managent.cpp" line="19"/>
+        <source>工位图静态</source>
+        <translation>工位圖靜態</translation>
+    </message>
+    <message>
+        <location filename="../Function/img_show_managent.cpp" line="19"/>
+        <source>工位图动态</source>
+        <translation>工位圖動態</translation>
+    </message>
+    <message>
+        <location filename="../Function/img_show_managent.cpp" line="29"/>
         <source>确定</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="38"/>
+        <location filename="../Function/img_show_managent.cpp" line="33"/>
         <source>取消</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="58"/>
         <source>工位%1</source>
-        <translation>工位%1</translation>
+        <translation type="vanished">工位%1</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="60"/>
         <source>工位%1图像路径</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">工位%1圖像路徑</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="136"/>
         <source>请设置结果图路径</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">請設置結果圖路徑</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="143"/>
         <source>请设置分析图路径</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">請設置分析圖路徑</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="176"/>
         <source>请设置工位%1的图像路径</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">請設置工位%1的圖像路徑</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="196"/>
+        <location filename="../Function/img_show_managent.cpp" line="88"/>
         <source>设置成功</source>
         <translation>設置成功</translation>
     </message>
@@ -2336,9 +2453,14 @@
 <context>
     <name>lineedit_button</name>
     <message>
-        <location filename="../Function/lineedit_button.cpp" line="34"/>
+        <location filename="../Function/lineedit_button.cpp" line="37"/>
         <source>请选择图片</source>
         <translation>請選擇圖片</translation>
+    </message>
+    <message>
+        <location filename="../Function/lineedit_button.cpp" line="39"/>
+        <source>请选择相机配置文件</source>
+        <translation>請選擇相機配置文件</translation>
     </message>
 </context>
 </TS>
