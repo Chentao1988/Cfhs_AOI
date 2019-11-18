@@ -83,6 +83,8 @@ void cfhs_mainwindows_img::setImage(const QString &path)
         return;
     }
     save_map.load(path);
+    if(save_map.isNull())
+        return;
     *right_label_map = save_map;
     *gridview_map = save_map;
     *result_map = save_map;

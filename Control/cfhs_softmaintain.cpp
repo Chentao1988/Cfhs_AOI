@@ -87,7 +87,7 @@ Cfhs_SoftMaintain::Cfhs_SoftMaintain(QWidget* parent)
     this->setLayout(mainLayout);
     //主界面设置
     this->setWindowTitle(tr("系统自动维护设置"));
-    this->resize(400, 300);
+    this->resize(420, 300);
 }
 
 Cfhs_SoftMaintain::~Cfhs_SoftMaintain()

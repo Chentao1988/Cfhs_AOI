@@ -17,9 +17,15 @@ INCLUDEPATH += D:\Qt\QtPlugin\qwt-6.1.4\src
 CONFIG += Cfhs_Business
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Lib/ -lCfhs_Business
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Lib/ -lCfhs_Businessd
-
 INCLUDEPATH += $$PWD/Lib
 DEPENDPATH += $$PWD/Lib
+
+CONFIG += openCv
+win32:CONFIG(release, debug|release): LIBS += -L"D:\opencv\build\x64\vc15\lib" -lopencv_world401
+else:win32:CONFIG(debug, debug|release): LIBS += -L"D:\opencv\build\x64\vc15\lib" -lopencv_world401d
+INCLUDEPATH += "D:\opencv\build\include"
+DEPENDPATH += "D:\opencv\build\x64\vc15\lib"
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -70,7 +76,7 @@ SOURCES += \
         cfhs_lineedit.cpp \
         cfhs_showzoomimage.cpp \
         cfhs_mainwindows_img.cpp \
-    cfhs_addcamerainfo.cpp
+        cfhs_addcamerainfo.cpp
 
 HEADERS += \
         cfhs_base.h \
@@ -96,7 +102,7 @@ HEADERS += \
         Lib/Cfhs_Global.h \
         Lib/Cfhs_IBusiness.h \
         cfhs_mainwindows_img.h \
-    cfhs_addcamerainfo.h
+        cfhs_addcamerainfo.h
 
 FORMS += \
         cfhs_mainwindow.ui
@@ -116,5 +122,3 @@ include(Function/Function.pri);
 include(Control/Control.pri);
 include(Setting/Setting.pri);
 include(Help/Help.pri);
-
-

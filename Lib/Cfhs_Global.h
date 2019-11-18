@@ -43,16 +43,24 @@ typedef struct Config
     int iDiskSpaceAlarm;
     //磁盘空间小于多少G时，删除
     int iDiskSpaceDelete;
-    //保存图片，1-保存，0-不包吃
-    bool bSaveImg;
-    //压缩图片，1-压缩，0-不压缩
-    bool bCompressedImg;
+    //保存OK原图片，1-保存，0-不保存
+    bool bSaveOKImg;
+
+    bool bSaveNGImg;
+
+    bool bSaveCompressedOKImg;
+
+    bool bSaveCompressedNGImg;
+
+    bool bStationDynamic;
+
+    bool bAlgorithmOnOrOff;
     //产品运行多少片后开始计算
     int iYieldAlarmNum;
     //良率低于多少开始预警
     QString strYieldAlarm;
-    //系统语言，1-中文，0-英文
-    bool bSysLang;
+    //系统语言：2-繁体中文，1-英文，0-简体中文
+    int iSysLang;
     //软件离线：1-离线，0-在线
     bool bSysOnLine;
     //导入图片路径
@@ -84,21 +92,9 @@ typedef struct Programme
     QString strMesRate;
     //1-正常结果，2-强制OK，3-强制NG
     int iResultMode;
-    //结果图象路径
-    QString strResultImgPath;
-    //分析图象路径
-    QString strAnalysisImgPath;
-    //是否同步工位,true(同步), false(不同步)
-    bool bSyn;
-    //结果同步工位号
-    int iSynResultStationNo;
-    //分析同步工位号
-    int iSynAnalysisStationNo;
-    //工位动态：true(动态)，false(静态)
-    bool bStationDynamic;
     //缺陷判定(JSON格式的字符串，例如"{"交叉划痕":{"1":"划痕","2":"划痕"},"交叉脏污":{"1":"脏污","2":"脏污"},"划痕":{"1":"","2":"划痕"},"脏污":{"1":"划痕","2":"脏污"}}")
     QString strDefectDetermination;
-    //NG筛选(JSON格式的字符串，例如"{"黑点": "面积>1","白点": "长度<11","划痕": "圆度>0.2"}")
+    //缺陷筛选(JSON格式的字符串，例如"{"白点": "((缺陷面积1>2)&&(缺陷面积2>0))||(缺陷宽度>=4)", "黑点": "(缺陷面积1>=7)&&(缺陷面积2<8)"}")
     QString strNGScreening;
 
 }stProgramme;
@@ -126,6 +122,7 @@ typedef struct Batch
     int iNGTotal;
     //产品良率
     QString strYield;
+
 }stBatch;
 
 typedef struct BatchImg
@@ -159,8 +156,6 @@ typedef struct Station
     QString strDefectScreening;
     //是否启用，true(开启)，false(关闭)
     bool bEnable;
-    //图片路径
-    QString strImgPath;
     //工具参数(JSON格式的字符串)
     QString strToolPara;
 
@@ -172,6 +167,8 @@ typedef struct Features
     QString strCH;
     //特征英文号(特征名1#特征名2#...特征名N)
     QString strEN;
+    //特征繁体号(特征名1#特征名2#...特征名N)
+    QString strTr;
 
 }stFeatures;
 

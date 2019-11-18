@@ -183,6 +183,8 @@ public slots:
     void slot_ShowCurrentTask(const int &index);
     //开启九宫格
     void slot_ShowGridView(bool open_gridview,int x_gridview,int y_gridview);
+    //关闭方案配置界面
+    void slot_ProgramConfig_Close();
 
 private:
     //控制模块

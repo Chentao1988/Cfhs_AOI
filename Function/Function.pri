@@ -4,7 +4,8 @@ HEADERS += \
     $$PWD/imgsavemode.h \
     $$PWD/imgsubset.h \
     $$PWD/lineedit_button.h \
-    $$PWD/switch_button.h
+    $$PWD/switch_button.h \
+    $$PWD/cfhs_imagetranscoding.h
 
 SOURCES += \
     $$PWD/edit_double.cpp \
@@ -12,4 +13,5 @@ SOURCES += \
     $$PWD/imgsavemode.cpp \
     $$PWD/imgsubset.cpp \
     $$PWD/lineedit_button.cpp \
-    $$PWD/switch_button.cpp
+    $$PWD/switch_button.cpp \
+    $$PWD/cfhs_imagetranscoding.cpp

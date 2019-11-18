@@ -13,7 +13,9 @@ lineedit_button::lineedit_button(QString text, QWidget *parent, const FileType &
     lineedit->setReadOnly(true);
     label_text->setText(text);
     button->setFixedSize(17,16);
-    button->setStyleSheet("QPushButton{background-image: url(:/down_arrow.png);background-color:transparent;border:none}");
+    button->setStyleSheet("QPushButton{border-image: url(:/down_arrow.png);"
+                          "background-color:transparent;border:none}"
+                          "QPushButton:pressed{border-image: url(:/down_arrow_press.png)}");
     layout->addWidget(button,0,Qt::AlignRight|Qt::AlignVCenter);
     layout->setContentsMargins(0,0,0,0);
     lineedit->setTextMargins(0,0,20,0);
@@ -22,7 +24,8 @@ lineedit_button::lineedit_button(QString text, QWidget *parent, const FileType &
     layout_all->addWidget(lineedit);
     layout_all->setContentsMargins(0,0,0,0);
     setLayout(layout_all);
-    connect(button,SIGNAL(clicked()),this,SLOT(button_click()));
+    connect(button, &QPushButton::clicked,
+            this, &lineedit_button::button_click);
 }
 
 lineedit_button::~lineedit_button()

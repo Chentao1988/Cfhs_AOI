@@ -1,4 +1,5 @@
 ﻿#include "img_show_managent.h"
+#include "cfhs_imagetranscoding.h"
 #include <QMessageBox>
 
 #pragma execution_character_set("utf-8")
@@ -33,12 +34,15 @@ Img_Show_Managent::Img_Show_Managent(QWidget *parent) :
     button_no->setText(tr("取消"));
     connect(button_no, &QPushButton::clicked,
             this, &Img_Show_Managent::button_no_click);
+    //静态图设置
+    button_static_img = new QPushButton(tr("静态图设置"), this);
+    connect(button_static_img, &QPushButton::clicked,
+            this, &Img_Show_Managent::button_static_img_clicked);
+
     QHBoxLayout *layout_button = new QHBoxLayout();
-    layout_button->addStretch();
-    layout_button->addWidget(button_no);
-    layout_button->addStretch();
-    layout_button->addWidget(button_yes);
-    layout_button->addStretch();
+    layout_button->addWidget(button_static_img, 0, Qt::AlignCenter);
+    layout_button->addWidget(button_no, 0, Qt::AlignCenter);
+    layout_button->addWidget(button_yes, 0, Qt::AlignCenter);
     //总layout
     QVBoxLayout *layout_all = new QVBoxLayout();
     layout_all->addLayout(algorithmLayout);
@@ -47,7 +51,7 @@ Img_Show_Managent::Img_Show_Managent(QWidget *parent) :
     layout_all->setContentsMargins(9,9,9,20);
     layout_all->setSpacing(20);
     setLayout(layout_all);
-    resize(400,220);
+    resize(460,240);
     this->setWindowTitle(tr("图像显示管理"));
 }
 
@@ -56,30 +60,30 @@ Img_Show_Managent::~Img_Show_Managent()
 
 }
 
-void Img_Show_Managent::DialogShow()
+int Img_Show_Managent::DialogShow()
 {
     //获取方案
     QString strInfo;
     if(!m_logicInterface->GetConfigInfo(stConf, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
-        return;
+        return QDialog::Rejected;
     }
     //算法执行
-    algorithm_open_button->Set_Switch(stConf.bSaveImg);
+    algorithm_open_button->Set_Switch(stConf.bAlgorithmOnOrOff);
     //工位图来源
-    station_open_button->Set_Switch(stConf.bSaveImg);
-    this->exec();
+    station_open_button->Set_Switch(stConf.bStationDynamic);
+    return this->exec();
 }
 
 void Img_Show_Managent::button_yes_click()
 {
+    if(!Cfhs_ImageTranscoding::isStaticImgExists())
+        return;
     QString strInfo; //日志
     //设置方案信息
-    bool isAgorithmUsed = algorithm_open_button->Get_Switch();
-    bool isStationSys = station_open_button->Get_Switch();
-    stConf.bSaveImg = isAgorithmUsed;
-    stConf.bSysLang = isStationSys;
+    stConf.bAlgorithmOnOrOff = algorithm_open_button->Get_Switch();
+    stConf.bStationDynamic = station_open_button->Get_Switch();
     if(!m_logicInterface->SetConfigInfo(stConf, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
@@ -106,4 +110,12 @@ void Img_Show_Managent::station_open_button_clicked()
     bool isOpen = station_open_button->Get_Switch();
     isOpen = !isOpen;
     station_open_button->Set_Switch(isOpen);
+}
+
+void Img_Show_Managent::button_static_img_clicked()
+{
+    Cfhs_ImageTranscoding image(this);
+
+    if(image.exec() == QDialog::Accepted)
+        QMessageBox::information(this, " ", tr("设置成功"));
 }

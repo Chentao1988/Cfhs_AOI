@@ -6,7 +6,7 @@
 ImgSubSet::ImgSubSet(QWidget *parent)
     :QDialog(parent)
 {
-    resize(600,400);
+    resize(600,440);
     this->setWindowTitle(tr("图像分区设置"));
     QVBoxLayout *layout_All = new QVBoxLayout();
     QHBoxLayout *layout_EditAndButton = new QHBoxLayout();

@@ -257,8 +257,6 @@ void Cfhs_LoginDialog::init()
     this->setLayout(mainLayout);
     on_userComboBox_currentIndexChanged(0);
     //连接信号槽
-    //connect(m_userComboBox, currentIndexChanged,
-            //this, &Cfhs_LoginDialog::on_userComboBox_currentIndexChanged);
     connect(m_userComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(on_userComboBox_currentIndexChanged(int)));
     connect(m_modifyPwdButton, &QPushButton::clicked,
@@ -368,7 +366,7 @@ void Cfhs_LoginDialog::on_langCombo_currentIndex_changed(int index)
         //切换语言
         qApp->installTranslator(m_translator);
     }
-    //发送到数据库
+    //更改数据库
     stConfig stConf;
     QString strInfo;
     if(!m_logicInterface->GetConfigInfo(stConf, strInfo))
@@ -376,4 +374,18 @@ void Cfhs_LoginDialog::on_langCombo_currentIndex_changed(int index)
         QMessageBox::warning(this, " ", strInfo);
         return;
     }
+    switch(m_currentLang)
+    {
+    case English:
+        stConf.iSysLang = 1;
+        break;
+    case SimplifiedChinese:
+        stConf.iSysLang = 0;
+        break;
+    case TraditionalChinese:
+        stConf.iSysLang = 2;
+        break;
+    }
+    if(!m_logicInterface->SetConfigInfo(stConf, strInfo))
+        QMessageBox::warning(this, " ", strInfo);
 }

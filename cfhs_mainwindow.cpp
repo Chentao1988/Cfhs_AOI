@@ -22,8 +22,6 @@ Cfhs_MainWindow::Cfhs_MainWindow(QWidget *parent) :
 {
     this->mainWindowInit();
     this->setWindowStyle();
-    //读取方案
-    ReadProgram();
     //信号槽连接
     //弹窗信息
     connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowFrameInfo,
@@ -70,6 +68,9 @@ Cfhs_MainWindow::Cfhs_MainWindow(QWidget *parent) :
     //---良率报警
     connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowYieldAlarm,
             this, &Cfhs_MainWindow::slot_ShowYieldAlarm);
+
+    //读取方案
+    ReadProgram();
 }
 
 Cfhs_MainWindow::~Cfhs_MainWindow()
@@ -257,7 +258,7 @@ void Cfhs_MainWindow::mainWindowInit()
     this->setFixedSize(1920, 1080);
     this->setWindowFlags(this->windowFlags()|Qt::FramelessWindowHint);
     //工位栏
-    m_taskWidget = new Cfhs_TaskInfoWidget(this, false);
+    m_taskWidget = new Cfhs_TaskInfoWidget(this, true);
     ui->taskFrame->setWidget(m_taskWidget);
     connect(this, &Cfhs_MainWindow::sig_ShowStationStatus,
             m_taskWidget, &Cfhs_TaskInfoWidget::slot_ShowStationStatus);
@@ -265,8 +266,8 @@ void Cfhs_MainWindow::mainWindowInit()
             this, &Cfhs_MainWindow::slot_ShowCurrentTask);
     //大图
     m_bigImageWidget = new cfhs_mainwindows_img(this);
-    //QString path = QCoreApplication::applicationDirPath()+"/Resource/1.bmp";
-    //m_bigImageWidget->setImage(path);
+    QString path = QCoreApplication::applicationDirPath()+"/Resource/1.bmp";
+    m_bigImageWidget->setImage(path);
     m_bigImageWidget->installEventFilter(this);
     ui->mainFrame->setWidget(m_bigImageWidget);
     m_sumAnalysisTime = 12;
@@ -620,6 +621,7 @@ void Cfhs_MainWindow::slot_ShowStationImagePoint(int iStation, const QImage &ima
         m_defectSmallImage[1]->showDefect(imageSmall2, strDefectName2);
         m_defectSmallImage[2]->showDefect(imageSmall3, strDefectName3);
     }
+    qDebug()<<__FUNCTION__;
 }
 
 void Cfhs_MainWindow::slot_ShowResultImagePoint(const QImage &imageBig, const QString &strDefectName1,
@@ -669,6 +671,7 @@ void Cfhs_MainWindow::slot_ShowResultImagePoint(const QImage &imageBig, const QS
             m_defectSmallImage[i]->showDefect(img, name);
         }
     }
+    qDebug()<<__FUNCTION__;
 }
 
 void Cfhs_MainWindow::slot_ShowAnalysisImagePoint(const QImage &imageBig, const QString &strPoint)
@@ -682,6 +685,7 @@ void Cfhs_MainWindow::slot_ShowAnalysisImagePoint(const QImage &imageBig, const 
         //显示大图
         showBigImage(m_analysisImg, m_polygonAnalysisPoint);
     }
+    qDebug()<<__FUNCTION__;
 }
 
 void Cfhs_MainWindow::slot_ShowBatchChartInfo(const QString &strHourName, const QString &strHourInput, const QString &strHourYield, const QString &strHourTotalYield)
@@ -756,6 +760,19 @@ void Cfhs_MainWindow::slot_ShowGridView(bool open_gridview, int x_gridview, int 
     m_yGridview = y_gridview;
     if(m_taskWidget->getCurrentTask() == Cfhs_TaskInfoWidget::ResultTask)
         m_bigImageWidget->setGridView(m_openGridview, m_xGridview, m_yGridview);
+}
+
+void Cfhs_MainWindow::slot_ProgramConfig_Close()
+{
+    //---显示工位图片和缺陷点
+    connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowStationImagePoint,
+            this, &Cfhs_MainWindow::slot_ShowStationImagePoint);
+    //---显示结果图片和缺陷点
+    connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowResultImagePoint,
+            this, &Cfhs_MainWindow::slot_ShowResultImagePoint);
+    //---显示分析图片和缺陷点
+    connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowAnalysisImagePoint,
+            this, &Cfhs_MainWindow::slot_ShowAnalysisImagePoint);
 }
 
 void Cfhs_MainWindow::setUser(const UserType &user)
@@ -1070,8 +1087,19 @@ void Cfhs_MainWindow::programConfigAction_triggered() //方案配置
     if(!m_programConfigWidget)
     {
         m_programConfigWidget = new Cfhs_ProgramConfig(this);
-        //do something
+        connect(m_programConfigWidget, &Cfhs_ProgramConfig::sig_programConfig_close,
+                this, &Cfhs_MainWindow::slot_ProgramConfig_Close);
     }
+    //方案配置时不接受信息
+    //---显示工位图片和缺陷点
+    disconnect(m_logicInterface, &Cfhs_IBusiness::sig_ShowStationImagePoint,
+            this, &Cfhs_MainWindow::slot_ShowStationImagePoint);
+    //---显示结果图片和缺陷点
+    disconnect(m_logicInterface, &Cfhs_IBusiness::sig_ShowResultImagePoint,
+            this, &Cfhs_MainWindow::slot_ShowResultImagePoint);
+    //---显示分析图片和缺陷点
+    disconnect(m_logicInterface, &Cfhs_IBusiness::sig_ShowAnalysisImagePoint,
+            this, &Cfhs_MainWindow::slot_ShowAnalysisImagePoint);
     m_programConfigWidget->show();
 }
 
@@ -1097,7 +1125,25 @@ void Cfhs_MainWindow::addCameraAction_triggered()
 void Cfhs_MainWindow::imageManageAction_triggered()
 {
     Img_Show_Managent dialog(this);
-    dialog.DialogShow();
+    if(dialog.DialogShow() == QDialog::Accepted)
+    {
+        //读取当前方案
+        QMessageBox *msg = new QMessageBox(QMessageBox::Information,
+                                           tr("提示"),
+                                           tr("方案读取中，请稍后..."),
+                                           QMessageBox::Ok,
+                                           this);
+        msg->show();
+        Sleep(10);
+        if(ReadProgram())
+        {
+            msg->close();
+            QMessageBox::information(this, " ", tr("方案选择成功"));
+        }
+        msg->close();
+        delete msg;
+        msg = nullptr;
+    }
 }
 
 void Cfhs_MainWindow::imageSaveAction_triggered()
@@ -1318,8 +1364,21 @@ void Cfhs_MainWindow::on_programPushButton_clicked()
             return;
         }
         //读取当前方案
+        QMessageBox *msg = new QMessageBox(QMessageBox::Information,
+                                           tr("提示"),
+                                           tr("方案读取中，请稍后..."),
+                                           QMessageBox::Ok,
+                                           this);
+        msg->show();
+        Sleep(10);
         if(ReadProgram())
+        {
+            msg->close();
             QMessageBox::information(this, " ", tr("方案选择成功"));
+        }
+        msg->close();
+        delete msg;
+        msg = nullptr;
     }
 }
 

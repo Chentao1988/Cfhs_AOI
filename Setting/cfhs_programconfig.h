@@ -29,6 +29,9 @@ public:
 protected:
     void closeEvent(QCloseEvent *event);
 
+signals:
+    void sig_programConfig_close();
+
 private:
     void init();
     void setWindowStyle();

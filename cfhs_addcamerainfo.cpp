@@ -207,13 +207,13 @@ void Cfhs_AddCameraInfo::on_commitButton_clicked()
         QMessageBox::warning(this, " ", tr("该记录已存在，请重新设置"));
         return;
     }
-#if 0
+#if 1
     stCameraInfo stCamera;
     stCamera.strCameraType = strBrand;
     stCamera.strCameraSpecification = strType;
     stCamera.strCcfFilePath = strCcf;
     QString strInfo;
-    if(!m_logicInterface->InsertNewCameraInfo(stCamera, strInfo))
+    if(!m_logicInterface->InsertCameraInfo(stCamera, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;

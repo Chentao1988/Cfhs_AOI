@@ -65,12 +65,12 @@ void ImgSaveMode::DialogShow()
         QMessageBox::warning(this, " ", strInfo);
         return;
     }
-    save_original_ok->setChecked(stConf.bSaveImg);
-    save_compress_ok->setChecked(stConf.bCompressedImg);
-    save_original_ng->setChecked(stConf.bSaveImg);
-    save_compress_ng->setChecked(stConf.bCompressedImg);
-    bool isStationSys = true;
-    if(isStationSys)
+    save_original_ok->setChecked(stConf.bSaveOKImg);
+    save_compress_ok->setChecked(stConf.bSaveCompressedOKImg);
+    save_original_ng->setChecked(stConf.bSaveNGImg);
+    save_compress_ng->setChecked(stConf.bSaveCompressedNGImg);
+    //工位图是动态图是固定压缩
+    if(stConf.bStationDynamic)
     {
         save_compress_ok->setChecked(true);
         save_compress_ok->setEnabled(false);
@@ -82,12 +82,12 @@ void ImgSaveMode::DialogShow()
 
 void ImgSaveMode::on_button_yes_clicked()
 {
-    stConf.bSaveImg = save_original_ok->isChecked();
-    stConf.bCompressedImg = save_compress_ok->isChecked();
-    stConf.bSysLang = save_original_ng->isChecked();
-    stConf.bSysOnLine = save_compress_ng->isChecked();
+    stConf.bSaveOKImg = save_original_ok->isChecked();
+    stConf.bSaveCompressedOKImg = save_compress_ok->isChecked();
+    stConf.bSaveNGImg = save_original_ng->isChecked();
+    stConf.bSaveCompressedNGImg = save_compress_ng->isChecked();
     QString strInfo;
-    if(m_logicInterface->SetConfigInfo(stConf, strInfo))
+    if(!m_logicInterface->SetConfigInfo(stConf, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;

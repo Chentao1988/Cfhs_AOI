@@ -86,7 +86,7 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
                 QMessageBox::warning(this, " ", strInfo);
                 return false;
             }
-            qDebug()<<"Read station" << station.strToolPara;
+            //qDebug()<<"Read station" << station.strToolPara;
             //添加到list中
             m_stationList.append(station);
         }
@@ -136,6 +136,7 @@ void Cfhs_ProgramConfig::closeEvent(QCloseEvent *event)
         delete msg;
         msg = nullptr;
     }
+    emit sig_programConfig_close();
 }
 
 void Cfhs_ProgramConfig::init()
@@ -328,7 +329,7 @@ void Cfhs_ProgramConfig::on_saveProgramAction_triggered()
             QMessageBox::warning(this, " ", strInfo);
             return;
         }
-        qDebug()<<"Save station"<<station.strToolPara;
+        //qDebug()<<"Save station"<<station.strToolPara;
     }
     strInfo = QString(tr("方案(%1)保存成功")).arg(m_strProgramName);
     m_isProgramSaved = true;
