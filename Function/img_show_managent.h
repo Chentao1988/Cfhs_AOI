@@ -34,6 +34,7 @@ private:
     QPushButton *button_no;
     QPushButton *button_static_img;
     stConfig stConf;
+    int station_num;
 };
 
 #endif // IMG_SHOW_MANAGENT_H

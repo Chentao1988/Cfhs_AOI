@@ -73,12 +73,21 @@ int Img_Show_Managent::DialogShow()
     algorithm_open_button->Set_Switch(stConf.bAlgorithmOnOrOff);
     //工位图来源
     station_open_button->Set_Switch(stConf.bStationDynamic);
+    //获取工位数
+    QString strAllStation;
+    if(!m_logicInterface->GetAllStationNo(m_curProgramName, strAllStation, strInfo))
+    {
+        QMessageBox::warning(this, " ", strInfo);
+        return QDialog::Rejected;
+    }
+    QStringList listStation = getListFromQString(strAllStation);
+    station_num = listStation.size();
     return this->exec();
 }
 
 void Img_Show_Managent::button_yes_click()
 {
-    if(!Cfhs_ImageTranscoding::isStaticImgExists())
+    if(!Cfhs_ImageTranscoding::isStaticImgExists(station_num))
         return;
     QString strInfo; //日志
     //设置方案信息
@@ -114,7 +123,7 @@ void Img_Show_Managent::station_open_button_clicked()
 
 void Img_Show_Managent::button_static_img_clicked()
 {
-    Cfhs_ImageTranscoding image(this);
+    Cfhs_ImageTranscoding image(this, station_num);
 
     if(image.exec() == QDialog::Accepted)
         QMessageBox::information(this, " ", tr("设置成功"));

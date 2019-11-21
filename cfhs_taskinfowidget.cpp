@@ -26,7 +26,7 @@ Cfhs_TaskInfoWidget::Cfhs_TaskInfoWidget(QWidget *parent, const bool &isResultUs
     layout->setContentsMargins(15,0,15,0);
     this->setLayout(layout);
     m_curTaskIndex = AnalysisTask;
-    m_curStationNum = 0;
+    m_curStationNum = -1;
 }
 
 Cfhs_TaskInfoWidget::~Cfhs_TaskInfoWidget()
@@ -40,8 +40,7 @@ void Cfhs_TaskInfoWidget::setTask(const int &stationNum)
         return;
     //清空原有数据
     clearTask();
-    if(stationNum <=0)
-        return;
+    QHBoxLayout *layout = static_cast<QHBoxLayout*>(this->layout());
     //如果新的工位不存在map中则添加
     int currentNum = m_mapButton.size();
     if(stationNum > currentNum)
@@ -53,7 +52,6 @@ void Cfhs_TaskInfoWidget::setTask(const int &stationNum)
             m_mapButton.insert(i, button);
         }
     }
-    QHBoxLayout *layout = static_cast<QHBoxLayout*>(this->layout());
     //重新显示工位
     for(int i=1; i<=stationNum; i++)
     {
@@ -67,18 +65,9 @@ void Cfhs_TaskInfoWidget::setTask(const int &stationNum)
         setButtonStatus(m_reslutButton, Connect);
     setButtonStatus(m_analysisButton, Connect);
 
-    if(m_isResultUsed)
-    {
-        //默认显示结果工位
-        m_curTaskIndex = ResultTask;
-        m_reslutButton->setChecked(true);
-    }
-    else
-    {
-        //默认显示分析工位
-        m_curTaskIndex = AnalysisTask;
-        m_analysisButton->setChecked(true);
-    }
+    //默认显示分析工位
+    m_curTaskIndex = AnalysisTask;
+    m_analysisButton->setChecked(true);
 
     m_curStationNum = stationNum;
 }

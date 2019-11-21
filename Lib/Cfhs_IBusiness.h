@@ -83,9 +83,10 @@ public:
     //输入
     //strNowName：系统的当前方案名
     //stGet:输出
+    //bShowImg:是否显示图片
     //方案信息
     //strInfo:执行信息
-    bool GetProInfo(const QString &strNowName, stProgramme &stGet, QString &strInfo);
+    bool GetProInfo(const QString &strNowName, stProgramme &stGet, bool bShowImg, QString &strInfo);
     //---设置方案信息
     //输入
     //strNowName：系统的当前方案名

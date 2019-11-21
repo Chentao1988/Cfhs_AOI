@@ -16,7 +16,7 @@ public:
     Cfhs_ImageTranscoding(QWidget *parent = nullptr, const int &stationNum = 4);
     ~Cfhs_ImageTranscoding();
 
-    static bool isStaticImgExists();
+    static bool isStaticImgExists(const int &stationNum = 4);
 
 private:
     //图片转码

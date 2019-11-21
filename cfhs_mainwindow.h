@@ -17,6 +17,7 @@
 #include <QPolygon>
 #include <QActionGroup>
 #include <QKeyEvent>
+#include <QTimer>
 #include "cfhs_tablewidget.h"
 #include "cfhs_statusbar.h"
 #include "cfhs_productresultwidget.h"
@@ -183,8 +184,8 @@ public slots:
     void slot_ShowCurrentTask(const int &index);
     //开启九宫格
     void slot_ShowGridView(bool open_gridview,int x_gridview,int y_gridview);
-    //关闭方案配置界面
-    void slot_ProgramConfig_Close();
+    //关闭按钮按下超过3s，关闭软件
+    void slot_closeButton_timeout();
 
 private:
     //控制模块
@@ -230,7 +231,7 @@ private:
     QPointer<Cfhs_SideTool> m_sideToolWidget; //侧边工具栏
     bool m_isReadCoded;  //读码开关
     bool m_isMesReported;  //MES上传开关
-    QTime m_closeTime;  //关闭按钮按下的时间
+    QPointer<QTimer> m_closeTimer;  //关闭软件和电脑定时器
     bool m_isSystemStatus; //系统运行状态
     QPointer<QMessageBox> m_showMessage;  //显示弹出信息
     QPointer<cfhs_mainwindows_img> m_bigImageWidget;  //大图

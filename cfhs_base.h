@@ -30,7 +30,7 @@ typedef struct _UserType{
 }UserType;
 
 //界面语言
-enum LanguageEnum{English=0, SimplifiedChinese, TraditionalChinese};
+enum LanguageEnum{English=1, SimplifiedChinese=0, TraditionalChinese=2};
 
 
 #endif // CFHS_BASE_H

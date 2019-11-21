@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     //显示登录界面
     splash.hide();
     Cfhs_LoginDialog login;
-    if(login.exec() == QDialog::Accepted)
+    if(login.DialogShow() == QDialog::Accepted)
     {
         //加载主界面
         splash.showMessage("Loading module, please waiting ...", Qt::AlignCenter, QColor("#0077FF"));

@@ -584,10 +584,13 @@ QTabBar QToolButton::left-arrow:pressed
 }
 
 /**********文本编辑框**********/
-QTextEdit {
-        border: 1px solid #0077FF;
-        color: #0077FF;
-        background: #000A19;
+QTextEdit
+{
+    border: 1px solid #0077FF;
+    color: #2193AB;
+    background: #000A19;
+    font-size: 18px;
+    font-family: Mircosoft Yahei;
 }
 
 QToolBar
@@ -607,4 +610,20 @@ QToolTip
     color: #0077FF;
     font-size: 16px;
     font-family: Mircosoft Yahei;
+}
+
+QProgressBar
+{
+    border: 1px solid #0077FF;
+    border-radius: 6px;
+    color: #2193AB;
+    background:transparent;
+    text-align: center;
+    font-size: 18px;
+    font-family: Mircosoft Yahei;
+}
+
+QProgressBar::chunk
+{
+    background:#3954C9;
 }

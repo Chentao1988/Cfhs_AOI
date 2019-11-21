@@ -60,7 +60,7 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
     }
     QString strInfo;
     //读取方案
-    if(!m_logicInterface->GetProInfo(programName, m_curProgram, strInfo))
+    if(!m_logicInterface->GetProInfo(programName, m_curProgram, false, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return false;
@@ -136,7 +136,6 @@ void Cfhs_ProgramConfig::closeEvent(QCloseEvent *event)
         delete msg;
         msg = nullptr;
     }
-    emit sig_programConfig_close();
 }
 
 void Cfhs_ProgramConfig::init()
@@ -145,8 +144,6 @@ void Cfhs_ProgramConfig::init()
     m_stationSetWidget = new Cfhs_StationSet(this);
     //Roi绘图
     m_imageWindow = new Cfhs_ImageWindow(this);
-    //QString path = QCoreApplication::applicationDirPath()+"/Resource/1.bmp";
-    //m_imageWindow->setImage(path);
     ui->windowFrame->setWidget(m_imageWindow);
     //工具箱
     m_toolTree = new Cfhs_ProgramToolTree(this);

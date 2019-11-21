@@ -24,6 +24,7 @@ public:
     ~Cfhs_LoginDialog();
     UserType getUser();
     PermissionEnum getUserPermission();
+    int DialogShow();
 
 protected:
     void changeEvent(QEvent *event);
@@ -41,6 +42,8 @@ private slots:
 private:
     void init();
     void setWindowStyle();
+    bool updateUi(const int &index);
+
 
 private:
     UserType m_user;

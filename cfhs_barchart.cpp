@@ -223,6 +223,27 @@ Cfhs_Barchart::Cfhs_Barchart(QWidget *parent):
     m_totalCurve->setTitle(tr("累计良率/每小时"));
     m_totalCurve->attach(this);
 
+    //设置值显示
+    int xBottomAxisId = QwtPlot::xBottom;
+    int yLeftAxisId = QwtPlot::yLeft;
+
+    //设置X/Y轴标题、显示范围、轴线的最大间隔
+    //setAxisTitle(xBottomAxisId, tr("生产时间"));
+    QStringList listname;
+    for(int i=0; i<12; i++)
+        listname.append(QString::number(i+1));
+    setAxisScale(xBottomAxisId, -1, 12);
+    setAxisMaxMinor(xBottomAxisId, 1);  // 设置大刻度之间的小刻度数量
+    setAxisMaxMajor(xBottomAxisId, 14); // 设置大刻度的数量,增加两个刻度使两侧的数据能够显示完全
+    setAxisScaleDraw(xBottomAxisId, new DistroScaleDraw(listname));
+
+    //setAxisTitle(yLeftAxisId, tr("产品良率"));
+    setAxisScale(yLeftAxisId, 0, 100.0);
+    setAxisMaxMinor(yLeftAxisId, 5);
+    setAxisMaxMajor(yLeftAxisId, 10);
+    setAxisScaleDraw(yLeftAxisId, new QwtScaleDraw());
+    //enableAxis(yLeftAxisId, false); //设置不可用
+
     setAutoReplot(true);
     //Menu init
     m_menu = new QMenu(this);
@@ -334,7 +355,7 @@ void Cfhs_Barchart::setData(const QString &strHourName, const QString &strHourIn
 void Cfhs_Barchart::setDrawData(const QStringList& name, const QVector<double>& inputSamples,
                  const QPolygonF& hourSamples, const QPolygonF& totalSamples)
 {
-#if 1
+#if 0
     //设置直显示
     int xBottomAxisId = QwtPlot::xBottom;
     int yLeftAxisId = QwtPlot::yLeft;
@@ -352,6 +373,9 @@ void Cfhs_Barchart::setDrawData(const QStringList& name, const QVector<double>& 
     setAxisMaxMajor(yLeftAxisId, 10);
     setAxisScaleDraw(yLeftAxisId, new QwtScaleDraw());
     //enableAxis(yLeftAxisId, false); //设置不可用
+#else
+    int xBottomAxisId = QwtPlot::xBottom;
+    setAxisScaleDraw(xBottomAxisId, new DistroScaleDraw(name));
 #endif
     //设置sample
     m_barChartItem->setSamplesData(inputSamples);

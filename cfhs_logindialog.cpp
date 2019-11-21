@@ -43,6 +43,22 @@ PermissionEnum Cfhs_LoginDialog::getUserPermission()
     return m_user.m_Permission;
 }
 
+int Cfhs_LoginDialog::DialogShow()
+{
+    stConfig conf;
+    QString strInfo;
+    if(!m_logicInterface->GetConfigInfo(conf, strInfo))
+    {
+        QMessageBox::warning(this, " ", strInfo);
+        return QDialog::Rejected;
+    }
+    m_langCombo->setCurrentIndex(conf.iSysLang);
+    if(!updateUi(conf.iSysLang))
+        return QDialog::Rejected;
+
+    return this->exec();
+}
+
 void Cfhs_LoginDialog::changeEvent(QEvent *event)
 {
     if(event->type() == QEvent::LanguageChange)
@@ -174,6 +190,40 @@ void Cfhs_LoginDialog::setWindowStyle()
     this->setFixedSize(600, 420);
 }
 
+bool Cfhs_LoginDialog::updateUi(const int &index)
+{
+    m_currentLang = static_cast<LanguageEnum>(index);
+    //加载翻译器
+    if(m_currentLang == SimplifiedChinese)
+        qApp->removeTranslator(m_translator);
+    else
+    {
+        QString path = "";
+        if(m_currentLang == English)
+        {
+            path = QCoreApplication::applicationDirPath()+"/Language/lang_En.qm";
+            if(!m_translator->load(path))
+            {
+                QMessageBox::warning(this, " ", "Loading translator file failed");
+                return false;
+            }
+        }
+        else if(m_currentLang == TraditionalChinese)
+        {
+            path = QCoreApplication::applicationDirPath()+"/Language/lang_Cht.qm";
+            if(!m_translator->load(path))
+            {
+                QMessageBox::warning(this, " ", "加載翻譯文件失敗");
+                return false;
+            }
+        }
+        //切换语言
+        qApp->installTranslator(m_translator);
+    }
+
+    return true;
+}
+
 void Cfhs_LoginDialog::init()
 {
     this->setWindowFlags(this->windowFlags() | Qt::WindowMinimizeButtonHint);
@@ -211,8 +261,8 @@ void Cfhs_LoginDialog::init()
     //语言切换
     m_langCombo = new Cfhs_ComboBox(this);
     QStringList langList;
-    langList.append("English");
     langList.append("简体中文");
+    langList.append("English");
     langList.append("繁體中文");
     m_langCombo->addItems(langList);
     m_langCombo->setCurrentIndex(1);
@@ -324,48 +374,8 @@ void Cfhs_LoginDialog::on_langCombo_currentIndex_changed(int index)
 {
     if(index < 0)
         return;
-    switch (index)
-    {
-    case 0:
-        m_currentLang = English;
-        break;
-    case 1:
-        m_currentLang = SimplifiedChinese;
-        break;
-    case 2:
-        m_currentLang = TraditionalChinese;
-        break;
-    default:
-        m_currentLang = English;
-        break;
-    }
-    //加载翻译器
-    if(m_currentLang == SimplifiedChinese)
-        qApp->removeTranslator(m_translator);
-    else
-    {
-        QString path = "";
-        if(m_currentLang == English)
-        {
-            path = QCoreApplication::applicationDirPath()+"/Resource/lang_En.qm";
-            if(!m_translator->load(path))
-            {
-                QMessageBox::warning(this, " ", "Loading translator failed");
-                return;
-            }
-        }
-        else if(m_currentLang == TraditionalChinese)
-        {
-            path = QCoreApplication::applicationDirPath()+"/Resource/lang_Cht.qm";
-            if(!m_translator->load(path))
-            {
-                QMessageBox::warning(this, " ", "加載翻譯文件失敗");
-                return;
-            }
-        }
-        //切换语言
-        qApp->installTranslator(m_translator);
-    }
+    if(!updateUi(index))
+        return;
     //更改数据库
     stConfig stConf;
     QString strInfo;
@@ -374,18 +384,7 @@ void Cfhs_LoginDialog::on_langCombo_currentIndex_changed(int index)
         QMessageBox::warning(this, " ", strInfo);
         return;
     }
-    switch(m_currentLang)
-    {
-    case English:
-        stConf.iSysLang = 1;
-        break;
-    case SimplifiedChinese:
-        stConf.iSysLang = 0;
-        break;
-    case TraditionalChinese:
-        stConf.iSysLang = 2;
-        break;
-    }
+    stConf.iSysLang = index;
     if(!m_logicInterface->SetConfigInfo(stConf, strInfo))
         QMessageBox::warning(this, " ", strInfo);
 }

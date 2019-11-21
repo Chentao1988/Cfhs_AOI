@@ -13,6 +13,7 @@ DEFINES += QT_DLL QWT_DLL
 win32:CONFIG(release, debug|release): LIBS += -L"D:\Qt\QtPlugin\qwt-6.1.4\lib" -lqwt
 else:win32:CONFIG(debug, debug|release): LIBS += -L"D:\Qt\QtPlugin\qwt-6.1.4\lib" -lqwtd
 INCLUDEPATH += D:\Qt\QtPlugin\qwt-6.1.4\src
+DEPENDPATH += D:\Qt\QtPlugin\qwt-6.1.4\lib
 
 CONFIG += Cfhs_Business
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Lib/ -lCfhs_Business
@@ -20,11 +21,11 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Lib/ -lCfhs_Businessd
 INCLUDEPATH += $$PWD/Lib
 DEPENDPATH += $$PWD/Lib
 
-CONFIG += openCv
+CONFIG += opencv
 win32:CONFIG(release, debug|release): LIBS += -L"D:\opencv\build\x64\vc15\lib" -lopencv_world401
 else:win32:CONFIG(debug, debug|release): LIBS += -L"D:\opencv\build\x64\vc15\lib" -lopencv_world401d
 INCLUDEPATH += "D:\opencv\build\include"
-DEPENDPATH += "D:\opencv\build\x64\vc15\lib"
+DEPENDPATH += "D:\opencv\build\x64\vc15\bin"
 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

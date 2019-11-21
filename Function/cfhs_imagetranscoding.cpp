@@ -57,7 +57,7 @@ Cfhs_ImageTranscoding::~Cfhs_ImageTranscoding()
 
 }
 
-bool Cfhs_ImageTranscoding::isStaticImgExists()
+bool Cfhs_ImageTranscoding::isStaticImgExists(const int &stationNum)
 {
     QDir dir;
     //文件目录
@@ -83,7 +83,7 @@ bool Cfhs_ImageTranscoding::isStaticImgExists()
         return false;
     }
     //工位图
-    for(int i=0; i<4; i++)
+    for(int i=0; i<stationNum; i++)
     {
         int stationNo = i + 1;
         QString station_path = QString("%1/station%2.jpg").arg(strDir).arg(stationNo);

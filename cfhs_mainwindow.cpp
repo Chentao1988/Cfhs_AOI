@@ -216,7 +216,7 @@ void Cfhs_MainWindow::setWindowStyle()
     QString functionStyle = getFunctionButtonStyle("function");
     ui->functionPushButton->setStyleSheet(functionStyle);
     //字体设置为22px
-    labelStyle = QString("QLabel{color:#0077FF; font-size: 22px}" "QLabel:hover{color:#2193AB}");
+    labelStyle = QString("QLabel{color:#0077FF; font-size: 26px; font-family:Mircosoft Yahei;}");
     ui->functionLabel->setStyleSheet(labelStyle);
     //控制
     ui->controlPushButton->setFixedSize(size);
@@ -325,6 +325,10 @@ void Cfhs_MainWindow::mainWindowInit()
     m_roiTable = new Cfhs_TableWidget(this);
     ui->RoiFrame->setWidget(m_roiTable);
     //关闭按钮添加事件过滤器
+    m_closeTimer = new QTimer(this);
+    m_closeTimer->setInterval(3000);
+    connect(m_closeTimer, &QTimer::timeout,
+            this, &Cfhs_MainWindow::slot_closeButton_timeout);
     ui->closePushButton->installEventFilter(this);
     //控制栏配置
     controlInit();
@@ -421,6 +425,7 @@ void Cfhs_MainWindow::helpInit()
     m_helpMenu->addAction(m_teamviewerAction);
     //设置到button上
     ui->helpPushButton->setMenu(m_helpMenu);
+    ui->helpLabel->installEventFilter(this);
 }
 
 bool Cfhs_MainWindow::setProgram(const stProgramme &stPro)
@@ -762,17 +767,20 @@ void Cfhs_MainWindow::slot_ShowGridView(bool open_gridview, int x_gridview, int 
         m_bigImageWidget->setGridView(m_openGridview, m_xGridview, m_yGridview);
 }
 
-void Cfhs_MainWindow::slot_ProgramConfig_Close()
+void Cfhs_MainWindow::slot_closeButton_timeout()
 {
-    //---显示工位图片和缺陷点
-    connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowStationImagePoint,
-            this, &Cfhs_MainWindow::slot_ShowStationImagePoint);
-    //---显示结果图片和缺陷点
-    connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowResultImagePoint,
-            this, &Cfhs_MainWindow::slot_ShowResultImagePoint);
-    //---显示分析图片和缺陷点
-    connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowAnalysisImagePoint,
-            this, &Cfhs_MainWindow::slot_ShowAnalysisImagePoint);
+    QMessageBox *msg = new QMessageBox(QMessageBox::Information,
+                                       tr("关闭"),
+                                       tr("确定关闭软件和电脑？"),
+                                       QMessageBox::Yes|
+                                       QMessageBox::No,
+                                       this);
+    if(msg->exec() == QMessageBox::Yes)
+    {
+        m_logicInterface->CloseAll();
+    }
+    //关闭定时器
+    m_closeTimer->stop();
 }
 
 void Cfhs_MainWindow::setUser(const UserType &user)
@@ -826,7 +834,7 @@ bool Cfhs_MainWindow::ReadProgram()
     m_curProgramName = conf.strNowProName;
     //获取当前方案
     stProgramme stPro;
-    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, strInfo))
+    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, true, strInfo))
     {
         QMessageBox::information(this, " ", strInfo);
         return false;
@@ -879,27 +887,13 @@ bool Cfhs_MainWindow::eventFilter(QObject* obj, QEvent* event)
         }
         else if(obj == ui->closePushButton)
         {
-            m_closeTime.start();
+            m_closeTimer->start();
         }
         return false;
     }
     else if(event->type() == QEvent::MouseButtonRelease && obj == ui->closePushButton)
     {
-        qDebug()<<"time used" << m_closeTime.elapsed();
-        if(m_closeTime.elapsed() >= 3000)
-        {
-            QMessageBox *msg = new QMessageBox(QMessageBox::Information,
-                                               tr("关闭"),
-                                               tr("确定关闭软件和电脑？"),
-                                               QMessageBox::Yes|
-                                               QMessageBox::No,
-                                               this);
-            if(msg->exec() == QMessageBox::Yes)
-            {
-                m_logicInterface->CloseAll();
-                return true;
-            }
-        }
+        m_closeTimer->stop();
         return false;
     }
     else if(m_taskWidget->getCurrentTask() == Cfhs_TaskInfoWidget::AnalysisTask
@@ -1087,19 +1081,7 @@ void Cfhs_MainWindow::programConfigAction_triggered() //方案配置
     if(!m_programConfigWidget)
     {
         m_programConfigWidget = new Cfhs_ProgramConfig(this);
-        connect(m_programConfigWidget, &Cfhs_ProgramConfig::sig_programConfig_close,
-                this, &Cfhs_MainWindow::slot_ProgramConfig_Close);
     }
-    //方案配置时不接受信息
-    //---显示工位图片和缺陷点
-    disconnect(m_logicInterface, &Cfhs_IBusiness::sig_ShowStationImagePoint,
-            this, &Cfhs_MainWindow::slot_ShowStationImagePoint);
-    //---显示结果图片和缺陷点
-    disconnect(m_logicInterface, &Cfhs_IBusiness::sig_ShowResultImagePoint,
-            this, &Cfhs_MainWindow::slot_ShowResultImagePoint);
-    //---显示分析图片和缺陷点
-    disconnect(m_logicInterface, &Cfhs_IBusiness::sig_ShowAnalysisImagePoint,
-            this, &Cfhs_MainWindow::slot_ShowAnalysisImagePoint);
     m_programConfigWidget->show();
 }
 
@@ -1306,11 +1288,12 @@ void Cfhs_MainWindow::on_readCodePushButton_clicked()
     bool isStatus = !m_isReadCoded;
     stProgramme stPro;
     QString strInfo;
-    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, strInfo))
+    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, false, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;
     }
+    stPro.bOpenScan = isStatus;
     if(m_logicInterface->SetProInfo(m_curProgramName, stPro, strInfo))
         setReadCodingOpen(isStatus);
     else
@@ -1322,7 +1305,7 @@ void Cfhs_MainWindow::on_mesReportPushButton_clicked()
     bool isStatus = !m_isMesReported;
     stProgramme stPro;
     QString strInfo;
-    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, strInfo))
+    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, false, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;
@@ -1396,7 +1379,7 @@ void Cfhs_MainWindow::on_normalRadioButton_clicked()
 {
     stProgramme stPro;
     QString strInfo;
-    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, strInfo))
+    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, false, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;
@@ -1415,7 +1398,7 @@ void Cfhs_MainWindow::on_okRadioButton_clicked()
 {
     stProgramme stPro;
     QString strInfo;
-    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, strInfo))
+    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, false, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;
@@ -1434,7 +1417,7 @@ void Cfhs_MainWindow::on_ngRadioButton_clicked()
 {
     stProgramme stPro;
     QString strInfo;
-    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, strInfo))
+    if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, false, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;
