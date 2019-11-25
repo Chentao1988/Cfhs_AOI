@@ -84,6 +84,8 @@ private:
     void setMesReportOpen(const bool& isOpened);
     //显示附加功能，只供内部人员使用
     void showAdditionalFunction(const bool &isShowed);
+    //模拟数据
+    void createData();
 
 signals:
     //---显示当前产品结果

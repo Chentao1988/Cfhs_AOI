@@ -71,6 +71,8 @@ Cfhs_MainWindow::Cfhs_MainWindow(QWidget *parent) :
 
     //读取方案
     ReadProgram();
+    //虚拟数据
+    //createData();
 }
 
 Cfhs_MainWindow::~Cfhs_MainWindow()
@@ -1282,6 +1284,51 @@ void Cfhs_MainWindow::showAdditionalFunction(const bool &isShowed)
         ui->settingPushButton->click();
 }
 
+void Cfhs_MainWindow::createData()
+{
+    //大图、缺陷点
+    QPolygon listPoint;
+    listPoint.append(QPoint(9470, 3200));
+    listPoint.append(QPoint(3600, 8560));
+    listPoint.append(QPoint(5840, 17820));
+    showBigImage(m_resultImg, listPoint);
+    //缺陷小图
+    //1
+    QString strName = "黑点";
+    QImage img;
+    img.load(":/image2.png");
+    m_defectSmallImage[0]->showDefect(img, strName);
+    //2
+    strName = "黑线";
+    img.load(":/image1.png");
+    m_defectSmallImage[1]->showDefect(img, strName);
+    //3
+    strName = "白线";
+    img.load(":/image4.png");
+    m_defectSmallImage[2]->showDefect(img, strName);
+    //结果图
+    QString strCurRel = "OK";
+    emit sig_ShowNowResult(strCurRel);
+    QString strPrevRel = "OK#OK#NG#OK#OK#OK#OK#OK#NG#OK";
+    strPrevRel.append("#NG#OK#OK#OK#OK#OK#OK#OK#OK#OK");
+    emit sig_Show20Result(strPrevRel);
+    //批次数据
+    QString strBatch = "1910091806_A_01_0002#252#220#30#87.3%";
+    m_batchTable->addData(strBatch);
+    //特征表
+    QString strFeat1 = "1910091809#2#黑点#3600,8560#100.2#200.3#20#30#40#10#20#12.5";
+    QString strFeat2 = "1910091817#1#黑线#9470,3200#200.2#400.3#18#330#34#10#30#32.5";
+    QString strFeat3 ="1910091817#3#白线#5840,17820#220.2#360.3#25#430#24#30#27#72.5";
+    m_featureTable->addData(strFeat1);
+    m_featureTable->addData(strFeat2);
+    m_featureTable->addData(strFeat3);
+    //良率表
+    QString strHour = "7#8#9#10#11#12#13#14#15#16#17#18";
+    QString strInput = "200#789#658#549#657#895#788#864#765#698#655#821";
+    QString strYield = "78#50#69#78#89#52#45#64#42#68#55#96";
+    QString strTotal = "75#68#82#80#76#74#72#84#87#89#90#65";
+    m_batchChart->setData(strHour,strInput,strYield,strTotal);
+}
 
 void Cfhs_MainWindow::on_readCodePushButton_clicked()
 {

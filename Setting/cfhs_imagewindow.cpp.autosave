@@ -165,6 +165,8 @@ QList<QPoint> Cfhs_ImageWindow::list_imgtothis(QList<QPoint> listpoint)
 QList<QPoint> Cfhs_ImageWindow::list_imgtothis(QList<QPoint> listpoint)
 {
     QList<QPoint> list_return;
+    if(save_map.isNull())
+        return list_return;
     QPoint point_temp;
     for (int i=0;i<listpoint.size();i++) {
         int x_len = (this->width() - save_width)/2;
@@ -181,6 +183,8 @@ QList<QPoint> Cfhs_ImageWindow::list_imgtothis(QList<QPoint> listpoint)
 QList<QPoint> Cfhs_ImageWindow::list_thistoimg(QList<QPoint> listpoint)
 {
     QList<QPoint> list_return;
+    if(save_map.isNull())
+        return list_return;
     QPoint point_temp;
     for (int i=0;i<listpoint.size();i++) {
         int x_len = (this->width() - save_width)/2;

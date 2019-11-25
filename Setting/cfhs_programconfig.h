@@ -38,6 +38,9 @@ private:
     void setCurProgramName(const QString& name);
 
 private slots:
+    void slot_currentStation_changed(const int &index);
+
+private slots:
     //新建方案
     void on_newProgramAction_triggered();
     //加载方案

@@ -9,6 +9,7 @@
 #include <QList>
 #include <QMessageBox>
 #include <QStatusBar>
+#include <QFile>
 
 class Cfhs_ShowStatusBar : public QStatusBar
 {
@@ -65,6 +66,8 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
         QMessageBox::warning(this, " ", strInfo);
         return false;
     }
+    //更新当前方案名
+    setCurProgramName(programName);
     //读取工位信息
     QString strAllStation;
     if(!m_logicInterface->GetAllStationNo(programName, strAllStation, strInfo))
@@ -107,8 +110,6 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
     m_featureList = getListFromQString(strFeature);
     //更新到流程栏中
     m_processBar->setStationList(m_stationList);
-    //更新当前方案名
-    setCurProgramName(programName);
     //方案置为已保存状态
     m_isProgramSaved = true;
     return true;
@@ -152,6 +153,8 @@ void Cfhs_ProgramConfig::init()
     m_processBar = new Cfhs_ProgramProcessBar(this);
     connect(m_imageWindow, &Cfhs_ImageWindow::sig_sendRoiPoint,
             m_processBar, &Cfhs_ProgramProcessBar::slot_getRoiPoint);
+    connect(m_processBar, &QTabWidget::currentChanged,
+            this, &Cfhs_ProgramConfig::slot_currentStation_changed);
     ui->processFrame->setWidget(m_processBar);
     //多工位投影标定
     m_stationsStandardize = nullptr;
@@ -238,6 +241,19 @@ void Cfhs_ProgramConfig::setCurProgramName(const QString &name)
     m_statusBar->showMessageInfo(isNormal, strMsg);
 }
 
+void Cfhs_ProgramConfig::slot_currentStation_changed(const int &index)
+{
+    if(index <0 || index>= m_stationList.size())
+        return;
+    if(m_strProgramName.isEmpty())
+        return;
+    int stationNo = index + 1;
+    QString strImg = QString("D:/%1/static_img/station%2.jpg").arg(m_strProgramName).arg(stationNo);
+    if(!QFile::exists(strImg))
+        return;
+    m_imageWindow->setImage(strImg);
+}
+
 void Cfhs_ProgramConfig::on_newProgramAction_triggered()
 {
     //新建方案名
@@ -287,8 +303,19 @@ void Cfhs_ProgramConfig::on_readProgramAction_triggered()
     {
         //读取方案
         QString proName = msg.getMessage();
+        QString strMsg = QString(tr("方案(%1)读取中，请稍后...")).arg(proName);
+        QMessageBox *msg = new QMessageBox(QMessageBox::Information,
+                                           tr("提示"),
+                                           strMsg,
+                                           QMessageBox::Ok,
+                                           this);
+        msg->show();
+        Sleep(10);
         if(ReadProgram(proName))
         {
+            msg->close();
+            delete msg;
+            msg = nullptr;
             QString strMsg = QString(tr("方案(%1)读取成功")).arg(proName);
             QMessageBox::information(this, " ", strMsg);
         }
