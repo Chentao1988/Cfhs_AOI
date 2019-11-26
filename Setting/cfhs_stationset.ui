@@ -54,7 +54,7 @@
         <item>
          <widget class="QLabel" name="stationEnableLabel">
           <property name="text">
-           <string>工位检测启用（开/关）：</string>
+           <string>工位检测启用（关/开）：</string>
           </property>
          </widget>
         </item>

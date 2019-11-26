@@ -65,6 +65,9 @@ Cfhs_CameraConfig::~Cfhs_CameraConfig()
 
 void Cfhs_CameraConfig::setCameraConfig(const QString &strConfig)
 {
+    if(strConfig.isEmpty() || strConfig == "null")
+        return;
+
     QStringList list = strConfig.split("@");
     QString strName;  //相机品牌
     QString strType;  //相机类型
@@ -168,7 +171,7 @@ QTreeWidgetItem *Cfhs_CameraConfig::getItem(const QString &name,
     item->setText(column, name);
     if(hasIcon)
     {
-        QString path = QString(":/image_tool/camera_%1.png").arg(name);
+        QString path = QString(":/image_tool/camera_%1.png").arg(name.toLower());
         QIcon icon;
         icon.addFile(path);
         item->setIcon(0, icon);

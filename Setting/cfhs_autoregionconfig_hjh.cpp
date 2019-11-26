@@ -10,7 +10,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-const int m_paraNum = 2;
+const int m_paraNum = 3;
 
 Cfhs_AutoRegionConfig_hjh::Cfhs_AutoRegionConfig_hjh(QWidget *parent)
     :QDialog (parent)
@@ -26,6 +26,7 @@ Cfhs_AutoRegionConfig_hjh::Cfhs_AutoRegionConfig_hjh(QWidget *parent)
     m_algoTable = new Cfhs_AlgorithmTable(this);
     m_algoTable->addOnePara(tr("A区低阈值"), tr("相对于A区平均亮度下沉值"));
     m_algoTable->addOnePara(tr("A区高阈值"), tr("相对于A区平均亮度上浮值"));
+    m_algoTable->addOnePara(tr("模板"), tr("0：调用已有模板  1：新建模板"));
     //commit button
     m_commitButton = new QPushButton(this);
     m_commitButton->setText(tr("确定"));
@@ -125,6 +126,18 @@ bool Cfhs_AutoRegionConfig_hjh::setParaConfig(const QString &strConfig)
         }
         item->setText(strMax);
     }
+    if(map.contains("new_model_hjh"))
+    {
+        QString strModel = map.value("new_model_hjh");
+        row = getRowFromName("new_model_hjh");
+        QTableWidgetItem *item = m_algoTable->item(row, 1);
+        if(!item)
+        {
+            item = new QTableWidgetItem;
+            m_algoTable->setItem(row, 1, item);
+        }
+        item->setText(strModel);
+    }
 
     return true;
 }
@@ -136,6 +149,8 @@ int Cfhs_AutoRegionConfig_hjh::getIndexFromName(const QString &name)
         index = 1;
     else if(name == "aa_region_positive_hjh")
         index = 2;
+    else if(name == "new_model_hjh")
+        index = 3;
 
     return index;
 }
@@ -150,6 +165,9 @@ QString Cfhs_AutoRegionConfig_hjh::getNameFromIndex(const int &index)
         break;
     case 2:
         name = "aa_region_positive_hjh";
+        break;
+    case 3:
+        name = "new_model_hjh";
         break;
     }
 
@@ -182,8 +200,6 @@ void Cfhs_AutoRegionConfig_hjh::onCommitButton_clicked()
         obj.insert(name, iter.value());
         iter++;
     }
-    //添加模板文件，固定为方案名
-    obj.insert("model_file_hjh", m_curProgramName);
     QJsonDocument doc;
     doc.setObject(obj);
     m_strConfig = QString(doc.toJson(QJsonDocument::Compact));

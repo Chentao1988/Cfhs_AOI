@@ -46,6 +46,7 @@ Cfhs_ShowZoomImage::~Cfhs_ShowZoomImage()
 
 void Cfhs_ShowZoomImage::paintEvent(QPaintEvent *event)
 {
+    QWidget::paintEvent(event);
     if(save_map.isNull())
         return;
     QPainter painter(this);

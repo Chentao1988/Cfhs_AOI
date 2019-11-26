@@ -22,7 +22,7 @@ QString Cfhs_ImageWindow::getFunctionButtonStyle(const QString &name)
                             "background:transparent; border:none;}"
                             "QPushButton:pressed{image:url(:/%2_press.png)}"
                             "QPushButton:checked{image:url(:/%3_press.png);"
-                            "border: 1px solid #0077FF}").arg(name).arg(name).arg(name);
+                            "border: 1px solid red}").arg(name).arg(name).arg(name);
 
     return style;
 }
@@ -34,7 +34,10 @@ void Cfhs_ImageWindow::setImage(const QString &path)
     time.start();
     QFile file(path);
     if (!file.exists())
+    {
+        save_map = QPixmap();
         return;
+    }
     //Qt::ImageConversionFlags flag;
     save_map.load(path);
     qDebug()<<__FUNCTION__<<"pixmap,"<<time.elapsed();
@@ -165,6 +168,8 @@ QList<QPoint> Cfhs_ImageWindow::list_imgtothis(QList<QPoint> listpoint)
 QList<QPoint> Cfhs_ImageWindow::list_imgtothis(QList<QPoint> listpoint)
 {
     QList<QPoint> list_return;
+    if(save_map.isNull())
+        return list_return;
     QPoint point_temp;
     for (int i=0;i<listpoint.size();i++) {
         int x_len = (this->width() - save_width)/2;
@@ -181,6 +186,8 @@ QList<QPoint> Cfhs_ImageWindow::list_imgtothis(QList<QPoint> listpoint)
 QList<QPoint> Cfhs_ImageWindow::list_thistoimg(QList<QPoint> listpoint)
 {
     QList<QPoint> list_return;
+    if(save_map.isNull())
+        return list_return;
     QPoint point_temp;
     for (int i=0;i<listpoint.size();i++) {
         int x_len = (this->width() - save_width)/2;

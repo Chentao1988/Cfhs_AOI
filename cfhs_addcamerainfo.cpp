@@ -81,6 +81,9 @@ int Cfhs_AddCameraInfo::DialogShow()
         QMessageBox::warning(this, " ", strInfo);
         return QDialog::Rejected;
     }
+    if(strAllCamera.isEmpty() || strAllCamera == "null")
+        return this->exec();
+
     QStringList list = strAllCamera.split("@");
     QString strName;  //相机品牌
     QString strType;  //相机类型
@@ -119,6 +122,7 @@ int Cfhs_AddCameraInfo::DialogShow()
     m_cameraBrandCombo->clear();
     m_cameraBrandCombo->addItems(listName);
     m_cameraBrandCombo->setCurrentIndex(0);
+
     return this->exec();
 }
 

@@ -94,6 +94,9 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
             m_stationList.append(station);
         }
     }
+    //默认显示工位一图
+    QString strImg = QString("D:/%1/static_img/station%2.jpg").arg(m_strProgramName).arg(1);
+    m_imageWindow->setImage(strImg);
     //产品特征表
     stFeatures stFeat;
     if(!m_logicInterface->GetFeaturesInfo(stFeat, strInfo))
@@ -153,7 +156,7 @@ void Cfhs_ProgramConfig::init()
     m_processBar = new Cfhs_ProgramProcessBar(this);
     connect(m_imageWindow, &Cfhs_ImageWindow::sig_sendRoiPoint,
             m_processBar, &Cfhs_ProgramProcessBar::slot_getRoiPoint);
-    connect(m_processBar, &QTabWidget::currentChanged,
+    connect(m_processBar, &QTabWidget::tabBarClicked,
             this, &Cfhs_ProgramConfig::slot_currentStation_changed);
     ui->processFrame->setWidget(m_processBar);
     //多工位投影标定
@@ -251,7 +254,17 @@ void Cfhs_ProgramConfig::slot_currentStation_changed(const int &index)
     QString strImg = QString("D:/%1/static_img/station%2.jpg").arg(m_strProgramName).arg(stationNo);
     if(!QFile::exists(strImg))
         return;
+    QMessageBox *msg = new QMessageBox(QMessageBox::Information,
+                                       tr("提示"),
+                                       tr("工位图加载中，请稍后..."),
+                                       QMessageBox::Ok,
+                                       this);
+    msg->show();
+    Sleep(10);
     m_imageWindow->setImage(strImg);
+    msg->close();
+    delete msg;
+    msg = nullptr;
 }
 
 void Cfhs_ProgramConfig::on_newProgramAction_triggered()

@@ -14,6 +14,8 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QHeaderView>
+#include <QDesktopServices>
+#include <QUrl>
 
 
 Cfhs_MainWindow::Cfhs_MainWindow(QWidget *parent) :
@@ -524,6 +526,8 @@ void Cfhs_MainWindow::showBigImage(const QImage &image, const QPolygon &vectorPo
     m_bigImageWidget->setImage(image);
     //添加坐标
     int size = vectorPoint.size();
+    //if(size == 0)
+        //return;
     for(int i=0; i<size; i++)
     {
         QPoint point = vectorPoint.at(i);
@@ -834,6 +838,11 @@ bool Cfhs_MainWindow::ReadProgram()
         return false;
     }
     m_curProgramName = conf.strNowProName;
+    if(m_curProgramName.isEmpty())
+    {
+        QMessageBox::warning(this, " ", tr("当前没有可执行方案"));
+        return false;
+    }
     //获取当前方案
     stProgramme stPro;
     if(!m_logicInterface->GetProInfo(m_curProgramName, stPro, true, strInfo))
@@ -1174,7 +1183,20 @@ void Cfhs_MainWindow::faultManualAction_triggered()
 
 void Cfhs_MainWindow::softManualAction_triggered()
 {
-
+    QString path = QCoreApplication::applicationDirPath() + "/Resource/";
+    switch(m_currentLang)
+    {
+    case English:
+        path += "help_En.doc";
+        break;
+    case SimplifiedChinese:
+        path += "help_Chs.doc";
+        break;
+    case TraditionalChinese:
+        path = "help_Cht.doc";
+        break;
+    }
+    QDesktopServices::openUrl(QUrl(path));
 }
 
 void Cfhs_MainWindow::listConsumablesAction_triggered()
