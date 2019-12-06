@@ -49,16 +49,18 @@ void Cfhs_ProgramToolTree::mouseMoveEvent(QMouseEvent *event)
     //显示拖拽item
     QDrag *drag = new QDrag(this);
     QMimeData *mime = new QMimeData();
-    QString toolName = m_mapTool.key(dragItem);
+    QString toolPosition = m_mapTool.key(dragItem);
     QByteArray info;
-    info.append(toolName);
+    info.append(toolPosition);
     mime->setData("QTreeWidgetItem", info);
     drag->setMimeData(mime);
-    QString iconPath = Cfhs_StationSingleTool::getIconPath(toolName);
+    QString iconPath = Cfhs_StationSingleTool::getIconPath(toolPosition);
     QPixmap map;
     if(map.load(iconPath))
+    {
         map = map.scaled(30, 30);
-    drag->setPixmap(map);
+        drag->setPixmap(map);
+    }
     drag->exec(Qt::MoveAction);
 }
 
@@ -70,7 +72,7 @@ void Cfhs_ProgramToolTree::mouseReleaseEvent(QMouseEvent *event)
 }
 
 QTreeWidgetItem *Cfhs_ProgramToolTree::getItem(const QString &showName, const QString &iconPath,
-                                        const QString &tip, const QString &toolName,
+                                        const QString &tip, const QString &toolPosition,
                                         const int &column)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem;
@@ -84,8 +86,8 @@ QTreeWidgetItem *Cfhs_ProgramToolTree::getItem(const QString &showName, const QS
         item->setIcon(column, icon);
     }
     //添加到map中
-    if(!toolName.isEmpty())
-        m_mapTool.insert(toolName, item);
+    if(!toolPosition.isEmpty())
+        m_mapTool.insert(toolPosition, item);
 
     return item;
 }
@@ -120,7 +122,7 @@ void Cfhs_ProgramToolTree::addCameraModule()
     QString showName = tr("相机设备");
     QString iconPath = getRootIconPath();
     QString tip = "";
-    QString toolName ="";
+    QString toolPosition ="";
     /***相机设备***/
     QTreeWidgetItem *cameraRootItem = getItem(showName, iconPath);
     //添加工具
@@ -128,8 +130,8 @@ void Cfhs_ProgramToolTree::addCameraModule()
     showName = Cfhs_CameraConfig::getShowName();
     iconPath = Cfhs_CameraConfig::getIconPath();
     tip = Cfhs_CameraConfig::getToolTip();
-    toolName = Cfhs_CameraConfig::getToolName();
-    QTreeWidgetItem *cameraConfigItem = getItem(showName, iconPath, tip, toolName);
+    toolPosition = Cfhs_CameraConfig::getToolPosition();
+    QTreeWidgetItem *cameraConfigItem = getItem(showName, iconPath, tip, toolPosition);
     cameraRootItem->addChild(cameraConfigItem);
 
     //添加到tree上
@@ -141,18 +143,39 @@ void Cfhs_ProgramToolTree::addImagePartitionModule()
     QString showName = "";
     QString iconPath = "";
     QString tip = "";
-    QString toolName = "";
+    QString toolPosition = "";
     /***图像分区***/
     showName = tr("图像分区");
     iconPath = getRootIconPath();
     QTreeWidgetItem *partitionRootItem = getItem(showName, iconPath);
-    //Roi设置
-    showName = Cfhs_RoiConfig::getShowName();
-    iconPath = Cfhs_RoiConfig::getIconPath();
-    tip = Cfhs_RoiConfig::getToolTip();
-    toolName = Cfhs_RoiConfig::getToolName();
-    QTreeWidgetItem *roiItem = getItem(showName, iconPath, tip, toolName);
-    partitionRootItem->addChild(roiItem);
+    //自动AA区
+    showName = Cfhs_AutoRegionConfig::getShowName();
+    iconPath = Cfhs_AutoRegionConfig::getIconPath();
+    tip = Cfhs_AutoRegionConfig::getToolTip();
+    toolPosition = Cfhs_AutoRegionConfig::getToolPosition();
+    QTreeWidgetItem *autoRegionItem = getItem(showName, iconPath, tip, toolPosition);
+    partitionRootItem->addChild(autoRegionItem);
+    //自动分区
+    showName = Cfhs_AutoRegionConfig_hjh::getShowName();
+    iconPath = Cfhs_AutoRegionConfig_hjh::getIconPath();
+    tip = Cfhs_AutoRegionConfig_hjh::getToolTip();
+    toolPosition = Cfhs_AutoRegionConfig_hjh::getToolPosition();
+    QTreeWidgetItem *autoRegionItem2 = getItem(showName, iconPath, tip, toolPosition);
+    partitionRootItem->addChild(autoRegionItem2);
+    //原图分区
+    showName = Cfhs_OriginalRegionConfig::getShowName();
+    iconPath = Cfhs_OriginalRegionConfig::getIconPath();
+    tip = Cfhs_OriginalRegionConfig::getToolTip();
+    toolPosition = Cfhs_OriginalRegionConfig::getToolPosition();
+    QTreeWidgetItem *originalRegionItem = getItem(showName, iconPath, tip, toolPosition);
+    partitionRootItem->addChild(originalRegionItem);
+  ////手动Roi
+  //showName = Cfhs_RoiConfig::getShowName();
+  //iconPath = Cfhs_RoiConfig::getIconPath();
+  //tip = Cfhs_RoiConfig::getToolTip();
+  //toolPosition = Cfhs_RoiConfig::getToolPosition();
+  //QTreeWidgetItem *roiItem = getItem(showName, iconPath, tip, toolPosition);
+  //partitionRootItem->addChild(roiItem);
 
     //添加到tree上
     this->addTopLevelItem(partitionRootItem);
@@ -163,7 +186,7 @@ void Cfhs_ProgramToolTree::addAlgorithmModule()
     QString showName = "";
     QString iconPath = "";
     QString tip = "";
-    QString toolName = "";
+    QString toolPosition = "";
     /***算法模块***/
     showName = tr("算法");
     iconPath = getRootIconPath();
@@ -172,37 +195,30 @@ void Cfhs_ProgramToolTree::addAlgorithmModule()
     showName = Cfhs_DefectConfig::getShowName();
     iconPath = Cfhs_DefectConfig::getIconPath();
     tip = Cfhs_DefectConfig::getToolTip();
-    toolName = Cfhs_DefectConfig::getToolName();
-    QTreeWidgetItem *defectItem = getItem(showName, iconPath, tip, toolName);
+    toolPosition = Cfhs_DefectConfig::getToolPosition();
+    QTreeWidgetItem *defectItem = getItem(showName, iconPath, tip, toolPosition);
     algorithmRootItem->addChild(defectItem);
-    //自动AA区
-    showName = Cfhs_AutoRegionConfig::getShowName();
-    iconPath = Cfhs_AutoRegionConfig::getIconPath();
-    tip = Cfhs_AutoRegionConfig::getToolTip();
-    toolName = Cfhs_AutoRegionConfig::getToolName();
-    QTreeWidgetItem *autoRegionItem = getItem(showName, iconPath, tip, toolName);
-    algorithmRootItem->addChild(autoRegionItem);
-    //膨胀滤波
-    showName = Cfhs_WaveFilterConfig::getShowName();
-    iconPath = Cfhs_WaveFilterConfig::getIconPath();
-    tip = Cfhs_WaveFilterConfig::getToolTip();
-    toolName = Cfhs_WaveFilterConfig::getToolName();
-    //QTreeWidgetItem *waveFilterItem = getItem(showName, iconPath, tip, toolName);
-    //algorithmRootItem->addChild(waveFilterItem);
-    //自动AA区2
-    showName = Cfhs_AutoRegionConfig_hjh::getShowName();
-    iconPath = Cfhs_AutoRegionConfig_hjh::getIconPath();
-    tip = Cfhs_AutoRegionConfig_hjh::getToolTip();
-    toolName = Cfhs_AutoRegionConfig_hjh::getToolName();
-    QTreeWidgetItem *autoRegionItem2 = getItem(showName, iconPath, tip, toolName);
-    algorithmRootItem->addChild(autoRegionItem2);
-    //瑕疵检测2
+    //边缘检测
     showName = Cfhs_DefectConfig_hjh::getShowName();
     iconPath = Cfhs_DefectConfig_hjh::getIconPath();
     tip = Cfhs_DefectConfig_hjh::getToolTip();
-    toolName = Cfhs_DefectConfig_hjh::getToolName();
-    QTreeWidgetItem *defectItem2 = getItem(showName, iconPath, tip, toolName);
+    toolPosition = Cfhs_DefectConfig_hjh::getToolPosition();
+    QTreeWidgetItem *defectItem2 = getItem(showName, iconPath, tip, toolPosition);
     algorithmRootItem->addChild(defectItem2);
+    //ITO检测
+    showName = Cfhs_ItoDetectConfig::getShowName();
+    iconPath = Cfhs_ItoDetectConfig::getIconPath();
+    tip = Cfhs_ItoDetectConfig::getToolTip();
+    toolPosition = Cfhs_ItoDetectConfig::getToolPosition();
+    QTreeWidgetItem *itoItem = getItem(showName, iconPath, tip, toolPosition);
+    algorithmRootItem->addChild(itoItem);
+   ////膨胀滤波
+   //showName = Cfhs_WaveFilterConfig::getShowName();
+   //iconPath = Cfhs_WaveFilterConfig::getIconPath();
+   //tip = Cfhs_WaveFilterConfig::getToolTip();
+   //toolPosition = Cfhs_WaveFilterConfig::getToolPosition();
+   //QTreeWidgetItem *waveFilterItem = getItem(showName, iconPath, tip, toolPosition);
+   //algorithmRootItem->addChild(waveFilterItem);
     //添加到tree上
     this->addTopLevelItem(algorithmRootItem);
 }

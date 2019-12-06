@@ -36,6 +36,7 @@ void Cfhs_ImageWindow::setImage(const QString &path)
     if (!file.exists())
     {
         save_map = QPixmap();
+        this->update();
         return;
     }
     //Qt::ImageConversionFlags flag;
@@ -50,7 +51,7 @@ void Cfhs_ImageWindow::setImage(const QString &path)
     this->update();
 }
 
-void Cfhs_ImageWindow::getAllPoint(QMap<int, QList<QPoint> > &map)
+void Cfhs_ImageWindow::getAllPoint(QMap<int, QList<QPoint>> &map)
 {
     savemap_point[0] = list_thistoimg(Rect_start_save_point);
     savemap_point[1] = list_thistoimg(Rect_end_save_point);
@@ -60,7 +61,7 @@ void Cfhs_ImageWindow::getAllPoint(QMap<int, QList<QPoint> > &map)
     map = savemap_point;
 }
 
-void Cfhs_ImageWindow::getAllPoint(QMap<int, QList<QList<QPoint> > > &map)
+void Cfhs_ImageWindow::getAllPoint(QMap<int, QList<QList<QPoint>>> &map)
 {
     map.clear();
     QList<QList<QPoint>> rectArea;

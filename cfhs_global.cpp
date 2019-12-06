@@ -36,6 +36,8 @@ QPolygon getPolygonFromQString(const QString &strValue,
                                const QString &inSplit)
 {
     QPolygon polygon;
+    if(strValue.isEmpty())
+        return polygon;
     QStringList list = strValue.split(outSplit);
     for(int i=0; i<list.size(); i++)
     {
@@ -84,8 +86,6 @@ bool getKeyListFromJson(const QString &json, QStringList &list, QString &strInfo
     strInfo = "Conversion successed";
     return true;
 }
-
-
 
 bool getValueListFromJson(const QString &json, QStringList &list, QString &strInfo)
 {

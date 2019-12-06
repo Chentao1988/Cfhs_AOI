@@ -5,14 +5,20 @@
 cfhs_mainwindows_img::cfhs_mainwindows_img(QWidget *parent)
     : QWidget(parent)
 {
+    resize(800,600);
+    pLayout = new QHBoxLayout();
+    pButtonGroup = new QButtonGroup(this);
+    DownLoad_Button = getButton("load");
+//    pLayout->addStretch();
+    pLayout->setSpacing(10);
+    this->setLayout(pLayout);
     this->init();
     this->setWindowStyle();
     setMouseTracking(true);
-    painter=new QPainter;
-    painter1=new QPainter;
     gridview_map = new QPixmap();
     result_map = new QPixmap();
     right_label_map = new QPixmap();
+    connect(DownLoad_Button, SIGNAL(clicked()), this, SLOT(Clicked_DownLoad()));
 }
 
 cfhs_mainwindows_img::~cfhs_mainwindows_img()
@@ -20,39 +26,10 @@ cfhs_mainwindows_img::~cfhs_mainwindows_img()
 
 }
 
-void cfhs_mainwindows_img::addPoint_begin()
-{
-//    painter->begin(gridview_map);
-}
 void cfhs_mainwindows_img::addPoint(QPoint point)
 {
     save_list<<point;
-#if 0
-    QPainter painter3(gridview_map);
-    painter3.setPen(Qt::red);//设置画笔颜色
-    painter3.setBrush(Qt::red);
-    painter3.drawEllipse(x-50,y-50,100,100);
 
-    QPainter painter2(result_map);
-    painter2.setPen(Qt::red);//设置画笔颜色
-    painter2.setBrush(Qt::red);
-    painter2.drawEllipse(x-50,y-50,100,100);
-#else
-
-//    painter->setPen(Qt::red);//设置画笔颜色
-//    painter->setBrush(Qt::red);
-//    painter->drawEllipse(point.x()-50,point.y()-50,100,100);
-
-#endif
-//    this->update();
-}
-
-void cfhs_mainwindows_img::addPoint_end()
-{
-    //result_map->toImage()得到image
-    //QPixmap::fromImage(save_image) 得到pixmap
-//    *result_map = *gridview_map;
-//    painter->end();
 }
 
 void cfhs_mainwindows_img::AddLabel()
@@ -67,12 +44,13 @@ void cfhs_mainwindows_img::AddLabel()
     painter_text.drawText(10,30,xpoint);
     QString ypoint = QString("Y : %1 ").arg(point_show.y());
     painter_text.drawText(10,60,ypoint);
-    QString gary_end = QString("R : %1").arg(Gray_show.red());
-    painter_text.drawText(10,90,gary_end);
-    QString gary_end1 = QString("G : %1").arg(Gray_show.green());
-    painter_text.drawText(10,120,gary_end1);
-    QString gary_end2 = QString("B : %1").arg(Gray_show.blue());
-    painter_text.drawText(10,150,gary_end2);
+    QString gary_R = QString("R : %1").arg(Gray_show.red());
+    painter_text.drawText(10,90,gary_R);
+    QString gary_G = QString("G : %1").arg(Gray_show.green());
+    painter_text.drawText(10,120,gary_G);
+    QString gary_B = QString("B : %1").arg(Gray_show.blue());
+    painter_text.drawText(10,150,gary_B);
+    painter_text.end();
 
 }
 //载入图片
@@ -83,8 +61,6 @@ void cfhs_mainwindows_img::setImage(const QString &path)
         return;
     }
     save_map.load(path);
-    if(save_map.isNull())
-        return;
     *right_label_map = save_map;
     *gridview_map = save_map;
     *result_map = save_map;
@@ -153,9 +129,11 @@ void cfhs_mainwindows_img::getImage(QPixmap& pixmap_img)
 //保存函数
 bool cfhs_mainwindows_img::saveImage(QString savepath)
 {
-    if(save_map.save(savepath)){
+    if(save_img.save(savepath)){
+        qDebug()<<"save true";
         return true;
     }
+    qDebug()<<"save false";
     return false;
 }
 
@@ -182,12 +160,39 @@ void cfhs_mainwindows_img::showLightPoint(const QPoint &point)
     this->update();
 }
 
-//鼠标右键
-void cfhs_mainwindows_img::contextMenuEvent(QContextMenuEvent *event)
+void cfhs_mainwindows_img::setEnable(bool enable_flg)
 {
-    QPoint pos = event->pos();
-    p_end = pos;
-    this->update();
+    DownLoad_Button->setEnabled(enable_flg);
+}
+
+QString cfhs_mainwindows_img::getFunctionButtonStyle(const QString &name)
+{
+    QString style = QString("QPushButton{image:url(:/%1_normal.png);"
+            "background:transparent; border:none;}"
+            "QPushButton:pressed{image:url(:/%2_press.png)}"
+            "QPushButton:checked{image:url(:/%3_press.png);"
+            "border: 1px solid red}").arg(name).arg(name).arg(name);
+    return style;
+}
+
+QPushButton *cfhs_mainwindows_img::getButton(const QString &name)
+{
+    QPushButton *button = new QPushButton(this);
+    button->setFixedSize(35, 35);
+    QString style = getFunctionButtonStyle(name);
+    button->setStyleSheet(style);
+    button->setCheckable(true);
+    pLayout->addWidget(button, 0, Qt::AlignRight | Qt::AlignTop);
+    pButtonGroup->addButton(button);
+
+    return button;
+}
+
+void cfhs_mainwindows_img::Clicked_DownLoad()
+{
+    save_img = ChangeImage::addPoint(save_map,save_list);
+    QString file_path = QFileDialog::getSaveFileName(this, tr("保存路径..."),"..",tr("Images (*.png *.bmp *.jpg)"));
+    saveImage(file_path);
 }
 
 //  绘制函数
@@ -219,6 +224,7 @@ void cfhs_mainwindows_img::paintEvent(QPaintEvent *event)
     CDrawPoint();// 加入缺陷坐标
     if(gridview_flg)//九宫格开启
         CDrawFourPoint();
+    painter.end();
 }
 
 void cfhs_mainwindows_img::CRect()
@@ -227,6 +233,7 @@ void cfhs_mainwindows_img::CRect()
     pp.setPen(Qt::green);//设置画笔颜色
     QRect temp(p_start,p_end);
     pp.drawRect(temp);//画矩形
+    pp.end();
 }
 
 void cfhs_mainwindows_img::CDrawPoint()
@@ -250,6 +257,7 @@ void cfhs_mainwindows_img::CDrawPoint()
         }
 
         pp.drawEllipse(point_da.x()-2,point_da.y()-2,4,4);
+        pp.end();
     }
 }
 
@@ -291,6 +299,7 @@ void cfhs_mainwindows_img::CDrawFourPoint()
                              (D.y() - A.y())*i/y-2+A.y(),show_text);
         }
     }
+    pp.end();
 }
 
 //鼠标按下
@@ -368,7 +377,7 @@ void cfhs_mainwindows_img::setWindowStyle()
 //初始化函数
 void cfhs_mainwindows_img::init()
 {
-    this->setStyleSheet("background-color:lightGray");
+    //this->setStyleSheet("background-color:lightGray");
     Up_Down_num = 5;
     set_x_gridview = 3;
     set_y_gridview = 3;

@@ -69,7 +69,7 @@ Cfhs_DefectConfig::~Cfhs_DefectConfig()
 
 QString Cfhs_DefectConfig::getShowName()
 {
-    QString name = tr("瑕疵检测");
+    QString name = tr("瑕疵检测1");
 
     return name;
 }
@@ -87,24 +87,95 @@ QString Cfhs_DefectConfig::getIconPath()
     return path;
 }
 
-QString Cfhs_DefectConfig::getToolName()
+QString Cfhs_DefectConfig::getToolPosition()
 {
-    return "DefectConfig";
+    return "3-1";
+}
+
+QString Cfhs_DefectConfig::getToolParaDefault()
+{
+    QString strPara;
+    QJsonObject obj;
+    obj.insert("defect_area_for_stop_inspection", "50000");
+    obj.insert("defect_num_for_stop_inspection", "5");
+    obj.insert("defect_acceptable_minimum_area", "180");
+    obj.insert("exception_dilate_element_width", "30");
+    obj.insert("exception_dilate_element_height", "30");
+    obj.insert("loop_stride_to_decide_stantard_grey_value", "100");
+    obj.insert("grey_difference_negative", "30");
+    obj.insert("grey_difference_positive", "30");
+    QJsonDocument doc;
+    doc.setObject(obj);
+
+    strPara = QString(doc.toJson(QJsonDocument::Compact));
+    return strPara;
+}
+
+QStringList Cfhs_DefectConfig::getToolOutput(const LanguageEnum &language)
+{
+    QStringList list;
+    switch(language)
+    {
+    case English:
+        list.append("DefectCoordinate");
+        list.append("DefectArea1");
+        list.append("DefectArea2");
+        list.append("DefectWidth");
+        list.append("DefectHeight");
+        list.append("DefectGray");
+        list.append("DefectGrayDifference");
+        list.append("DefectRoundness");
+        list.append("CircumferenceRatio");
+        break;
+    case SimplifiedChinese:
+        list.append("缺陷坐标");
+        list.append("缺陷面积1");
+        list.append("缺陷面积2");
+        list.append("缺陷宽度");
+        list.append("缺陷长度");
+        list.append("缺陷灰度");
+        list.append("缺陷灰度差");
+        list.append("缺陷圆度");
+        list.append("圆周比率");
+        break;
+    case TraditionalChinese:
+        list.append("缺陷坐標");
+        list.append("缺陷面積1");
+        list.append("缺陷面積2");
+        list.append("缺陷寬度");
+        list.append("缺陷長度");
+        list.append("缺陷灰度");
+        list.append("缺陷灰度差");
+        list.append("缺陷圓度");
+        list.append("圓周比率");
+        break;
+    }
+
+    return list;
 }
 
 QString Cfhs_DefectConfig::getParaConfig() const
 {
-    return m_strConfig;
+    QMap<QString, QString> map;
+    QString strInfo;
+    getMapFromJson(m_strConfig, map, strInfo);
+    if(map.isEmpty())
+        return getToolParaDefault();
+    else
+        return m_strConfig;
 }
 
 bool Cfhs_DefectConfig::setParaConfig(const QString &strConfig)
 {
     QMap<QString, QString> map;
     QString strInfo;
-    if(!getMapFromJson(strConfig, map, strInfo))
+    getMapFromJson(strConfig, map, strInfo);
+    if(map.isEmpty())
     {
-        QMessageBox::warning(this, " ", strInfo);
-        return false;
+        //数据错误，使用默认数据
+        QString strDefault = getToolParaDefault();
+        getMapFromJson(strDefault, map, strInfo);
+        m_strConfig = strDefault;
     }
     int row = 0;
     if(map.contains("defect_area_for_stop_inspection"))

@@ -212,6 +212,10 @@ public:
 
 signals:
 
+    //显示软件状态
+    //bRun:软件是否正常运行（true：运行中；false：已停止）
+    void sig_ShowSoftStatus(bool bRun);
+
     //---显示弹框信息
     //bOK:离线模式执行结果
     //strInfo:弹框信息

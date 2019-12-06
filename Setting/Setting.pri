@@ -24,7 +24,9 @@ HEADERS += \
     $$PWD/cfhs_stationprocess.h \
     $$PWD/cfhs_stationsingletool.h \
     $$PWD/cfhs_autoregionconfig_hjh.h \
-    $$PWD/cfhs_defectconfig_hjh.h
+    $$PWD/cfhs_defectconfig_hjh.h \
+    $$PWD/cfhs_originalregionconfig.h \
+    $$PWD/cfhs_itodetectconfig.h
 
 SOURCES += \
     $$PWD/cfhs_programconfig.cpp \
@@ -48,4 +50,6 @@ SOURCES += \
     $$PWD/cfhs_stationprocess.cpp \
     $$PWD/cfhs_stationsingletool.cpp \
     $$PWD/cfhs_autoregionconfig_hjh.cpp \
-    $$PWD/cfhs_defectconfig_hjh.cpp
+    $$PWD/cfhs_defectconfig_hjh.cpp \
+    $$PWD/cfhs_originalregionconfig.cpp \
+    $$PWD/cfhs_itodetectconfig.cpp

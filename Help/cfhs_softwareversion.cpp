@@ -29,8 +29,8 @@ void Cfhs_SoftwareVersion::init()
     m_versionLabel = new QLabel(tr("软件版本："));
     m_versionLineEdit = new QLineEdit(this);
     m_versionLineEdit->setReadOnly(true);
-    //m_versionLineEdit->setText("V2.2.0620");
-    m_versionLineEdit->setText("V2.1.0620");
+    m_versionLineEdit->setText("V2.2.0620");
+    //m_versionLineEdit->setText("V2.1.0620");
     QPointer<QHBoxLayout> versionLayout = new QHBoxLayout;
     versionLayout->addWidget(m_versionLabel);
     versionLayout->addWidget(m_versionLineEdit,1);

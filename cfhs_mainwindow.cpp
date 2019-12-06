@@ -5,6 +5,7 @@
 #include "Function/imgsavemode.h"
 #include "Help/cfhs_softwareversion.h"
 #include "cfhs_addcamerainfo.h"
+#include "Help/cfhs_defectcallout.h"
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QLabel>
@@ -70,6 +71,9 @@ Cfhs_MainWindow::Cfhs_MainWindow(QWidget *parent) :
     //---良率报警
     connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowYieldAlarm,
             this, &Cfhs_MainWindow::slot_ShowYieldAlarm);
+    //系统运行状态
+    connect(m_logicInterface, &Cfhs_IBusiness::sig_ShowSoftStatus,
+            this, &Cfhs_MainWindow::slot_ShowSystemRunStatus);
 
     //读取方案
     ReadProgram();
@@ -262,7 +266,7 @@ void Cfhs_MainWindow::mainWindowInit()
     this->setFixedSize(1920, 1080);
     this->setWindowFlags(this->windowFlags()|Qt::FramelessWindowHint);
     //工位栏
-    m_taskWidget = new Cfhs_TaskInfoWidget(this, true);
+    m_taskWidget = new Cfhs_TaskInfoWidget(this, false);
     ui->taskFrame->setWidget(m_taskWidget);
     connect(this, &Cfhs_MainWindow::sig_ShowStationStatus,
             m_taskWidget, &Cfhs_TaskInfoWidget::slot_ShowStationStatus);
@@ -318,6 +322,7 @@ void Cfhs_MainWindow::mainWindowInit()
     //设置状态栏，主要显示日志/告警信息
     m_statusBar = new Cfhs_StatusBar(this);
     this->setStatusBar(m_statusBar);
+    m_isSystemStatus = false;
     //日志弹出窗口
     m_showMessage = new QMessageBox(QMessageBox::Warning,
                                     tr("日志显示"),
@@ -368,6 +373,12 @@ void Cfhs_MainWindow::setFunctionEnable(const bool &isEnable)
     ui->ngRadioButton->setEnabled(isEnable);
     //侧边栏
     m_sideToolWidget->setEnabled(isEnable);
+    //开始键
+    ui->startPushButton->setEnabled(isEnable);
+    //关闭
+    ui->closePushButton->setEnabled(isEnable);
+    //停止
+    ui->stopPushButton->setEnabled(!isEnable);
 }
 
 void Cfhs_MainWindow::functionInit()
@@ -421,12 +432,17 @@ void Cfhs_MainWindow::helpInit()
     m_teamviewerAction = new QAction(tr("远程协助"), this);
     connect(m_teamviewerAction, &QAction::triggered,
             this, &Cfhs_MainWindow::teamviewerAction_triggered);
+    //缺陷打标
+    m_defectCallout = new QAction(tr("缺陷打标"), this);
+    connect(m_defectCallout, &QAction::triggered,
+            this, &Cfhs_MainWindow::defectCallout_triggered);
     //添加到menu中
     m_helpMenu->addAction(m_softVersionAction);
     m_helpMenu->addAction(m_faultManualAction);
     m_helpMenu->addAction(m_softManualAction);
     m_helpMenu->addAction(m_listConsumablesAction);
     m_helpMenu->addAction(m_teamviewerAction);
+    m_helpMenu->addAction(m_defectCallout);
     //设置到button上
     ui->helpPushButton->setMenu(m_helpMenu);
     ui->helpLabel->installEventFilter(this);
@@ -490,15 +506,38 @@ bool Cfhs_MainWindow::setProgram(const stProgramme &stPro)
         realFeatureList.append("Defect ID");
         realFeatureList.append("Defect name");
     }
-    else
+    else if(m_currentLang == SimplifiedChinese)
     {
         strFeature = stFeat.strCH;
         realFeatureList.append("产品ID");
         realFeatureList.append("缺陷排序ID");
         realFeatureList.append("缺陷名称");
     }
+    else
+    {
+        strFeature = stFeat.strTr;
+        realFeatureList.append("產品ID");
+        realFeatureList.append("缺陷排序ID");
+        realFeatureList.append("缺陷名稱");
+    }
     QStringList listFeature = getListFromQString(strFeature);
     realFeatureList.append(listFeature);
+    //去掉距离和个数
+    if(m_currentLang == SimplifiedChinese)
+    {
+        realFeatureList.removeOne("距离");
+        realFeatureList.removeOne("个数");
+    }
+    else if(m_currentLang == TraditionalChinese)
+    {
+        realFeatureList.removeOne("距離");
+        realFeatureList.removeOne("個數");
+    }
+    else
+    {
+        realFeatureList.removeOne("DefectDis");
+        realFeatureList.removeOne("DefectNum");
+    }
     m_featureTable->setHeaderString(realFeatureList);
 
     return true;
@@ -548,9 +587,6 @@ void Cfhs_MainWindow::slot_ShowInfo(bool bNormal, const QString &strInfo)
     QString strTime = QDateTime::currentDateTime().toString("yyyy-MM-dd  hh:mm:ss");
     QString message = QString("  [%1]   %2").arg(strTime).arg(strInfo);
     m_statusBar->ShowMessageInfo(bNormal, message);
-    //设置系统状态
-    if(bNormal != m_isSystemStatus)
-        setSystemStatus(bNormal);
 }
 
 void Cfhs_MainWindow::slot_ShowScanRate(const QString &strInfo)
@@ -574,10 +610,7 @@ void Cfhs_MainWindow::slot_ShowFeatureData(const int &stationNo, const QString &
     //如果是当前工位显示
     if(m_taskWidget->getCurrentTask() == stationNo)
     {
-        QStringList list = strData.split("@");
-        m_featureTable->tableInit();
-        for(int i=0; i<list.size(); i++)
-            m_featureTable->addData(list.at(i));
+        setFeatureData(strData);
     }
 }
 
@@ -720,6 +753,7 @@ void Cfhs_MainWindow::slot_ShowCurrentTask(const int &index)
 {
     //是否显示九宫格 ，只在结果页面显示
     bool isShowGridView = false;
+    QString strFeather = "";
     if(index == Cfhs_TaskInfoWidget::ResultTask)
     {
         //显示结果信息
@@ -757,10 +791,11 @@ void Cfhs_MainWindow::slot_ShowCurrentTask(const int &index)
             QImage img = m_mapStationDefectImg.value(index).value(i+1);
             m_defectSmallImage[i]->showDefect(img, name);
         }
-        //显示缺陷特征
-        QString strFeather = m_mapStationFeature.value(index);
-        slot_ShowFeatureData(index, strFeather);
+        strFeather = m_mapStationFeature.value(index);
     }
+    //显示缺陷特征
+    setFeatureData(strFeather);
+    //显示九宫格
     m_bigImageWidget->setGridView(isShowGridView, m_xGridview, m_yGridview);
 }
 
@@ -787,6 +822,13 @@ void Cfhs_MainWindow::slot_closeButton_timeout()
     }
     //关闭定时器
     m_closeTimer->stop();
+}
+
+void Cfhs_MainWindow::slot_ShowSystemRunStatus(const bool &run)
+{
+    //设置系统状态
+    if(run != m_isSystemStatus)
+        setSystemStatus(run);
 }
 
 void Cfhs_MainWindow::setUser(const UserType &user)
@@ -1031,11 +1073,15 @@ void Cfhs_MainWindow::on_startPushButton_clicked()
     dialog.setBatchInfo(conf.strNowBatchName, listBatch);
     if(dialog.exec() == QDialog::Accepted)
     {
+        ui->startPushButton->setEnabled(false);
+        slot_ShowFrameInfo(true, tr("设备启动中，请稍后..."));
+        Sleep(10);
         //侧边栏隐藏
         if(m_sideToolWidget->isSideShow())
             m_sideToolWidget->setSideShow(false);
         //开始
         m_logicInterface->Start();
+        m_showMessage->hide();
     }
 }
 
@@ -1094,6 +1140,8 @@ void Cfhs_MainWindow::programConfigAction_triggered() //方案配置
         m_programConfigWidget = new Cfhs_ProgramConfig(this);
     }
     m_programConfigWidget->show();
+    if(m_programConfigWidget->windowState() == Qt::WindowMinimized)
+        m_programConfigWidget->setWindowState(Qt::WindowNoState);
 }
 
 void Cfhs_MainWindow::imageSpliceAction_triggered()  //图像拼接管理
@@ -1207,6 +1255,29 @@ void Cfhs_MainWindow::listConsumablesAction_triggered()
 void Cfhs_MainWindow::teamviewerAction_triggered()
 {
 
+}
+
+void Cfhs_MainWindow::defectCallout_triggered()
+{
+    QString path = QFileDialog::getOpenFileName(this,
+                                                tr("选择缺陷图"),
+                                                "",
+                                                "Image(*.png *.bmp *.jpg)");
+    if(path.isEmpty())
+        return;
+    QString strDir = Cfhs_SideTool::getDirFromFilePath(path);
+    QDir dir;
+    dir.setPath(strDir);
+    if(!dir.exists())
+    {
+        QMessageBox::warning(this, " ", tr("缺陷图路径错误，请重新选择"));
+        return;
+    }
+    Cfhs_DefectCallout callout(strDir, this);
+    if(callout.exec() == QDialog::Accepted)
+    {
+
+    }
 }
 
 //显示系统状态
@@ -1350,6 +1421,16 @@ void Cfhs_MainWindow::createData()
     QString strYield = "78#50#69#78#89#52#45#64#42#68#55#96";
     QString strTotal = "75#68#82#80#76#74#72#84#87#89#90#65";
     m_batchChart->setData(strHour,strInput,strYield,strTotal);
+}
+
+void Cfhs_MainWindow::setFeatureData(const QString &strFeature)
+{
+    m_featureTable->tableInit();
+    if(strFeature.isEmpty())
+        return;
+    QStringList list = strFeature.split("@");
+    for(int i=0; i<list.size(); i++)
+        m_featureTable->addData(list.at(i));
 }
 
 void Cfhs_MainWindow::on_readCodePushButton_clicked()

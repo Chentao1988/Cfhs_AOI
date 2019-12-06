@@ -31,7 +31,6 @@ private slots:
     void startButton_clicked();
     void cancelButton_clicked();
 
-
 private:
     QPointer<QLabel> m_curRecordLabel;
     QPointer<QLineEdit> m_curRecordLineEdit;  //当前批次

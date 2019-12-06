@@ -86,6 +86,8 @@ private:
     void showAdditionalFunction(const bool &isShowed);
     //模拟数据
     void createData();
+    //设置缺陷特征信息
+    void setFeatureData(const QString &strFeature);
 
 signals:
     //---显示当前产品结果
@@ -188,6 +190,8 @@ public slots:
     void slot_ShowGridView(bool open_gridview,int x_gridview,int y_gridview);
     //关闭按钮按下超过3s，关闭软件
     void slot_closeButton_timeout();
+    //显示系统状态
+    void slot_ShowSystemRunStatus(const bool &run);
 
 private:
     //控制模块
@@ -209,6 +213,7 @@ private:
     void softManualAction_triggered(); //软件使用说明书
     void listConsumablesAction_triggered(); //易损件清单
     void teamviewerAction_triggered();  //远程协助
+    void defectCallout_triggered();    //缺陷打标
 
 private slots:
     void on_closePushButton_clicked();  //点击关闭按钮
@@ -296,6 +301,7 @@ private:
     QPointer<QAction> m_softManualAction; //软件使用说明书
     QPointer<QAction> m_listConsumablesAction; //易损件清单
     QPointer<QAction> m_teamviewerAction;  //远程协助
+    QPointer<QAction> m_defectCallout;  //缺陷打标
     //配置功能项
     QPointer<QMenu> m_functionMenu;
     QPointer<QAction> m_imageManageAction;  //图像显示管理

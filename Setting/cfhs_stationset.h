@@ -19,6 +19,7 @@ typedef struct _StationInfo{
     QString m_ip;  //工位Ip
     QMap<QString, QString> m_mapDefect;  //缺陷定义  key 缺陷名称  value 缺陷判定方式
     QMap<QString, QString> m_mapNg; //NG判定  key 缺陷名  value NG判定方式
+    QStringList m_listFeature;  //缺陷特征值
 
     void init()
     {
@@ -26,9 +27,10 @@ typedef struct _StationInfo{
         m_ip = "127.0.0.1";
         m_port = 0;
         m_defectNum = 0;
-        m_isEnable = false;
+        m_isEnable = true;
         m_mapDefect.clear();
         m_mapNg.clear();
+        m_listFeature.clear();
     }
 
 }StationInfo;
@@ -47,8 +49,8 @@ class Cfhs_StationSet : public QDialog
 public:
     explicit Cfhs_StationSet(QWidget *parent = nullptr);
     ~Cfhs_StationSet();
-    QStringList getFeatureList() const;
     StationInfoList getStationList() const;
+    void setStationList(const StationInfoList& list);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -66,10 +68,10 @@ private:
     bool isIpRepeated(const QString& ip);
     //判定该缺陷定义是否合法
     bool isDefectInfoValid(const QMap<QString, QString> &map);
-
-public slots:
-    void setStationList(const StationInfoList& list);
+    //设置缺陷特征
     void setFeatureList(const QStringList &list);
+    //显示当前工位信息
+    void showStationData();
 
 private slots:
     //工位Ip设置
@@ -89,7 +91,6 @@ private:
     StationInfo m_curStation;  //当前工位
     Cfhs_DefectInfoWidget *m_defectInfoWidget;  //缺陷定义
     Cfhs_DefectInfoTable *m_ngFilterWidget;  //NG判定
-    QStringList m_listFeature;
 };
 
 #endif // CFHS_STATIONSET_H

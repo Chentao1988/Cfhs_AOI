@@ -61,7 +61,7 @@ QString Cfhs_RoiConfig::getParaConfig() const
 
 QString Cfhs_RoiConfig::getShowName()
 {
-    QString name = tr("Roi设置");
+    QString name = tr("手动Roi");
 
     return name;
 }
@@ -79,9 +79,9 @@ QString Cfhs_RoiConfig::getIconPath()
     return path;
 }
 
-QString Cfhs_RoiConfig::getToolName()
+QString Cfhs_RoiConfig::getToolPosition()
 {
-    return "RoiConfig";
+    return "2-n";
 }
 
 bool Cfhs_RoiConfig::setParaConfig(const QString &strConfig)

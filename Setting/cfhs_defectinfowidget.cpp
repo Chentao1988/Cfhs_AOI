@@ -12,6 +12,39 @@
 Cfhs_DefectInfoWidget::Cfhs_DefectInfoWidget(const QStringList &listFeather, QWidget *parent)
     : QWidget(parent)
 {
+    init(listFeather);
+}
+
+Cfhs_DefectInfoWidget::Cfhs_DefectInfoWidget(QWidget *parent)
+    : QWidget(parent)
+{
+    init();
+}
+
+Cfhs_DefectInfoWidget::~Cfhs_DefectInfoWidget()
+{
+
+}
+
+QMap<QString, QString> Cfhs_DefectInfoWidget::getDefectInfoMap()
+{
+    QMap<QString, QString> map;
+    m_infoTable->getInfoMap(map);
+    return map;
+}
+
+void Cfhs_DefectInfoWidget::setDefectInfoMap(const QMap<QString, QString> &map)
+{
+    m_infoTable->setInfoMap(map);
+}
+
+void Cfhs_DefectInfoWidget::setFeatherList(const QStringList &list)
+{
+    m_infoTable->setFeatureList(list);
+}
+
+void Cfhs_DefectInfoWidget::init(const QStringList &listFeather)
+{
     //缺陷名称
     m_defectTitleLabel = new QLabel(this);
     m_defectTitleLabel->setText(tr("添加行："));
@@ -43,28 +76,6 @@ Cfhs_DefectInfoWidget::Cfhs_DefectInfoWidget(const QStringList &listFeather, QWi
     layout->setSpacing(10);
     layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
-}
-
-Cfhs_DefectInfoWidget::~Cfhs_DefectInfoWidget()
-{
-
-}
-
-QMap<QString, QString> Cfhs_DefectInfoWidget::getDefectInfoMap()
-{
-    QMap<QString, QString> map;
-    m_infoTable->getInfoMap(map);
-    return map;
-}
-
-void Cfhs_DefectInfoWidget::setDefectInfoMap(const QMap<QString, QString> &map)
-{
-    m_infoTable->setInfoMap(map);
-}
-
-void Cfhs_DefectInfoWidget::setFeatherList(const QStringList &list)
-{
-    m_infoTable->setFeatureList(list);
 }
 
 void Cfhs_DefectInfoWidget::onCommitButton_clicked()

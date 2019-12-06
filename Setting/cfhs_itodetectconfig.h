@@ -1,24 +1,20 @@
-﻿#ifndef CFHS_DEFECTCONFIG_HJH_H
-#define CFHS_DEFECTCONFIG_HJH_H
+﻿#ifndef CFHS_ITODETECTCONFIG_H
+#define CFHS_ITODETECTCONFIG_H
 
 #include <QDialog>
 #include <QPointer>
 #include "../cfhs_base.h"
 
-
-class QLabel;
 class QPushButton;
+class QLabel;
 class Cfhs_AlgorithmTable;
 
-
-//算法瑕疵检测，黄工版
-class Cfhs_DefectConfig_hjh : public QDialog
+//该类用于设置算法“ITO检测”的参数
+class Cfhs_ItoDetectConfig : public QDialog
 {
-    Q_OBJECT
-
 public:
-    Cfhs_DefectConfig_hjh(QWidget *parent = nullptr);
-    ~Cfhs_DefectConfig_hjh();
+    Cfhs_ItoDetectConfig(QWidget *parent = nullptr);
+    ~Cfhs_ItoDetectConfig();
     static QString getShowName();  //工具显示名
     static QString getToolTip();  //工具介绍
     static QString getIconPath(); //图标路径
@@ -27,6 +23,7 @@ public:
     static QStringList getToolOutput(const LanguageEnum &language);  //获取算子输出参数列表
     QString getParaConfig() const;
     bool setParaConfig(const QString& strConfig);
+
 
 private:
     //根据参数名获取参数位置索引
@@ -48,4 +45,4 @@ private:
     QString m_strConfig;
 };
 
-#endif // CFHS_DEFECTCONFIG_HJH_H
+#endif // CFHS_ITODETECTCONFIG_H

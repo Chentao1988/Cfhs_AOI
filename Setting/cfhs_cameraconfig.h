@@ -21,11 +21,11 @@ public:
     ~Cfhs_CameraConfig();
     void setCameraConfig(const QString &strConfig);
     QString getParaConfig() const;
-    void setParaConfig(const QString &strPara);
+    bool setParaConfig(const QString &strPara);
     static QString getShowName();  //工具显示名
     static QString getToolTip();  //工具介绍
     static QString getIconPath(); //图标路径
-    static QString getToolName(); //工具名 固定英文
+    static QString getToolPosition(); //工具位置，2-1 前位：模块索引，后位：该模块中的工具索引
 
 private:
     QTreeWidgetItem *getItem(const QString &name,
@@ -44,8 +44,9 @@ private:
     QPointer<Cfhs_ComboBox> m_ccfCombo;
     QPointer<QPushButton> m_commitButton;
     QPointer<QPushButton> m_cancelButton;
-    QString m_strCameraType;
-    QString m_strCcfFile;
+    QString m_strCameraBrand;  //相机品牌
+    QString m_strCameraType;  //相机型号
+    QString m_strCcfFile;  //CCF文件
     //key  相机品牌
     //value  Map：key 相机型号   value CCF文件
     QMap<QString, QMap<QString, QStringList>> m_mapCamera;

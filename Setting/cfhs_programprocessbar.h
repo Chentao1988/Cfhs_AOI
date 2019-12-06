@@ -12,7 +12,8 @@ class Cfhs_ProgramProcessBar : public QTabWidget
 public:
     Cfhs_ProgramProcessBar(QWidget *parent = nullptr);
     ~Cfhs_ProgramProcessBar();
-    QMap<int, QString> getProgramProcessMap();
+    QMap<int, QString> getProgramProcessMap();   //获取工位流程信息
+    QMap<int, QString> getStationFeatureMap();  //获取工位输出特征
 
 public slots:
     void setStationList(const QList<stStation> &list);

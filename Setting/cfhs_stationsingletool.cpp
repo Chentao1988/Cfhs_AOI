@@ -9,7 +9,7 @@ Cfhs_StationSingleTool::Cfhs_StationSingleTool(const StationTool &tool, QListWid
 {
     m_stationTool = tool;
     //设置工具名
-    setToolName(m_stationTool.m_toolName);
+    setToolPosition(m_stationTool.m_toolPosition);
 }
 
 Cfhs_StationSingleTool::~Cfhs_StationSingleTool()
@@ -22,67 +22,85 @@ StationTool Cfhs_StationSingleTool::getStationTool()
     return m_stationTool;
 }
 
-QString Cfhs_StationSingleTool::getIconPath(const QString &toolName)
+QString Cfhs_StationSingleTool::getIconPath(const QString &toolPosition)
 {
     QString iconPath = "";
-    if(toolName == Cfhs_CameraConfig::getToolName())
+    if(toolPosition == Cfhs_CameraConfig::getToolPosition())
         iconPath = Cfhs_CameraConfig::getIconPath();
-    else if(toolName == Cfhs_RoiConfig::getToolName())
-        iconPath = Cfhs_RoiConfig::getIconPath();
-    else if(toolName == Cfhs_AutoRegionConfig::getToolName())
+    else if(toolPosition == Cfhs_AutoRegionConfig::getToolPosition())
         iconPath = Cfhs_AutoRegionConfig::getIconPath();
-    else if(toolName == Cfhs_DefectConfig::getToolName())
+    else if(toolPosition == Cfhs_DefectConfig::getToolPosition())
         iconPath = Cfhs_DefectConfig::getIconPath();
-    else if(toolName == Cfhs_WaveFilterConfig::getToolName())
-        iconPath = Cfhs_WaveFilterConfig::getIconPath();
-    else if(toolName == Cfhs_AutoRegionConfig_hjh::getToolName())
+    else if(toolPosition == Cfhs_AutoRegionConfig_hjh::getToolPosition())
         iconPath = Cfhs_AutoRegionConfig_hjh::getIconPath();
-    else if(toolName == Cfhs_DefectConfig_hjh::getToolName())
+    else if(toolPosition == Cfhs_DefectConfig_hjh::getToolPosition())
         iconPath = Cfhs_DefectConfig_hjh::getIconPath();
+    else if(toolPosition == Cfhs_OriginalRegionConfig::getToolPosition())
+        iconPath = Cfhs_OriginalRegionConfig::getIconPath();
+    else if(toolPosition == Cfhs_ItoDetectConfig::getToolPosition())
+        iconPath = Cfhs_ItoDetectConfig::getIconPath();
 
     return iconPath;
 }
 
-QString Cfhs_StationSingleTool::getToolTip(const QString &toolName)
+QString Cfhs_StationSingleTool::getToolTip(const QString &toolPosition)
 {
     QString tip = "";
-    if(toolName == Cfhs_CameraConfig::getToolName())
+    if(toolPosition == Cfhs_CameraConfig::getToolPosition())
         tip = Cfhs_CameraConfig::getToolTip();
-    else if(toolName == Cfhs_RoiConfig::getToolName())
-        tip = Cfhs_RoiConfig::getToolTip();
-    else if(toolName == Cfhs_AutoRegionConfig::getToolName())
+    else if(toolPosition == Cfhs_AutoRegionConfig::getToolPosition())
         tip = Cfhs_AutoRegionConfig::getToolTip();
-    else if(toolName == Cfhs_DefectConfig::getToolName())
+    else if(toolPosition == Cfhs_DefectConfig::getToolPosition())
         tip = Cfhs_DefectConfig::getToolTip();
-    else if(toolName == Cfhs_WaveFilterConfig::getToolName())
-        tip = Cfhs_WaveFilterConfig::getToolTip();
-    else if(toolName == Cfhs_AutoRegionConfig_hjh::getToolName())
+    else if(toolPosition == Cfhs_AutoRegionConfig_hjh::getToolPosition())
         tip = Cfhs_AutoRegionConfig_hjh::getToolTip();
-    else if(toolName == Cfhs_DefectConfig_hjh::getToolName())
+    else if(toolPosition == Cfhs_DefectConfig_hjh::getToolPosition())
         tip = Cfhs_DefectConfig_hjh::getToolTip();
+    else if(toolPosition == Cfhs_OriginalRegionConfig::getToolPosition())
+        tip = Cfhs_OriginalRegionConfig::getToolTip();
+    else if(toolPosition == Cfhs_ItoDetectConfig::getToolPosition())
+        tip = Cfhs_ItoDetectConfig::getToolTip();
 
     return tip;
 }
 
-QString Cfhs_StationSingleTool::getShowName(const QString &toolName)
+QString Cfhs_StationSingleTool::getShowName(const QString &toolPosition)
 {
     QString showName = "";
-    if(toolName == Cfhs_CameraConfig::getToolName())
+    if(toolPosition == Cfhs_CameraConfig::getToolPosition())
         showName = Cfhs_CameraConfig::getShowName();
-    else if(toolName == Cfhs_RoiConfig::getToolName())
-        showName = Cfhs_RoiConfig::getShowName();
-    else if(toolName == Cfhs_AutoRegionConfig::getToolName())
+    else if(toolPosition == Cfhs_AutoRegionConfig::getToolPosition())
         showName = Cfhs_AutoRegionConfig::getShowName();
-    else if(toolName == Cfhs_DefectConfig::getToolName())
+    else if(toolPosition == Cfhs_DefectConfig::getToolPosition())
         showName = Cfhs_DefectConfig::getShowName();
-    else if(toolName == Cfhs_WaveFilterConfig::getToolName())
-        showName = Cfhs_WaveFilterConfig::getShowName();
-    else if(toolName == Cfhs_AutoRegionConfig_hjh::getToolName())
+    else if(toolPosition == Cfhs_AutoRegionConfig_hjh::getToolPosition())
         showName = Cfhs_AutoRegionConfig_hjh::getShowName();
-    else if(toolName == Cfhs_DefectConfig_hjh::getToolName())
+    else if(toolPosition == Cfhs_DefectConfig_hjh::getToolPosition())
         showName = Cfhs_DefectConfig_hjh::getShowName();
+    else if(toolPosition == Cfhs_OriginalRegionConfig::getToolPosition())
+        showName = Cfhs_OriginalRegionConfig::getShowName();
+    else if(toolPosition == Cfhs_ItoDetectConfig::getToolPosition())
+        showName = Cfhs_ItoDetectConfig::getShowName();
+
 
     return showName;
+}
+
+QString Cfhs_StationSingleTool::getToolParaDefault(const QString &toolPosition)
+{
+    QString toolPara = "null";
+    if(toolPosition == Cfhs_AutoRegionConfig::getToolPosition())
+        toolPara = Cfhs_AutoRegionConfig::getToolParaDefault();
+    else if(toolPosition == Cfhs_DefectConfig::getToolPosition())
+        toolPara = Cfhs_DefectConfig::getToolParaDefault();
+    else if(toolPosition == Cfhs_AutoRegionConfig_hjh::getToolPosition())
+        toolPara = Cfhs_AutoRegionConfig_hjh::getToolParaDefault();
+    else if(toolPosition == Cfhs_DefectConfig_hjh::getToolPosition())
+        toolPara = Cfhs_DefectConfig_hjh::getToolParaDefault();
+    else if(toolPosition == Cfhs_ItoDetectConfig::getToolPosition())
+        toolPara = Cfhs_ItoDetectConfig::getToolParaDefault();
+
+    return toolPara;
 }
 
 void Cfhs_StationSingleTool::setShowName(const QString &name)
@@ -106,12 +124,12 @@ void Cfhs_StationSingleTool::setToolPara(const QString &para)
     m_stationTool.m_toolPara = para;
 }
 
-void Cfhs_StationSingleTool::setToolName(const QString &name)
+void Cfhs_StationSingleTool::setToolPosition(const QString& strPosition)
 {
-    m_stationTool.m_toolName = name;
-    QString showName = getShowName(name);
-    QString tip = getToolTip(name);
-    QString iconPath = getIconPath(name);
+    m_stationTool.m_toolPosition = strPosition;
+    QString showName = getShowName(strPosition);
+    QString tip = getToolTip(strPosition);
+    QString iconPath = getIconPath(strPosition);
     if(m_stationTool.m_times > 0)
         showName = QString("%1_%2").arg(showName).arg(m_stationTool.m_times);
 
@@ -120,4 +138,10 @@ void Cfhs_StationSingleTool::setToolName(const QString &name)
     QIcon icon;
     icon.addFile(iconPath);
     this->setIcon(icon);
+    if(m_stationTool.m_toolPara.isEmpty()
+            || m_stationTool.m_toolPara == "null")
+    {
+        //设置默认参数
+        setToolPara(getToolParaDefault(strPosition));
+    }
 }

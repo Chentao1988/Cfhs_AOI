@@ -118,5 +118,8 @@
         <file>login_show.png</file>
         <file>lang_Cht.ts</file>
         <file>logo_shh.png</file>
+        <file>move_normal.png</file>
+        <file>move_press.png</file>
+        <file>image_tool/ito_config.png</file>
     </qresource>
 </RCC>

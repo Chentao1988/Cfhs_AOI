@@ -77,6 +77,8 @@ QHeaderView::section
     padding-left:0px;
 }
 
+/*
+// 设置标题默认大小
 QHeaderView::section:horizontal
 {
     min-width: 80px;
@@ -88,6 +90,7 @@ QHeaderView::section:vertical
     min-width: 30px;
     min-height: 30px;
 }
+*/
 
 /*  纵向滑块 */
 QScrollBar:vertical
@@ -271,7 +274,6 @@ QLabel
     font-family: "Microsoft YaHei";
     color: #2193AB;
 }
-
 
 QRadioButton, QCheckBox
 {

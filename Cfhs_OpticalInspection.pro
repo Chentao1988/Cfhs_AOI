@@ -77,7 +77,8 @@ SOURCES += \
         cfhs_lineedit.cpp \
         cfhs_showzoomimage.cpp \
         cfhs_mainwindows_img.cpp \
-        cfhs_addcamerainfo.cpp
+        cfhs_addcamerainfo.cpp \
+    changeimage.cpp
 
 HEADERS += \
         cfhs_base.h \
@@ -103,7 +104,8 @@ HEADERS += \
         Lib/Cfhs_Global.h \
         Lib/Cfhs_IBusiness.h \
         cfhs_mainwindows_img.h \
-        cfhs_addcamerainfo.h
+        cfhs_addcamerainfo.h \
+    changeimage.h
 
 FORMS += \
         cfhs_mainwindow.ui

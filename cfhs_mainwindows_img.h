@@ -15,6 +15,11 @@
 #include <QRect>
 #include <QTime>
 #include <QList>
+#include <QPushButton>
+#include <QButtonGroup>
+#include "changeimage.h"
+
+#pragma execution_character_set("utf-8")
 class QAction;
 class QMenu;
 
@@ -32,9 +37,7 @@ public slots:
     //放大倍数
     void setTimes(int num);
     //添加缺陷点
-    void addPoint_begin();
     void addPoint(QPoint point);
-    void addPoint_end();
 
     //手动输入四个点以及是否反向判断
     void setPoint(QPoint left_top,QPoint right_top,QPoint left_bottom,QPoint right_bottom,bool flg_alphabet = true);
@@ -42,6 +45,7 @@ public slots:
     void setGridView(bool open_gridview,int x_gridview = 3,int y_gridview = 3);
     //保存图片
     bool saveImage(QString savepath);
+
     void getPoint(QPoint &left_top,QPoint &right_top,
                   QPoint &left_bottom,QPoint &right_bottom,
                   bool &flg_alphabet);
@@ -50,8 +54,14 @@ public slots:
     //高亮坐标点
     void showLightPoint(const QPoint &point);
 
+    void setEnable(bool enable_flg);
+
+    static QString getFunctionButtonStyle(const QString& name);
+    QPushButton *getButton(const QString &name);
+    void Clicked_DownLoad();
+
+
 protected:
-    void contextMenuEvent(QContextMenuEvent *event);
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -72,6 +82,9 @@ private:
 
 
 private:
+    QPushButton *DownLoad_Button;
+    QHBoxLayout* pLayout;
+    QButtonGroup *pButtonGroup;
     QList<QPoint> save_list;
     QColor Gray_show;   //左上角显示的RGB颜色
     bool gridview_flg;  //九宫格开启flag
@@ -86,7 +99,7 @@ private:
     QPixmap *right_label_map;//加入缺陷坐标的map
     QPixmap *gridview_map;  //加入九宫格的map
     QPixmap *result_map;
-    QImage save_image;
+    QPixmap save_img;
     QPoint p_start;     //矩形开始点
     QPoint p_end;       //矩形结束点
     QPoint point_show;  //用于左上角显示的坐标

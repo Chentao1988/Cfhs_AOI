@@ -20,7 +20,8 @@ public:
     static QString getShowName();  //工具显示名
     static QString getToolTip();  //工具介绍
     static QString getIconPath(); //图标路径
-    static QString getToolName(); //工具名 固定英文
+    static QString getToolPosition(); //工具位置，2-1 前位：模块索引，后位：该模块中的工具索引
+    static QString getToolParaDefault();  //默认参数
     QString getParaConfig() const;
     bool setParaConfig(const QString& strConfig);
 

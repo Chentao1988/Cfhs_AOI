@@ -108,8 +108,10 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
     QStringList realFeatureList;
     if(m_currentLang == English)
         strFeature = stFeat.strEN;
-    else
+    else if(m_currentLang == SimplifiedChinese)
         strFeature = stFeat.strCH;
+    else
+        strFeature = stFeat.strTr;
     m_featureList = getListFromQString(strFeature);
     //更新到流程栏中
     m_processBar->setStationList(m_stationList);
@@ -121,25 +123,7 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
 void Cfhs_ProgramConfig::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED(event);
-    if(!m_strProgramName.isEmpty()
-            && !m_isProgramSaved)
-    {
-        QString strInfo = QString(tr("当前方案(%1)未保存，是否保存？")).arg(m_strProgramName);
-        QMessageBox *msg = new QMessageBox(QMessageBox::Information,
-                                           tr("提示"),
-                                           strInfo,
-                                           QMessageBox::Yes|
-                                           QMessageBox::No,
-                                           this);
-        msg->setButtonText(QMessageBox::Yes, tr("是"));
-        msg->setButtonText(QMessageBox::No, tr("否"));
-        msg->setDefaultButton(QMessageBox::Yes);
-        if(msg->exec() == QMessageBox::Yes)
-            on_saveProgramAction_triggered();
-
-        delete msg;
-        msg = nullptr;
-    }
+    saveCurrentProgram();
 }
 
 void Cfhs_ProgramConfig::init()
@@ -244,6 +228,29 @@ void Cfhs_ProgramConfig::setCurProgramName(const QString &name)
     m_statusBar->showMessageInfo(isNormal, strMsg);
 }
 
+void Cfhs_ProgramConfig::saveCurrentProgram()
+{
+    if(!m_strProgramName.isEmpty()
+            && !m_isProgramSaved)
+    {
+        QString strInfo = QString(tr("当前方案(%1)未保存，是否保存？")).arg(m_strProgramName);
+        QMessageBox *msg = new QMessageBox(QMessageBox::Information,
+                                           tr("提示"),
+                                           strInfo,
+                                           QMessageBox::Yes|
+                                           QMessageBox::No,
+                                           this);
+        msg->setButtonText(QMessageBox::Yes, tr("是"));
+        msg->setButtonText(QMessageBox::No, tr("否"));
+        msg->setDefaultButton(QMessageBox::Yes);
+        if(msg->exec() == QMessageBox::Yes)
+            on_saveProgramAction_triggered();
+
+        delete msg;
+        msg = nullptr;
+    }
+}
+
 void Cfhs_ProgramConfig::slot_currentStation_changed(const int &index)
 {
     if(index <0 || index>= m_stationList.size())
@@ -253,7 +260,10 @@ void Cfhs_ProgramConfig::slot_currentStation_changed(const int &index)
     int stationNo = index + 1;
     QString strImg = QString("D:/%1/static_img/station%2.jpg").arg(m_strProgramName).arg(stationNo);
     if(!QFile::exists(strImg))
+    {
+        m_imageWindow->setImage(strImg);
         return;
+    }
     QMessageBox *msg = new QMessageBox(QMessageBox::Information,
                                        tr("提示"),
                                        tr("工位图加载中，请稍后..."),
@@ -269,6 +279,8 @@ void Cfhs_ProgramConfig::slot_currentStation_changed(const int &index)
 
 void Cfhs_ProgramConfig::on_newProgramAction_triggered()
 {
+    //保存当前方案
+    saveCurrentProgram();
     //新建方案名
     QString name = tr("新建方案");
     QString strInfo;
@@ -301,6 +313,8 @@ void Cfhs_ProgramConfig::on_newProgramAction_triggered()
 
 void Cfhs_ProgramConfig::on_readProgramAction_triggered()
 {
+    //保存当前方案
+    saveCurrentProgram();
     //获取方案列表
     QString strInfo; //日志信息
     QString programInfo;
@@ -514,9 +528,6 @@ void Cfhs_ProgramConfig::on_stationSetPushButton_clicked()
         stationList.append(info);
     }
     m_stationSetWidget->setStationList(stationList);
-    //缺陷特征表
-    if(m_featureList != m_stationSetWidget->getFeatureList())
-        m_stationSetWidget->setFeatureList(m_featureList);
     m_stationSetWidget->exec();
     //更新工位信息
     stationList = m_stationSetWidget->getStationList();

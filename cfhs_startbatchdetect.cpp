@@ -102,6 +102,7 @@ void Cfhs_StartBatchDetect::insertRecordButton_clicked()
         if(listBatch.contains(insertBatchName))
         {
             setBatchList(listBatch);
+            m_alreadyRecodeCombo->setCurrentText(insertBatchName);
             QMessageBox::information(this, " ", tr("插入批次成功"));
         }
         else
@@ -112,7 +113,12 @@ void Cfhs_StartBatchDetect::insertRecordButton_clicked()
 void Cfhs_StartBatchDetect::startButton_clicked()
 {
     //设置当前批次
-    QString nowBatch = m_curRecordLineEdit->text();
+    QString nowBatch = m_alreadyRecodeCombo->currentText();
+    if(nowBatch.isEmpty())
+    {
+        QMessageBox::warning(this, " ", tr("请选择执行批次"));
+        return;
+    }
     stConfig conf;
     QString strInfo;
     //获取配置信息

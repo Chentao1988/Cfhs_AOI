@@ -55,9 +55,6 @@ Cfhs_DefectJudgeTable::Cfhs_DefectJudgeTable(const QStringList& nameList, QWidge
     //设置Action
     m_updateAction = new QAction();
     m_updateAction->setText(tr("刷新"));
-    QIcon icon;
-    icon.addFile(":/reload.png", QSize(32,32));
-    m_updateAction->setIcon(icon);
     m_menu->addAction(m_updateAction);
     connect(m_updateAction, &QAction::triggered,
             this, &Cfhs_DefectJudgeTable::updateAction_triggered);

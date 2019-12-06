@@ -84,9 +84,9 @@ QString Cfhs_WaveFilterConfig::getIconPath()
     return path;
 }
 
-QString Cfhs_WaveFilterConfig::getToolName()
+QString Cfhs_WaveFilterConfig::getToolPosition()
 {
-    return "WaveFilterConfig";
+    return "3-n";
 }
 
 QString Cfhs_WaveFilterConfig::getParaConfig() const

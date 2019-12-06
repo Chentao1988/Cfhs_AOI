@@ -22,11 +22,6 @@ Cfhs_StationSet::~Cfhs_StationSet()
     delete ui;
 }
 
-QStringList Cfhs_StationSet::getFeatureList() const
-{
-    return  m_listFeature;
-}
-
 StationInfoList Cfhs_StationSet::getStationList() const
 {
     return m_stationList;
@@ -58,6 +53,35 @@ void Cfhs_StationSet::setStationList(const StationInfoList& list)
             break;
         }
     }
+    showStationData();
+}
+
+void Cfhs_StationSet::setFeatureList(const QStringList &list)
+{
+    QStringList listDefect = list;
+    //缺陷定义去掉距离和个数
+    if(m_currentLang == SimplifiedChinese)
+    {
+        listDefect.removeOne("距离");
+        listDefect.removeOne("个数");
+    }
+    else if(m_currentLang == TraditionalChinese)
+    {
+        listDefect.removeOne("距離");
+        listDefect.removeOne("個數");
+    }
+    else
+    {
+        listDefect.removeOne("DefectDis");
+        listDefect.removeOne("DefectNum");
+    }
+    m_defectInfoWidget->setFeatherList(listDefect);
+    //NG筛选
+    m_ngFilterWidget->setFeatureList(list);
+}
+
+void Cfhs_StationSet::showStationData()
+{
     //设置IP地址
     ui->stationIpLineEdit->setText(m_curStation.m_ip);
     //设置IP端口
@@ -70,25 +94,8 @@ void Cfhs_StationSet::setStationList(const StationInfoList& list)
     m_defectInfoWidget->setDefectInfoMap(m_curStation.m_mapDefect);
     //设置NG判定
     m_ngFilterWidget->setInfoMap(m_curStation.m_mapNg);
-}
-
-void Cfhs_StationSet::setFeatureList(const QStringList &list)
-{
-    m_listFeature = list;
-    m_defectInfoWidget->setFeatherList(list);
-    QStringList listNg = list;
-    //NG判定添加距离和个数
-    if(m_currentLang == SimplifiedChinese)
-    {
-        listNg.append("距离");
-        listNg.append("个数");
-    }
-    else
-    {
-        listNg.append("Distance");
-        listNg.append("Number");
-    }
-    m_ngFilterWidget->setFeatureList(listNg);
+    //设置缺陷特征
+    setFeatureList(m_curStation.m_listFeature);
 }
 
 void Cfhs_StationSet::closeEvent(QCloseEvent *event)
@@ -114,7 +121,7 @@ void Cfhs_StationSet::closeEvent(QCloseEvent *event)
 
 void Cfhs_StationSet::init()
 {
-    this->setWindowFlags(this->windowFlags()|Qt::WindowMinMaxButtonsHint);
+    this->setWindowFlags(this->windowFlags()|Qt::WindowMaximizeButtonHint);
     m_stationList.clear();
     m_curStation.init();
     //工位端口设置
@@ -124,10 +131,10 @@ void Cfhs_StationSet::init()
     const int numMin = 0, numMax = 1000;
     ui->defectNumSpinBox->setRange(numMin, numMax);
     //设置缺陷信息窗口
-    m_defectInfoWidget = new Cfhs_DefectInfoWidget(m_listFeature, this);
+    m_defectInfoWidget = new Cfhs_DefectInfoWidget(this);
     ui->defectFrame->setWidget(m_defectInfoWidget);
     //NG判定
-    m_ngFilterWidget = new Cfhs_DefectInfoTable(tr("工位NG判定"), m_listFeature, false, this);
+    m_ngFilterWidget = new Cfhs_DefectInfoTable(tr("工位NG判定"), QStringList(), false, this);
     m_ngFilterWidget->setHeadLabel(2, tr("NG判定方式"));
     ui->ngFrame->setWidget(m_ngFilterWidget);
     //缺陷定义窗口对缺陷名称的操作关联到NG判定窗口
@@ -223,18 +230,7 @@ void Cfhs_StationSet::on_stationListWidget_currentRowChanged(int currentRow)
                 break;
             }
         }
-        //设置IP地址
-        ui->stationIpLineEdit->setText(m_curStation.m_ip);
-        //设置IP端口
-        ui->stationPortSpinBox->setValue(m_curStation.m_port);
-        //设置工位是否启用
-        setStationEnable(m_curStation.m_isEnable);
-        //设置缺陷数量
-        ui->defectNumSpinBox->setValue(m_curStation.m_defectNum);
-        //设置缺陷定义
-        m_defectInfoWidget->setDefectInfoMap(m_curStation.m_mapDefect);
-        //设置NG判定
-        m_ngFilterWidget->setInfoMap(m_curStation.m_mapNg);
+        showStationData();
     }
 }
 

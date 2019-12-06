@@ -10,7 +10,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-const int m_paraNum = 7;
+//const int m_paraNum = 7;
+const int m_paraNum = 5;
 
 Cfhs_DefectConfig_hjh::Cfhs_DefectConfig_hjh(QWidget *parent)
     :QDialog (parent)
@@ -27,8 +28,8 @@ Cfhs_DefectConfig_hjh::Cfhs_DefectConfig_hjh(QWidget *parent)
     m_algoTable->addOnePara(tr("缺陷面积上限"), tr("单一瑕疵面积检测上限"));
     m_algoTable->addOnePara(tr("缺陷采集数量"), tr("瑕疵数目提取上限"));
     m_algoTable->addOnePara(tr("缺陷面积下限"), tr("单一瑕疵面积检测下限"));
-    m_algoTable->addOnePara(tr("滤波宽"), tr("膨胀操作核宽"));
-    m_algoTable->addOnePara(tr("滤波高"), tr("膨胀操作核高"));
+    //m_algoTable->addOnePara(tr("滤波宽"), tr("膨胀操作核宽"));
+    //m_algoTable->addOnePara(tr("滤波高"), tr("膨胀操作核高"));
     m_algoTable->addOnePara(tr("滤波低阈值"), tr("瑕疵检测可接受灰度下限"));
     m_algoTable->addOnePara(tr("滤波高阈值"), tr("瑕疵检测可接受灰度上限"));
     //commit button
@@ -68,7 +69,7 @@ Cfhs_DefectConfig_hjh::~Cfhs_DefectConfig_hjh()
 
 QString Cfhs_DefectConfig_hjh::getShowName()
 {
-    QString name = tr("瑕疵检测2");
+    QString name = tr("边缘检测2");
 
     return name;
 }
@@ -86,30 +87,98 @@ QString Cfhs_DefectConfig_hjh::getIconPath()
     return path;
 }
 
-QString Cfhs_DefectConfig_hjh::getToolName()
+QString Cfhs_DefectConfig_hjh::getToolPosition()
 {
-    return "DefectConfig_hjh";
+    return "3-2";
+}
+
+QString Cfhs_DefectConfig_hjh::getToolParaDefault()
+{
+    QString strPara;
+    QJsonObject obj;
+    obj.insert("max_area", "50000");
+    obj.insert("num_for_stop_inspection", "5");
+    obj.insert("min_area", "180");
+    obj.insert("grey_difference_negative", "30");
+    obj.insert("grey_difference_positive", "30");
+    QJsonDocument doc;
+    doc.setObject(obj);
+
+    strPara = QString(doc.toJson(QJsonDocument::Compact));
+    return strPara;
+}
+
+QStringList Cfhs_DefectConfig_hjh::getToolOutput(const LanguageEnum &language)
+{
+    QStringList list;
+    switch(language)
+    {
+    case English:
+        list.append("DefectCoordinate");
+        list.append("DefectArea1");
+        list.append("DefectArea2");
+        list.append("DefectWidth");
+        list.append("DefectHeight");
+        list.append("DefectGray");
+        list.append("DefectGrayDifference");
+        list.append("DefectRoundness");
+        list.append("CircumferenceRatio");
+        break;
+    case SimplifiedChinese:
+        list.append("缺陷坐标");
+        list.append("缺陷面积1");
+        list.append("缺陷面积2");
+        list.append("缺陷宽度");
+        list.append("缺陷长度");
+        list.append("缺陷灰度");
+        list.append("缺陷灰度差");
+        list.append("缺陷圆度");
+        list.append("圆周比率");
+        break;
+    case TraditionalChinese:
+        list.append("缺陷坐標");
+        list.append("缺陷面積1");
+        list.append("缺陷面積2");
+        list.append("缺陷寬度");
+        list.append("缺陷長度");
+        list.append("缺陷灰度");
+        list.append("缺陷灰度差");
+        list.append("缺陷圓度");
+        list.append("圓周比率");
+        break;
+    }
+
+    return list;
 }
 
 QString Cfhs_DefectConfig_hjh::getParaConfig() const
 {
-    return m_strConfig;
+    QMap<QString, QString> map;
+    QString strInfo;
+    getMapFromJson(m_strConfig, map, strInfo);
+    if(map.isEmpty())
+        return getToolParaDefault();
+    else
+        return m_strConfig;
 }
 
 bool Cfhs_DefectConfig_hjh::setParaConfig(const QString &strConfig)
 {
     QMap<QString, QString> map;
     QString strInfo;
-    if(!getMapFromJson(strConfig, map, strInfo))
+    getMapFromJson(strConfig, map, strInfo);
+    if(map.isEmpty())
     {
-        QMessageBox::warning(this, " ", strInfo);
-        return false;
+        //数据错误，使用默认数据
+        QString strDefault = getToolParaDefault();
+        getMapFromJson(strDefault, map, strInfo);
+        m_strConfig = strDefault;
     }
     int row = 0;
-    if(map.contains("max_area_hjh"))
+    if(map.contains("max_area"))
     {
-        QString strMaxArea = map.value("max_area_hjh");
-        row = getRowFromName("max_area_hjh");
+        QString strMaxArea = map.value("max_area");
+        row = getRowFromName("max_area");
         QTableWidgetItem *item = m_algoTable->item(row, 1);
         if(!item)
         {
@@ -119,10 +188,10 @@ bool Cfhs_DefectConfig_hjh::setParaConfig(const QString &strConfig)
         item->setText(strMaxArea);
     }
 
-    if(map.contains("num_for_stop_inspection_hjh"))
+    if(map.contains("num_for_stop_inspection"))
     {
-        QString strNum = map.value("num_for_stop_inspection_hjh");
-        row = getRowFromName("num_for_stop_inspection_hjh");
+        QString strNum = map.value("num_for_stop_inspection");
+        row = getRowFromName("num_for_stop_inspection");
         QTableWidgetItem *item = m_algoTable->item(row, 1);
         if(!item)
         {
@@ -131,10 +200,10 @@ bool Cfhs_DefectConfig_hjh::setParaConfig(const QString &strConfig)
         }
         item->setText(strNum);
     }
-    if(map.contains("min_area_hjh"))
+    if(map.contains("min_area"))
     {
-        QString strMinArea = map.value("min_area_hjh");
-        row = getRowFromName("min_area_hjh");
+        QString strMinArea = map.value("min_area");
+        row = getRowFromName("min_area");
         QTableWidgetItem *item = m_algoTable->item(row, 1);
         if(!item)
         {
@@ -143,34 +212,10 @@ bool Cfhs_DefectConfig_hjh::setParaConfig(const QString &strConfig)
         }
         item->setText(strMinArea);
     }
-    if(map.contains("exception_dilate_element_width_hjh"))
+    if(map.contains("grey_difference_negative"))
     {
-        QString strWid = map.value("exception_dilate_element_width_hjh");
-        row = getRowFromName("exception_dilate_element_width_hjh");
-        QTableWidgetItem *item = m_algoTable->item(row, 1);
-        if(!item)
-        {
-            item = new QTableWidgetItem;
-            m_algoTable->setItem(row, 1, item);
-        }
-        item->setText(strWid);
-    }
-    if(map.contains("exception_dilate_element_height_hjh"))
-    {
-        QString strHei = map.value("exception_dilate_element_height_hjh");
-        row = getRowFromName("exception_dilate_element_height_hjh");
-        QTableWidgetItem *item = m_algoTable->item(row, 1);
-        if(!item)
-        {
-            item = new QTableWidgetItem;
-            m_algoTable->setItem(row, 1, item);
-        }
-        item->setText(strHei);
-    }
-    if(map.contains("grey_difference_negative_hjh"))
-    {
-        QString strMin = map.value("grey_difference_negative_hjh");
-        row = getRowFromName("grey_difference_negative_hjh");
+        QString strMin = map.value("grey_difference_negative");
+        row = getRowFromName("grey_difference_negative");
         QTableWidgetItem *item = m_algoTable->item(row, 1);
         if(!item)
         {
@@ -179,10 +224,10 @@ bool Cfhs_DefectConfig_hjh::setParaConfig(const QString &strConfig)
         }
         item->setText(strMin);
     }
-    if(map.contains("grey_difference_positive_hjh"))
+    if(map.contains("grey_difference_positive"))
     {
-        QString strMax = map.value("grey_difference_positive_hjh");
-        row = getRowFromName("grey_difference_positive_hjh");
+        QString strMax = map.value("grey_difference_positive");
+        row = getRowFromName("grey_difference_positive");
         QTableWidgetItem *item = m_algoTable->item(row, 1);
         if(!item)
         {
@@ -198,20 +243,16 @@ bool Cfhs_DefectConfig_hjh::setParaConfig(const QString &strConfig)
 int Cfhs_DefectConfig_hjh::getIndexFromName(const QString &name)
 {
     int index = 0;
-    if(name == "max_area_hjh")
+    if(name == "max_area")
         index = 1;
-    else if(name == "num_for_stop_inspection_hjh")
+    else if(name == "num_for_stop_inspection")
         index = 2;
-    else if(name == "min_area_hjh")
+    else if(name == "min_area")
         index = 3;
-    else if(name == "exception_dilate_element_width_hjh")
+    else if(name == "grey_difference_negative")
         index = 4;
-    else if(name == "exception_dilate_element_height_hjh")
+    else if(name == "grey_difference_positive")
         index = 5;
-    else if(name == "grey_difference_negative_hjh")
-        index = 6;
-    else if(name == "grey_difference_positive_hjh")
-        index = 7;
 
     return index;
 }
@@ -222,25 +263,19 @@ QString Cfhs_DefectConfig_hjh::getNameFromIndex(const int &index)
     switch (index)
     {
     case 1:
-        name = "max_area_hjh";
+        name = "max_area";
         break;
     case 2:
-        name = "num_for_stop_inspection_hjh";
+        name = "num_for_stop_inspection";
         break;
     case 3:
-        name = "min_area_hjh";
+        name = "min_area";
         break;
     case 4:
-        name = "exception_dilate_element_width_hjh";
+        name = "grey_difference_negative";
         break;
     case 5:
-        name = "exception_dilate_element_height_hjh";
-        break;
-    case 6:
-        name = "grey_difference_negative_hjh";
-        break;
-    case 7:
-        name = "grey_difference_positive_hjh";
+        name = "grey_difference_positive";
         break;
     }
 

@@ -1,6 +1,6 @@
 ﻿#include "cfhs_cameraconfig.h"
-#include "../cfhs_base.h"
 #include "../cfhs_combobox.h"
+#include "../cfhs_global.h"
 #include <QTreeWidget>
 #include <QLabel>
 #include <QPushButton>
@@ -133,9 +133,40 @@ QString Cfhs_CameraConfig::getParaConfig() const
     return m_strConfig;
 }
 
-void Cfhs_CameraConfig::setParaConfig(const QString &strPara)
+bool Cfhs_CameraConfig::setParaConfig(const QString &strPara)
 {
     m_strConfig = strPara;
+    QMap<QString, QString> map;
+    QString strInfo;
+    if(!getMapFromJson(m_strConfig, map, strInfo))
+        return false;
+    m_strCameraBrand = map.value("CameraBrand");
+    m_strCameraType = map.value("CameraType");
+    m_strCcfFile = map.value("CcfConfig");
+    //设置当前相机类型
+    QList<QTreeWidgetItem*> listItem = m_cameraTree->findItems(m_strCameraBrand, Qt::MatchContains, 0);
+    QTreeWidgetItem *rootItem = listItem.at(0);
+    if(rootItem)
+    {
+        int count = rootItem->childCount();
+        for(int i=0; i<count; i++)
+        {
+            QTreeWidgetItem *currentItem = rootItem->child(i);
+            if(currentItem->text(0) == m_strCameraType)
+            {
+                m_cameraTree->setCurrentItem(currentItem);
+                break;
+            }
+        }
+        //设置当前CCF文件
+        m_ccfCombo->clear();
+        QStringList listCcf = m_mapCamera.value(m_strCameraBrand).value(m_strCameraType);
+        m_ccfCombo->addItems(listCcf);
+        m_ccfCombo->setCurrentText(m_strCcfFile);
+        return true;
+    }
+    else
+        return true;
 }
 
 QString Cfhs_CameraConfig::getShowName()
@@ -158,9 +189,9 @@ QString Cfhs_CameraConfig::getIconPath()
     return path;
 }
 
-QString Cfhs_CameraConfig::getToolName()
+QString Cfhs_CameraConfig::getToolPosition()
 {
-    return "CameraConfig";
+    return "1-1";
 }
 
 QTreeWidgetItem *Cfhs_CameraConfig::getItem(const QString &name,
@@ -197,6 +228,8 @@ void Cfhs_CameraConfig::on_cameraTree_itemClicked(QTreeWidgetItem *item, int col
     //加载CCF文件
     m_ccfCombo->clear();
     m_ccfCombo->addItems(list);
+    //保存相机品牌
+    m_strCameraBrand = strName;
     //保存选择的相机型号
     m_strCameraType = strType;
 }
@@ -215,6 +248,7 @@ void Cfhs_CameraConfig::on_commitButton_clicked()
         return;
     }
     QJsonObject obj;
+    obj.insert("CameraBrand", m_strCameraBrand);
     obj.insert("CameraType", m_strCameraType);
     obj.insert("CcfConfig", m_strCcfFile);
     QJsonDocument doc;

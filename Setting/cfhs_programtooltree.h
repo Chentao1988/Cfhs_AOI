@@ -25,7 +25,7 @@ protected:
 
 private:
     QTreeWidgetItem *getItem(const QString &showName, const QString &iconPath,
-                             const QString &tip = "", const QString &toolName = "",
+                             const QString &tip = "", const QString &toolPosition = "",
                              const int &column = 0);
     void init();
 
@@ -36,7 +36,7 @@ private:
 private:
     bool m_isPressed;  //左键是否按下
     QPoint m_startPos;  //左键按下的起始位置
-    //key  工具名
+    //key  工具位置
     //value  item
     QMap<QString, QTreeWidgetItem*> m_mapTool;
 };

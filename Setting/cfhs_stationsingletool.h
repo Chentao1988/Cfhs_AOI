@@ -8,12 +8,14 @@
 #include "cfhs_wavefilterconfig.h"
 #include "cfhs_autoregionconfig_hjh.h"
 #include "cfhs_defectconfig_hjh.h"
+#include "cfhs_originalregionconfig.h"
+#include "cfhs_itodetectconfig.h"
 #include <QListWidgetItem>
 
 typedef struct _StationTool{
     int m_index;  //工具使用序号，从1开始
     int m_times;  //同类工具使用次数
-    QString m_toolName;  //工具名
+    QString m_toolPosition;  //工具位置
     QString m_showName; //工具显示名
     QString m_toolPara;  //工具保存的参数，Json格式
 }StationTool;
@@ -27,12 +29,13 @@ public:
     void setShowName(const QString &name);
     void setToolIndex(const int& index);
     void setToolPara(const QString &para);
-    static QString getIconPath(const QString& toolName);
-    static QString getToolTip(const QString& toolName);
-    static QString getShowName(const QString& toolName);
+    static QString getIconPath(const QString& toolPosition);
+    static QString getToolTip(const QString& toolPosition);
+    static QString getShowName(const QString& toolPosition);
+    static QString getToolParaDefault(const QString& toolPosition);
 
 private:
-    void setToolName(const QString& name);
+    void setToolPosition(const QString& strPosition);
 
 private:
     StationTool m_stationTool;

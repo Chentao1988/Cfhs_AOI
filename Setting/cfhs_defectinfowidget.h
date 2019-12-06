@@ -17,10 +17,14 @@ class Cfhs_DefectInfoWidget : public QWidget
 
 public:
     explicit Cfhs_DefectInfoWidget(const QStringList &listFeather, QWidget *parent = nullptr);
+    Cfhs_DefectInfoWidget(QWidget *parent = nullptr);
     ~Cfhs_DefectInfoWidget();
     QMap<QString, QString> getDefectInfoMap();
     void setDefectInfoMap(const QMap<QString, QString> &map);
     void setFeatherList(const QStringList &list);
+
+private:
+    void init(const QStringList &listFeather = QStringList());
 
 signals:
     void sig_deleteOneRow(const QString &name);

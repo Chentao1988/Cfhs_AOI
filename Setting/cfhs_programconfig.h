@@ -36,6 +36,7 @@ private:
     bool isStationListValid();  //当前工位列表是否有效
     bool isMultipleStationValid(); //当前方案是否支持多工位功能
     void setCurProgramName(const QString& name);
+    void saveCurrentProgram();  //保存当前方案
 
 private slots:
     void slot_currentStation_changed(const int &index);

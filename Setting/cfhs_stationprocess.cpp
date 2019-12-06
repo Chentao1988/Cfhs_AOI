@@ -13,6 +13,9 @@
 #include <QApplication>
 #include <QDrag>
 
+const QString StrCameraTool = "1-";  //相机工具
+const QString StrRegionTool = "2-";  //分区工具
+const QString StrAlgorithmTool = "3-";  //算法工具
 
 Cfhs_StationProcess::Cfhs_StationProcess(const stStation &station, QWidget *parent)
     :QListWidget (parent)
@@ -34,17 +37,17 @@ Cfhs_StationProcess::Cfhs_StationProcess(const stStation &station, QWidget *pare
     m_deleteAction->setText(tr("删除"));
     connect(m_deleteAction, &QAction::triggered,
             this, &Cfhs_StationProcess::slot_deleteAction_triggered);
+    //清空工具
+    m_clearAction = new QAction(this);
+    m_clearAction->setText(tr("清空"));
+    connect(m_clearAction, &QAction::triggered,
+            this, &Cfhs_StationProcess::slot_clearAction_triggered);
     //添加到menu上
     m_menu->addAction(m_alterNameAction);
     m_menu->addAction(m_alterTipAction);
-    m_menu->addSeparator();
     m_menu->addAction(m_deleteAction);
+    m_menu->addAction(m_clearAction);
     //设置样式
-// QString style = QString("QListWidget:item{background:transparent; color:#2193AB;"
-//                         "font-size:14px; font-family:Mircosoft Yahei; "
-//                         "padding-left:8px; min-height: 36px;"
-//                         "border-left:1px solid #0077FF; border-bottom:1px solid #0077FF}"
-//                         "QListWidget:item:hover{background:#3954C9; color:lightGray;}");
     QString style = QString("QListWidget{background:transparent; border:none;"
                             "padding-left:8px;font-size:16px; font-family:Mircosoft Yahei;}"
                             "QListWidget:item{color:#2193AB;min-height: 36px;"
@@ -70,8 +73,7 @@ void Cfhs_StationProcess::setStation(const stStation &station)
 {
     m_stationNo = station.iStationNo;
     //清除原有数据
-    m_listTool.clear();
-    this->clear();
+    clearContent();
     QString strPara = station.strToolPara;
     if(strPara.isEmpty() || strPara == "null")
         return;
@@ -111,8 +113,8 @@ void Cfhs_StationProcess::setStation(const stStation &station)
                 {
                     //工具索引
                     tool.m_index = index;
-                    //工具名
-                    tool.m_toolName = dataObj.take("ToolName").toString();
+                    //工具位置
+                    tool.m_toolPosition = dataObj.take("ToolPosition").toString();
                     //工具参数
                     QJsonValue value = dataObj.take("ToolPara");
                     if(value.isString())
@@ -147,7 +149,7 @@ void Cfhs_StationProcess::addStationTool(StationTool &tool)
     int times = 0;
     foreach(Cfhs_StationSingleTool* single, m_listTool)
     {
-        if(single->getStationTool().m_toolName == tool.m_toolName)
+        if(single->getStationTool().m_toolPosition == tool.m_toolPosition)
             times++;
     }
     tool.m_times = times;
@@ -167,12 +169,12 @@ QString Cfhs_StationProcess::getStationProcess() const
     foreach(Cfhs_StationSingleTool *tool, m_listTool)
     {
         int index = tool->getStationTool().m_index;
-        QString name = tool->getStationTool().m_toolName;
+        QString position = tool->getStationTool().m_toolPosition;
         QString para = tool->getStationTool().m_toolPara;
         //添加到obj中
         QJsonObject toolObj;
         toolObj.insert("ToolIndex", QString::number(index));
-        toolObj.insert("ToolName", name);
+        toolObj.insert("ToolPosition", position);
         //添加参数,由QString转成object
         if(para.isEmpty() || para == "null")
             toolObj.insert("ToolPara", "null");
@@ -208,6 +210,117 @@ int Cfhs_StationProcess::getStationNo() const
     return m_stationNo;
 }
 
+QString Cfhs_StationProcess::getStationFeature() const
+{
+    if(m_listTool.isEmpty())
+        return "null";
+    QStringList listEn;  //英语版特征列表
+    QStringList listCns;  //简体中文版
+    QStringList listCnt;  //繁体中文版
+    foreach(Cfhs_StationSingleTool *tool, m_listTool)
+    {
+        QString toolPosition = tool->getStationTool().m_toolPosition;
+        if(toolPosition.contains(StrAlgorithmTool))
+        {
+            QStringList listEnOne;
+            QStringList listCnsOne;
+            QStringList listCntOne;
+            if(getAlgorithmToolOutput(toolPosition, listEnOne, listCnsOne, listCntOne))
+            {
+                for(int i=0; i<listEnOne.count(); i++)
+                {
+                    //已存在略过
+                    if(listEn.contains(listEnOne.at(i)))
+                        continue;
+                    listEn.append(listEnOne.at(i));
+                    listCns.append(listCnsOne.at(i));
+                    listCnt.append(listCntOne.at(i));
+                }
+            }
+        }
+    }
+    //如果数据为空，返回null
+    if(listEn.isEmpty())
+        return "null";
+    QString strFeatureEn, strFeatureCns, strFeatureCnt;
+    for(int i=0; i<listEn.count(); i++)
+    {
+        if(i ==0)
+        {
+            strFeatureEn.append(listEn.at(i));
+            strFeatureCns.append(listCns.at(i));
+            strFeatureCnt.append(listCnt.at(i));
+        }
+        else
+        {
+            strFeatureEn.append("#");
+            strFeatureEn.append(listEn.at(i));
+            strFeatureCns.append("#");
+            strFeatureCns.append(listCns.at(i));
+            strFeatureCnt.append("#");
+            strFeatureCnt.append(listCnt.at(i));
+        }
+    }
+    //添加距离和个数
+    //英文版
+    strFeatureEn.append("#");
+    strFeatureEn.append("DefectDis");
+    strFeatureEn.append("#");
+    strFeatureEn.append("DefectNum");
+    //简体中文版
+    strFeatureCns.append("#");
+    strFeatureCns.append("距离");
+    strFeatureCns.append("#");
+    strFeatureCns.append("个数");
+    //繁体中文版
+    strFeatureCnt.append("#");
+    strFeatureCnt.append("距離");
+    strFeatureCnt.append("#");
+    strFeatureCnt.append("個數");
+
+    QJsonObject obj;
+    obj.insert("English", strFeatureEn);
+    obj.insert("SimplifiedChinese", strFeatureCns);
+    obj.insert("TraditionalChinese", strFeatureCnt);
+    QJsonDocument doc;
+    doc.setObject(obj);
+
+    QString strFeather = QString(doc.toJson(QJsonDocument::Compact));
+    return strFeather;
+}
+
+bool Cfhs_StationProcess::getAlgorithmToolOutput(const QString &toolPosition, QStringList &listEn,
+                                                 QStringList &listCns, QStringList &listCnt)
+{
+    //清空源数据
+    listEn.clear();
+    listCns.clear();
+    listCnt.clear();
+    if(toolPosition == Cfhs_DefectConfig::getToolPosition())
+    {
+        listEn = Cfhs_DefectConfig::getToolOutput(English);
+        listCns = Cfhs_DefectConfig::getToolOutput(SimplifiedChinese);
+        listCnt = Cfhs_DefectConfig::getToolOutput(TraditionalChinese);
+    }
+    else if(toolPosition == Cfhs_DefectConfig_hjh::getToolPosition())
+    {
+        listEn = Cfhs_DefectConfig_hjh::getToolOutput(English);
+        listCns = Cfhs_DefectConfig_hjh::getToolOutput(SimplifiedChinese);
+        listCnt = Cfhs_DefectConfig_hjh::getToolOutput(TraditionalChinese);
+    }
+    else if(toolPosition == Cfhs_ItoDetectConfig::getToolPosition())
+    {
+        listEn = Cfhs_ItoDetectConfig::getToolOutput(English);
+        listCns = Cfhs_ItoDetectConfig::getToolOutput(SimplifiedChinese);
+        listCnt = Cfhs_ItoDetectConfig::getToolOutput(TraditionalChinese);
+    }
+
+    if(listEn.isEmpty())
+        return false;
+    else
+        return true;
+}
+
 void Cfhs_StationProcess::dropEvent(QDropEvent *event)
 {
     if(event->mimeData()->hasFormat("QTreeWidgetItem"))
@@ -219,12 +332,17 @@ void Cfhs_StationProcess::dropEvent(QDropEvent *event)
             event->accept();
             return;
         }
-        QString toolName;
-        toolName.append(info);
+        QString toolPosition;
+        toolPosition.append(info);
+        if(!isAcceptedAddTool(toolPosition))
+        {
+            event->ignore();
+            return;
+        }
         int size = m_listTool.size();
         StationTool tool;
         tool.m_index = size + 1;
-        tool.m_toolName = toolName;
+        tool.m_toolPosition = toolPosition;
         //添加一个工具
         addStationTool(tool);
         event->accept();
@@ -235,12 +353,40 @@ void Cfhs_StationProcess::dropEvent(QDropEvent *event)
         //拖拽item的行数
         int oldRow = this->row(m_actionItem);
         //释放位置的行数
-        QListWidgetItem *item = this->itemAt(event->pos());
+        Cfhs_StationSingleTool *item = static_cast<Cfhs_StationSingleTool*>(this->itemAt(event->pos()));
         if(!item)
             return;
         int curRow = this->row(item);
         if(oldRow == curRow)
             return;
+        //拖拽的是相机配置
+        if(m_actionItem->getStationTool().m_toolPosition.contains(StrCameraTool)
+                && oldRow == 0)
+        {
+            event->ignore();
+            return;
+        }
+        //拖拽的是分区工具
+        else if(m_actionItem->getStationTool().m_toolPosition.contains(StrRegionTool)
+                && oldRow == 1)
+        {
+            event->ignore();
+            return;
+        }
+        //放下的位置是相机配置
+        if(item->getStationTool().m_toolPosition.contains(StrCameraTool)
+                && curRow == 0)
+        {
+            event->ignore();
+            return;
+        }
+        //放下的位置是分区工具
+        else if(item->getStationTool().m_toolPosition.contains(StrRegionTool)
+                && curRow == 1)
+        {
+            event->ignore();
+            return;
+        }
         //删除旧行
         this->takeItem(oldRow);
         //插入到新的位置
@@ -315,8 +461,8 @@ void Cfhs_StationProcess::mouseMoveEvent(QMouseEvent *event)
     QMimeData *mime = new QMimeData();
     mime->setData("QListWidgetItem", QByteArray());
     drag->setMimeData(mime);
-    QString toolName = m_actionItem->getStationTool().m_toolName;
-    QString iconPath = Cfhs_StationSingleTool::getIconPath(toolName);
+    QString toolPosition = m_actionItem->getStationTool().m_toolPosition;
+    QString iconPath = Cfhs_StationSingleTool::getIconPath(toolPosition);
     QPixmap map;
     if(map.load(iconPath))
     {
@@ -337,9 +483,9 @@ void Cfhs_StationProcess::mouseDoubleClickEvent(QMouseEvent *event)
     m_actionItem = static_cast<Cfhs_StationSingleTool*>(this->itemAt(event->pos()));
     if(!m_actionItem)
         return;
-    QString toolName = m_actionItem->getStationTool().m_toolName;
+    QString toolPosition = m_actionItem->getStationTool().m_toolPosition;
     QString strPara = m_actionItem->getStationTool().m_toolPara;
-    if(toolName == Cfhs_CameraConfig::getToolName())
+    if(toolPosition == Cfhs_CameraConfig::getToolPosition())
     {
         QString strCameraConfig;
         QString strInfo;
@@ -358,18 +504,7 @@ void Cfhs_StationProcess::mouseDoubleClickEvent(QMouseEvent *event)
             strPara = camera.getParaConfig();
         }
     }
-    else if(toolName == Cfhs_RoiConfig::getToolName())
-    {
-        //Roi设置
-        Cfhs_RoiConfig roi(this);
-        if(!roi.setParaConfig(strPara))
-            return;
-        if(roi.exec() == QDialog::Accepted)
-        {
-            strPara = roi.getParaConfig();
-        }
-    }
-    else if(toolName == Cfhs_AutoRegionConfig::getToolName())
+    else if(toolPosition == Cfhs_AutoRegionConfig::getToolPosition())
     {
         //自动AA区
         Cfhs_AutoRegionConfig region(this);
@@ -380,7 +515,7 @@ void Cfhs_StationProcess::mouseDoubleClickEvent(QMouseEvent *event)
             strPara = region.getParaConfig();
         }
     }
-    else if(toolName == Cfhs_DefectConfig::getToolName())
+    else if(toolPosition == Cfhs_DefectConfig::getToolPosition())
     {
         //瑕疵检测
         Cfhs_DefectConfig defect(this);
@@ -391,7 +526,7 @@ void Cfhs_StationProcess::mouseDoubleClickEvent(QMouseEvent *event)
             strPara = defect.getParaConfig();
         }
     }
-    else if(toolName == Cfhs_WaveFilterConfig::getToolName())
+    else if(toolPosition == Cfhs_WaveFilterConfig::getToolPosition())
     {
         //膨胀滤波
         Cfhs_WaveFilterConfig wave(this);
@@ -402,7 +537,7 @@ void Cfhs_StationProcess::mouseDoubleClickEvent(QMouseEvent *event)
             strPara = wave.getParaConfig();
         }
     }
-    else if(toolName == Cfhs_AutoRegionConfig_hjh::getToolName())
+    else if(toolPosition == Cfhs_AutoRegionConfig_hjh::getToolPosition())
     {
         //自动AA区2
         Cfhs_AutoRegionConfig_hjh region(this);
@@ -413,7 +548,7 @@ void Cfhs_StationProcess::mouseDoubleClickEvent(QMouseEvent *event)
             strPara = region.getParaConfig();
         }
     }
-    else if(toolName == Cfhs_DefectConfig_hjh::getToolName())
+    else if(toolPosition == Cfhs_DefectConfig_hjh::getToolPosition())
     {
         //瑕疵检测2
         Cfhs_DefectConfig_hjh defect(this);
@@ -423,6 +558,15 @@ void Cfhs_StationProcess::mouseDoubleClickEvent(QMouseEvent *event)
         {
             strPara = defect.getParaConfig();
         }
+    }
+    else if(toolPosition == Cfhs_ItoDetectConfig::getToolPosition())
+    {
+        //ITO检测
+        Cfhs_ItoDetectConfig ito(this);
+        if(!ito.setParaConfig(strPara))
+            return;
+        if(ito.exec() == QDialog::Accepted)
+            strPara = ito.getParaConfig();
     }
     m_actionItem->setToolPara(strPara);
 }
@@ -435,6 +579,63 @@ void Cfhs_StationProcess::contextMenuEvent(QContextMenuEvent *event)
         QCursor cursor;
         m_menu->exec(cursor.pos());
     }
+}
+
+bool Cfhs_StationProcess::isAcceptedAddTool(const QString &toolPosition)
+{
+    int count = m_listTool.count();
+    if(count==0 && !toolPosition.contains(StrCameraTool))
+    {
+        QMessageBox::warning(this, " ", tr("请添加相机设置"));
+        return false;
+    }
+    else if(count == 1 && !toolPosition.contains(StrRegionTool))
+    {
+        QMessageBox::warning(this, " ", tr("请添加分区工具"));
+        return false;
+    }
+    bool isAccepted = true;
+    //如果是相机设置和分区工具，则检查是否已经存在
+    if(toolPosition.contains(StrCameraTool))
+    {
+        foreach(Cfhs_StationSingleTool* tool, m_listTool)
+        {
+            QString strTool = tool->getStationTool().m_toolPosition;
+            if(strTool.contains(StrCameraTool))
+            {
+                isAccepted = false;
+                QMessageBox::warning(this, " ", tr("相机设置已存在"));
+                break;
+            }
+        }
+    }
+    else if(toolPosition.contains(StrRegionTool))
+    {
+        foreach(Cfhs_StationSingleTool* tool, m_listTool)
+        {
+            QString strTool = tool->getStationTool().m_toolPosition;
+            if(strTool.contains(StrRegionTool))
+            {
+                isAccepted = false;
+                QMessageBox::warning(this, " ", tr("分区工具已存在"));
+                break;
+            }
+        }
+    }
+    return isAccepted;
+}
+
+void Cfhs_StationProcess::clearContent()
+{
+    int count = m_listTool.count();
+    for(int i= count-1; i>=0; i--)
+    {
+        Cfhs_StationSingleTool *tool = m_listTool.at(i);
+        delete tool;
+        tool = nullptr;
+    }
+    m_listTool.clear();
+    this->clear();
 }
 
 void Cfhs_StationProcess::slot_alterNameAction_triggered()
@@ -486,13 +687,32 @@ void Cfhs_StationProcess::slot_deleteAction_triggered()
     m_actionItem = nullptr;
 }
 
+void Cfhs_StationProcess::slot_clearAction_triggered()
+{
+    QMessageBox *msg = new QMessageBox(QMessageBox::Information,
+                                       tr("提示"),
+                                       tr("是否清除所有工具？"),
+                                       QMessageBox::Yes|
+                                       QMessageBox::No,
+                                       this);
+    msg->setButtonText(QMessageBox::Yes, tr("是"));
+    msg->setButtonText(QMessageBox::No, tr("否"));
+    msg->setDefaultButton(QMessageBox::Yes);
+    if(msg->exec() == QMessageBox::Yes)
+    {
+        clearContent();
+    }
+    delete msg;
+    msg = nullptr;
+}
+
 void Cfhs_StationProcess::slot_getRoiPoint(const int &stationNo, QMap<int, QList<QList<QPoint> > > &map)
 {
     if(stationNo != m_stationNo)
         return;
     foreach(Cfhs_StationSingleTool *tool, m_listTool)
     {
-        if(tool->getStationTool().m_toolName == Cfhs_RoiConfig::getToolName())
+        if(tool->getStationTool().m_toolPosition == Cfhs_RoiConfig::getToolPosition())
         {
             QJsonObject mainObj;
             mainObj.insert("AutoRoi", QString::number(0));

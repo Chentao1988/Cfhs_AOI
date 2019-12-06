@@ -25,7 +25,10 @@ Cfhs_DefectSmallImage::~Cfhs_DefectSmallImage()
 void Cfhs_DefectSmallImage::showDefect(const QImage& image, const QString& defectInfo)
 {
     if(image.isNull())
+    {
+        this->clearContent();
         return;
+    }
     //显示缺陷图
     QPixmap map = QPixmap::fromImage(image);
     map = map.scaled(100,100,Qt::KeepAspectRatio,Qt::SmoothTransformation);

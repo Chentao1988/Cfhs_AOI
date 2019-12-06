@@ -19,10 +19,10 @@ public:
     void setSideEnable(const bool &isEnable);
     void setSideShow(const bool &isShow);
     bool isSideShow() const;
+    static QString getDirFromFilePath(const QString &file);
 
 private:
     QPushButton* addButton(const QString& title, const QString& iconName);
-    QString getDirFromFilePath(const QString &file);
 
 private slots:
     void on_offlineButton_clicked();

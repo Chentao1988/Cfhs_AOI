@@ -18,7 +18,7 @@ QMap<int, QString> Cfhs_ProgramProcessBar::getProgramProcessMap()
     QMap<int, QString> mapProcess;
     if(m_mapStation.isEmpty())
         return mapProcess;
-    QMap<int ,Cfhs_StationProcess*>::const_iterator iter = m_mapStation.begin();
+    QMap<int, Cfhs_StationProcess*>::const_iterator iter = m_mapStation.begin();
     while(iter != m_mapStation.end())
     {
         mapProcess.insert(iter.key(), iter.value()->getStationProcess());
@@ -26,6 +26,21 @@ QMap<int, QString> Cfhs_ProgramProcessBar::getProgramProcessMap()
     }
 
     return mapProcess;
+}
+
+QMap<int, QString> Cfhs_ProgramProcessBar::getStationFeatureMap()
+{
+    QMap<int, QString> mapFeature;
+    if(m_mapStation.isEmpty())
+        return mapFeature;
+    QMap<int, Cfhs_StationProcess*>::const_iterator iter = m_mapStation.begin();
+    while(iter != m_mapStation.end())
+    {
+        mapFeature.insert(iter.key(), iter.value()->getStationFeature());
+        iter++;
+    }
+
+    return mapFeature;
 }
 
 void Cfhs_ProgramProcessBar::setStationList(const QList<stStation> &list)
