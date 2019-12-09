@@ -280,8 +280,8 @@ QString Cfhs_StationProcess::getStationFeature() const
 
     QJsonObject obj;
     obj.insert("English", strFeatureEn);
-    obj.insert("SimplifiedChinese", strFeatureCns);
-    obj.insert("TraditionalChinese", strFeatureCnt);
+    obj.insert("Simplified", strFeatureCns);
+    obj.insert("Traditional", strFeatureCnt);
     QJsonDocument doc;
     doc.setObject(obj);
 

@@ -54,6 +54,7 @@ public:
     static QString getFunctionButtonStyle(const QString& name, const bool& hasDisable = false);
     bool ReadProgram();
 
+
 protected:
     bool eventFilter(QObject* obj, QEvent* event);
     void keyPressEvent(QKeyEvent *event);
@@ -87,7 +88,14 @@ private:
     //模拟数据
     void createData();
     //设置缺陷特征信息
-    void setFeatureData(const QString &strFeature);
+    void setFeatureData(const QStringList &listFeatureName, const QString &strFeature);
+    //获取缺陷特征信息
+    //输入
+    //strFeature  缺陷特征信息
+    //输出
+    //listFeature  缺陷特征列表
+    //strInfo  执行日志
+    bool getFeatureData(const QString &strFeature, QStringList &listFeature, QString &strInfo);
 
 signals:
     //---显示当前产品结果
@@ -279,7 +287,13 @@ private:
     bool m_openGridview;
     int m_xGridview;
     int m_yGridview;
-    //工位特征表
+    //工位缺陷特征名
+    //key  工位号
+    //value  缺陷名列表
+    QMap<int, QStringList> m_mapStationFeatureName;
+    //工位特征数据
+    //key  工位号
+    //value  缺陷数据
     QMap<int, QString> m_mapStationFeature;
     int m_sumAnalysisTime; //汇总分析缺陷点的时间段
     //配置控制项

@@ -11,6 +11,7 @@
 Cfhs_IBusiness *m_logicInterface = new Cfhs_IBusiness();
 QString m_curProgramName = "";
 LanguageEnum m_currentLang = SimplifiedChinese;
+int m_curStationNo = 1;
 
 
 void Sleep(int ms)
@@ -23,7 +24,7 @@ void Sleep(int ms)
 
 QStringList getListFromQString(const QString &strValue, const QString &split)
 {
-    if(strValue.isEmpty())
+    if(strValue.isEmpty() || strValue == "null")
         return QStringList();
 
     QStringList list = strValue.split(split);
@@ -36,7 +37,7 @@ QPolygon getPolygonFromQString(const QString &strValue,
                                const QString &inSplit)
 {
     QPolygon polygon;
-    if(strValue.isEmpty())
+    if(strValue.isEmpty() || strValue == "null")
         return polygon;
     QStringList list = strValue.split(outSplit);
     for(int i=0; i<list.size(); i++)

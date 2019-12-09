@@ -11,6 +11,7 @@
 #include <QSpinBox>
 #include <QMessageBox>
 #include <QCursor>
+#include <QtSql/QSqlQuery>
 
 
 Cfhs_DefectJudgeTable::Cfhs_DefectJudgeTable(const QStringList& nameList, QWidget* parent)
@@ -132,7 +133,7 @@ bool Cfhs_DefectJudgeTable::saveData(QString& defectInfo)
     }
     //判定是否合法
     QString strInfo;
-    if(!m_logicInterface->FormatCheck(defectInfo, strInfo))
+    if(!m_logicInterface->FormatCheck(m_curProgramName, m_curStationNo, defectInfo, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return false;

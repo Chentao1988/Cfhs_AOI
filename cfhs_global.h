@@ -14,6 +14,8 @@ extern Cfhs_IBusiness* m_logicInterface;
 extern QString m_curProgramName;
 //当前界面语言
 extern LanguageEnum m_currentLang;
+//当前工位
+extern int m_curStationNo;
 
 
 //程序睡眠

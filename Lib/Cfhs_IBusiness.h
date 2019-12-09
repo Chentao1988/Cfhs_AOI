@@ -29,7 +29,7 @@ public:
     void Exit();
 
     //格式检查
-    bool FormatCheck(QString strCheck, QString &strInfo);
+    bool FormatCheck(const QString &strNowName, int iStation, QString strCheck, QString &strInfo);
 
     //***登录界面
 public:
@@ -157,13 +157,6 @@ public:
     //输出
     //strInfo:执行信息
     bool SetStationInfo(const QString &strProName, int iStationNo, const stStation &stSet, QString &strInfo);
-
-    //***table_features表操作
-    //---获取特征信息
-    //输出
-    //stGet:特征信息
-    //strInfo:执行信息
-    bool GetFeaturesInfo(stFeatures &stGet, QString &strInfo);
 
     //***table_camerainfo
     //strCameraInfo:相机信息（取值格式：相机类型1#相机规格1#ccf文件路径1@相机类型N#相机规格N#ccf文件路径N)

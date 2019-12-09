@@ -488,57 +488,6 @@ bool Cfhs_MainWindow::setProgram(const stProgramme &stPro)
     m_defectSmallImage[0]->clearContent();
     m_defectSmallImage[1]->clearContent();
     m_defectSmallImage[2]->clearContent();
-    //产品特征表
-    stFeatures stFeat;
-    QString strInfo;
-    if(!m_logicInterface->GetFeaturesInfo(stFeat, strInfo))
-    {
-        QMessageBox::warning(this, " ", strInfo);
-        return false;
-    }
-    QString strFeature;
-    //默认添加“产品ID”，“缺陷排序ID”，“缺陷名称”
-    QStringList realFeatureList;
-    if(m_currentLang == English)
-    {
-        strFeature = stFeat.strEN;
-        realFeatureList.append("Product ID");
-        realFeatureList.append("Defect ID");
-        realFeatureList.append("Defect name");
-    }
-    else if(m_currentLang == SimplifiedChinese)
-    {
-        strFeature = stFeat.strCH;
-        realFeatureList.append("产品ID");
-        realFeatureList.append("缺陷排序ID");
-        realFeatureList.append("缺陷名称");
-    }
-    else
-    {
-        strFeature = stFeat.strTr;
-        realFeatureList.append("產品ID");
-        realFeatureList.append("缺陷排序ID");
-        realFeatureList.append("缺陷名稱");
-    }
-    QStringList listFeature = getListFromQString(strFeature);
-    realFeatureList.append(listFeature);
-    //去掉距离和个数
-    if(m_currentLang == SimplifiedChinese)
-    {
-        realFeatureList.removeOne("距离");
-        realFeatureList.removeOne("个数");
-    }
-    else if(m_currentLang == TraditionalChinese)
-    {
-        realFeatureList.removeOne("距離");
-        realFeatureList.removeOne("個數");
-    }
-    else
-    {
-        realFeatureList.removeOne("DefectDis");
-        realFeatureList.removeOne("DefectNum");
-    }
-    m_featureTable->setHeaderString(realFeatureList);
 
     return true;
 }
@@ -610,7 +559,8 @@ void Cfhs_MainWindow::slot_ShowFeatureData(const int &stationNo, const QString &
     //如果是当前工位显示
     if(m_taskWidget->getCurrentTask() == stationNo)
     {
-        setFeatureData(strData);
+        QStringList listFeature = m_mapStationFeatureName.value(stationNo);
+        setFeatureData(listFeature, strData);
     }
 }
 
@@ -754,6 +704,7 @@ void Cfhs_MainWindow::slot_ShowCurrentTask(const int &index)
     //是否显示九宫格 ，只在结果页面显示
     bool isShowGridView = false;
     QString strFeather = "";
+    QStringList listFeature;
     if(index == Cfhs_TaskInfoWidget::ResultTask)
     {
         //显示结果信息
@@ -792,9 +743,10 @@ void Cfhs_MainWindow::slot_ShowCurrentTask(const int &index)
             m_defectSmallImage[i]->showDefect(img, name);
         }
         strFeather = m_mapStationFeature.value(index);
+        listFeature = m_mapStationFeatureName.value(index);
     }
     //显示缺陷特征
-    setFeatureData(strFeather);
+    setFeatureData(listFeature, strFeather);
     //显示九宫格
     m_bigImageWidget->setGridView(isShowGridView, m_xGridview, m_yGridview);
 }
@@ -903,8 +855,30 @@ bool Cfhs_MainWindow::ReadProgram()
         return false;
     }
     int stationNum = getListFromQString(strAllStation).size();
-
+    //加载工位
     m_taskWidget->setTask(stationNum);
+    //产品特征表
+    m_mapStationFeatureName.clear();
+    for(int i=0; i<stationNum; i++)
+    {
+        Station station;
+        int stationNo = i + 1;
+        if(!m_logicInterface->GetStationInfo(m_curProgramName, stationNo, station, strInfo))
+        {
+            QMessageBox::warning(this, " ", strInfo);
+            return false;
+        }
+        QStringList listFeature;
+        if(!getFeatureData(station.strFeatures, listFeature, strInfo))
+        {
+            strInfo = QString(tr("工位%1的缺陷特征获取失败：%2")).arg(stationNo).arg(strInfo);
+            QMessageBox::warning(this, " ", strInfo);
+            return false;
+        }
+        m_mapStationFeatureName.insert(stationNo, listFeature);
+    }
+    QStringList listFeatureName = m_mapStationFeatureName.value(m_taskWidget->getCurrentTask());
+    m_featureTable->setHeaderString(listFeatureName);
 
     return true;
 }
@@ -1423,14 +1397,86 @@ void Cfhs_MainWindow::createData()
     m_batchChart->setData(strHour,strInput,strYield,strTotal);
 }
 
-void Cfhs_MainWindow::setFeatureData(const QString &strFeature)
+void Cfhs_MainWindow::setFeatureData(const QStringList &listFeatureName, const QString &strFeature)
 {
-    m_featureTable->tableInit();
+    m_featureTable->setHeaderString(listFeatureName);
     if(strFeature.isEmpty())
         return;
     QStringList list = strFeature.split("@");
     for(int i=0; i<list.size(); i++)
         m_featureTable->addData(list.at(i));
+}
+
+bool Cfhs_MainWindow::getFeatureData(const QString &strFeature,
+                                     QStringList &listFeature, QString &strInfo)
+{
+    QMap<QString, QString> mapFeature;
+    if(!getMapFromJson(strFeature, mapFeature, strInfo))
+        return false;
+    if(mapFeature.isEmpty())
+    {
+        strInfo = QString(tr("数据为空"));
+        return false;
+    }
+    //选择要显示的语言版本
+    QString showFeature;
+    switch(m_currentLang)
+    {
+    case English:
+        showFeature = mapFeature.value("English");
+        break;
+    case SimplifiedChinese:
+        showFeature = mapFeature.value("Simplified");
+        break;
+    case TraditionalChinese:
+        showFeature = mapFeature.value("Traditional");
+        break;
+    }
+    QStringList list = getListFromQString(showFeature);
+    if(list.isEmpty())
+    {
+        strInfo = QString(tr("数据为空"));
+        return false;
+    }
+    //去掉距离和个数
+    if(m_currentLang == SimplifiedChinese)
+    {
+        list.removeOne("距离");
+        list.removeOne("个数");
+    }
+    else if(m_currentLang == TraditionalChinese)
+    {
+        list.removeOne("距離");
+        list.removeOne("個數");
+    }
+    else
+    {
+        list.removeOne("DefectDis");
+        list.removeOne("DefectNum");
+    }
+    //默认添加“产品ID”，“缺陷排序ID”，“缺陷名称”
+    QStringList realFeatureList;
+    if(m_currentLang == English)
+    {
+        realFeatureList.append("Product ID");
+        realFeatureList.append("Defect ID");
+        realFeatureList.append("Defect name");
+    }
+    else if(m_currentLang == SimplifiedChinese)
+    {
+        realFeatureList.append("产品ID");
+        realFeatureList.append("缺陷排序ID");
+        realFeatureList.append("缺陷名称");
+    }
+    else
+    {
+        realFeatureList.append("產品ID");
+        realFeatureList.append("缺陷排序ID");
+        realFeatureList.append("缺陷名稱");
+    }
+    realFeatureList.append(list);
+    listFeature = realFeatureList;
+    return true;
 }
 
 void Cfhs_MainWindow::on_readCodePushButton_clicked()

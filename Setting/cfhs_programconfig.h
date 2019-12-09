@@ -37,6 +37,10 @@ private:
     bool isMultipleStationValid(); //当前方案是否支持多工位功能
     void setCurProgramName(const QString& name);
     void saveCurrentProgram();  //保存当前方案
+    //获取工位缺陷信息
+    //stationNo  工位号
+    //listFeature  缺陷信息列表
+    bool getStationFeature(const int &stationNo, QStringList &listFeature);
 
 private slots:
     void slot_currentStation_changed(const int &index);
@@ -77,8 +81,6 @@ private:
     stProgramme m_curProgram;  //当前方案
     QList<stStation> m_stationList; //工位列表
     bool m_isProgramSaved; //方案是否已保存
-    QStringList m_featureList;  //缺陷特征列表
-    QString m_strProgramName;  //当前方案名，方案配置界面不共用全局变量
     QPointer<Cfhs_ShowStatusBar> m_statusBar;  //日志
 };
 

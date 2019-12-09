@@ -6,7 +6,7 @@
 DEFINES += logo_cfdr
 #DEFINES += logo_shh
 
-QT       += core gui axcontainer
+QT       += core gui axcontainer sql
 
 CONFIG += qwt
 DEFINES += QT_DLL QWT_DLL

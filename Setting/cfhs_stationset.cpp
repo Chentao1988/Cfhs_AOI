@@ -96,6 +96,8 @@ void Cfhs_StationSet::showStationData()
     m_ngFilterWidget->setInfoMap(m_curStation.m_mapNg);
     //设置缺陷特征
     setFeatureList(m_curStation.m_listFeature);
+    //设置当前工位号
+    m_curStationNo = m_curStation.m_stationNo;
 }
 
 void Cfhs_StationSet::closeEvent(QCloseEvent *event)

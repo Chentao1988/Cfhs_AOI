@@ -95,24 +95,8 @@ bool Cfhs_ProgramConfig::ReadProgram(const QString &programName)
         }
     }
     //默认显示工位一图
-    QString strImg = QString("D:/%1/static_img/station%2.jpg").arg(m_strProgramName).arg(1);
+    QString strImg = QString("D:/%1/static_img/station%2.jpg").arg(m_curProgramName).arg(1);
     m_imageWindow->setImage(strImg);
-    //产品特征表
-    stFeatures stFeat;
-    if(!m_logicInterface->GetFeaturesInfo(stFeat, strInfo))
-    {
-        QMessageBox::warning(this, " ", strInfo);
-        return false;
-    }
-    QString strFeature;
-    QStringList realFeatureList;
-    if(m_currentLang == English)
-        strFeature = stFeat.strEN;
-    else if(m_currentLang == SimplifiedChinese)
-        strFeature = stFeat.strCH;
-    else
-        strFeature = stFeat.strTr;
-    m_featureList = getListFromQString(strFeature);
     //更新到流程栏中
     m_processBar->setStationList(m_stationList);
     //方案置为已保存状态
@@ -170,7 +154,7 @@ void Cfhs_ProgramConfig::setWindowStyle()
 
 bool Cfhs_ProgramConfig::isProgramNameValid()
 {
-    if(m_strProgramName.isEmpty())
+    if(m_curProgramName.isEmpty())
     {
         QMessageBox::warning(this, " ", tr("请新建或者读取方案"));
         return false;
@@ -181,11 +165,42 @@ bool Cfhs_ProgramConfig::isProgramNameValid()
 
 bool Cfhs_ProgramConfig::isStationListValid()
 {
+    QString strInfo = "";
     if(m_stationList.isEmpty())
     {
-        QString info = QString(tr("方案(%1)没有工位信息，请添加")).arg(m_strProgramName);
-        QMessageBox::warning(this, " ", info);
+        strInfo = QString(tr("方案(%1)没有工位信息，请添加")).arg(m_curProgramName);
+        QMessageBox::warning(this, " ", strInfo);
         return false;
+    }
+    //获取工位缺陷输出特征
+    QMap<int, QString> mapFeature = m_processBar->getStationFeatureMap();
+    if(mapFeature.isEmpty())
+    {
+        QMessageBox::warning(this, " ", tr("请添加工位流程栏信息"));
+        return false;
+    }
+    if(mapFeature.size() != m_stationList.size())
+    {
+        QMessageBox::warning(this, " ", tr("获取的缺陷特征信息错误，与工位个数不匹配"));
+        return false;
+    }
+    for(int i=0; i<m_stationList.count(); i++)
+    {
+        int stationNo = m_stationList[i].iStationNo;
+        QString strFeature = mapFeature.value(stationNo);
+        if(strFeature.isEmpty() || strFeature == "null")
+        {
+            strInfo = QString(tr("请确认工位%1的流程栏中包含算法工具")).arg(stationNo);
+            QMessageBox::warning(this, " ", strInfo);
+            return false;
+        }
+        m_stationList[i].strFeatures = strFeature;
+        //保存工位数据
+        if(!m_logicInterface->SetStationInfo(m_curProgramName, stationNo, m_stationList[i], strInfo))
+        {
+            QMessageBox::warning(this, " ", strInfo);
+            return false;
+        }
     }
 
     return true;
@@ -194,11 +209,26 @@ bool Cfhs_ProgramConfig::isStationListValid()
 bool Cfhs_ProgramConfig::isMultipleStationValid()
 {
     int size = m_stationList.size();
+    QString strInfo;
     if(size < 2)
     {
-        QString strInfo = QString(tr("方案(%1)不是多工位，不支持该功能")).arg(m_strProgramName);
+        strInfo = QString(tr("方案(%1)不是多工位，不支持该功能")).arg(m_curProgramName);
         QMessageBox::warning(this, " ", strInfo);
         return false;
+    }
+    if(!isStationListValid())
+        return false;
+    //检查各工位的缺陷特征是否一致
+    QString strFeature = m_stationList.at(0).strFeatures;
+    foreach(Station station, m_stationList)
+    {
+        QString info = station.strFeatures;
+        if(info != strFeature)
+        {
+            strInfo = QString(tr("工位%1使用的算法工具不一致")).arg(station.iStationNo);
+            QMessageBox::warning(this, " ", strInfo);
+            return false;
+        }
     }
 
     return true;
@@ -206,7 +236,7 @@ bool Cfhs_ProgramConfig::isMultipleStationValid()
 
 void Cfhs_ProgramConfig::setCurProgramName(const QString &name)
 {
-    m_strProgramName = name;
+    m_curProgramName = name;
     //设置日志
     if(!m_statusBar)
     {
@@ -215,14 +245,14 @@ void Cfhs_ProgramConfig::setCurProgramName(const QString &name)
     }
     QString strMsg;
     bool isNormal = false;
-    if(m_strProgramName.isEmpty())
+    if(m_curProgramName.isEmpty())
     {
         strMsg = QString(tr("当前方案为空"));
         isNormal = false;
     }
     else
     {
-        strMsg = QString(tr("当前方案为：%1")).arg(m_strProgramName);
+        strMsg = QString(tr("当前方案为：%1")).arg(m_curProgramName);
         isNormal = true;
     }
     m_statusBar->showMessageInfo(isNormal, strMsg);
@@ -230,10 +260,10 @@ void Cfhs_ProgramConfig::setCurProgramName(const QString &name)
 
 void Cfhs_ProgramConfig::saveCurrentProgram()
 {
-    if(!m_strProgramName.isEmpty()
+    if(!m_curProgramName.isEmpty()
             && !m_isProgramSaved)
     {
-        QString strInfo = QString(tr("当前方案(%1)未保存，是否保存？")).arg(m_strProgramName);
+        QString strInfo = QString(tr("当前方案(%1)未保存，是否保存？")).arg(m_curProgramName);
         QMessageBox *msg = new QMessageBox(QMessageBox::Information,
                                            tr("提示"),
                                            strInfo,
@@ -251,14 +281,87 @@ void Cfhs_ProgramConfig::saveCurrentProgram()
     }
 }
 
+bool Cfhs_ProgramConfig::getStationFeature(const int &stationNo, QStringList &listFeature)
+{
+    QString strInfo;
+    if(m_stationList.count() == 0)
+    {
+        strInfo = QString(tr("当前方案（%1）没有工位信息")).arg(m_curProgramName);
+        QMessageBox::warning(this, " ", strInfo);
+        return false;
+    }
+    QString strFeature;
+    foreach(Station station, m_stationList)
+    {
+        if(station.iStationNo == stationNo)
+        {
+            strFeature = station.strFeatures;
+            break;
+        }
+    }
+    QMap<QString, QString> featureMap;
+    if(!getMapFromJson(strFeature, featureMap, strInfo))
+    {
+        strInfo = QString(tr("工位%1缺陷特征错误：%2")).arg(stationNo).arg(strInfo);
+        QMessageBox::warning(this, " ", strInfo);
+    }
+    QString strShowFeature;
+    switch(m_currentLang)
+    {
+    case English:
+        strShowFeature = featureMap.value("English");
+        break;
+    case SimplifiedChinese:
+        strShowFeature = featureMap.value("Simplified");
+        break;
+    case TraditionalChinese:
+        strShowFeature = featureMap.value("Traditional");
+        break;
+    }
+    QStringList list = getListFromQString(strShowFeature);
+    if(list.isEmpty())
+    {
+        strInfo = QString(tr("工位%1没有缺陷特征信息")).arg(stationNo);
+        QMessageBox::information(this, " ", strInfo);
+        return false;
+    }
+    listFeature.clear();
+    //去掉坐标特征
+    foreach(QString info, list)
+    {
+        switch(m_currentLang)
+        {
+        case English:
+            if(info.contains("Coordinate"))
+                continue;
+            else
+                listFeature.append(info);
+            break;
+        case SimplifiedChinese:
+            if(info.contains("坐标"))
+                continue;
+            else
+                listFeature.append(info);
+            break;
+        case TraditionalChinese:
+            if(info.contains("坐標"))
+                continue;
+            else
+                listFeature.append(info);
+            break;
+        }
+    }
+    return true;
+}
+
 void Cfhs_ProgramConfig::slot_currentStation_changed(const int &index)
 {
     if(index <0 || index>= m_stationList.size())
         return;
-    if(m_strProgramName.isEmpty())
+    if(m_curProgramName.isEmpty())
         return;
     int stationNo = index + 1;
-    QString strImg = QString("D:/%1/static_img/station%2.jpg").arg(m_strProgramName).arg(stationNo);
+    QString strImg = QString("D:/%1/static_img/station%2.jpg").arg(m_curProgramName).arg(stationNo);
     if(!QFile::exists(strImg))
     {
         m_imageWindow->setImage(strImg);
@@ -355,7 +458,7 @@ void Cfhs_ProgramConfig::on_saveProgramAction_triggered()
         return;
     QString strInfo;
     //保存方案
-    if(!m_logicInterface->SetProInfo(m_strProgramName, m_curProgram, strInfo))
+    if(!m_logicInterface->SetProInfo(m_curProgramName, m_curProgram, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;
@@ -367,22 +470,30 @@ void Cfhs_ProgramConfig::on_saveProgramAction_triggered()
         QMessageBox::warning(this, " ", tr("获取的流程栏信息错误，与工位个数不匹配"));
         return;
     }
+    //更新工位缺陷特征信息
+    QMap<int, QString> featureMap = m_processBar->getStationFeatureMap();
+    if(featureMap.size() != m_stationList.size())
+    {
+        QMessageBox::warning(this, " ", tr("获取的缺陷特征信息错误，与工位个数不匹配"));
+        return;
+    }
     for(int i=0; i<m_stationList.size(); i++)
     {
         int stationNo = m_stationList[i].iStationNo;
         m_stationList[i].strToolPara = processMap.value(stationNo);
+        m_stationList[i].strFeatures = featureMap.value(stationNo);
     }
     //保存工位信息
     foreach(stStation station, m_stationList)
     {
-        if(!m_logicInterface->SetStationInfo(m_strProgramName, station.iStationNo, station, strInfo))
+        if(!m_logicInterface->SetStationInfo(m_curProgramName, station.iStationNo, station, strInfo))
         {
             QMessageBox::warning(this, " ", strInfo);
             return;
         }
         //qDebug()<<"Save station"<<station.strToolPara;
     }
-    strInfo = QString(tr("方案(%1)保存成功")).arg(m_strProgramName);
+    strInfo = QString(tr("方案(%1)保存成功")).arg(m_curProgramName);
     m_isProgramSaved = true;
     QMessageBox::information(this, " ", strInfo);
 }
@@ -411,7 +522,7 @@ void Cfhs_ProgramConfig::on_deleteProgramAction_triggered()
             return;
         }
         //如果删除的是当前方案，当前方案清空
-        if(proName == m_strProgramName)
+        if(proName == m_curProgramName)
         {
             //清空流程栏
             foreach(stStation station, m_stationList)
@@ -436,14 +547,14 @@ void Cfhs_ProgramConfig::on_stationAddPushButton_clicked()
     QString strInfo;
     //添加工位
     int addStationNo = m_stationList.size()+1;
-    if(!m_logicInterface->InsertNewStationNo(m_strProgramName, addStationNo, strInfo))
+    if(!m_logicInterface->InsertNewStationNo(m_curProgramName, addStationNo, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;
     }
     //回读工位信息
     stStation station;
-    if(!m_logicInterface->GetStationInfo(m_strProgramName, addStationNo, station, strInfo))
+    if(!m_logicInterface->GetStationInfo(m_curProgramName, addStationNo, station, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;
@@ -460,8 +571,12 @@ void Cfhs_ProgramConfig::on_stationDelPushButton_clicked()
 {
     if(!isProgramNameValid())
         return;
-    if(!isStationListValid())
+    if(m_stationList.isEmpty())
+    {
+        QString info = QString(tr("方案(%1)没有工位信息，请添加")).arg(m_curProgramName);
+        QMessageBox::warning(this, " ", info);
         return;
+    }
     int stationNo = m_stationList.size();
     QString strInfo = QString(tr("确定删除工位%1")).arg(stationNo);
     QMessageBox *msg = new QMessageBox(QMessageBox::Information,
@@ -476,7 +591,7 @@ void Cfhs_ProgramConfig::on_stationDelPushButton_clicked()
     if(msg->exec() == QMessageBox::Yes)
     {
         //删除工位
-        if(!m_logicInterface->DeleteStationNo(m_strProgramName, stationNo, strInfo))
+        if(!m_logicInterface->DeleteStationNo(m_curProgramName, stationNo, strInfo))
         {
             QMessageBox::warning(this, " ", strInfo);
             return;
@@ -513,18 +628,23 @@ void Cfhs_ProgramConfig::on_stationSetPushButton_clicked()
         info.m_port = station.usPort;
         info.m_defectNum = station.iDefectNum;
         info.m_isEnable = station.bEnable;
+        //缺陷定义信息
         if(!getMapFromJson(station.strDefectDefine, info.m_mapDefect, strInfo))
         {
             strInfo = QString(tr("工位%1的缺陷定义参数错误：%2")).arg(station.iStationNo).arg(strInfo);
             QMessageBox::warning(this, " ", strInfo);
             return;
         }
+        //NG判定信息
         if(!getMapFromJson(station.strDefectScreening, info.m_mapNg, strInfo))
         {
             strInfo = QString(tr("工位%1的NG判定参数错误：%2")).arg(station.iStationNo).arg(strInfo);
             QMessageBox::warning(this, " ", strInfo);
             return;
         }
+        //缺陷特征信息
+        if(!getStationFeature(station.iStationNo, info.m_listFeature))
+            return;
         stationList.append(info);
     }
     m_stationSetWidget->setStationList(stationList);
@@ -576,7 +696,7 @@ void Cfhs_ProgramConfig::on_stationJudgePushButton_clicked()
     //获取工位列表
     QString strAllStation;
     QString strInfo;
-    if(!m_logicInterface->GetAllStationNo(m_strProgramName, strAllStation, strInfo))
+    if(!m_logicInterface->GetAllStationNo(m_curProgramName, strAllStation, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
         return;
@@ -599,7 +719,12 @@ void Cfhs_ProgramConfig::on_ngFilterPushButton_clicked()
         return;
     if(!isMultipleStationValid())
         return;
-    Cfhs_FilterNgDialog dialog(m_featureList, this);
+    QStringList featureList;
+    //获取工位1的缺陷特征
+    if(!getStationFeature(1, featureList))
+        return;
+
+    Cfhs_FilterNgDialog dialog(featureList, this);
     if(!dialog.setNgFilterInfo(m_curProgram.strNGScreening))
         return;
     if(dialog.exec() == QDialog::Accepted)

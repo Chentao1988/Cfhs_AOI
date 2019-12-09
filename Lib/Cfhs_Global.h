@@ -10,20 +10,12 @@
 #  define CFHS_IBUSINESS_EXPORT
 #endif
 
-#define strStart QObject::tr("开始")
-#define strStop QObject::tr("终止")
-
-#define strChinese QObject::tr("中文")
-#define strEnglish QObject::tr("英文")
-
-#define strMySQLIP              "192.168.0.180"
 #define table_config            "cfhs.table_config"
 #define table_programme         "cfhs.table_programme"
 #define table_camerainfo        "cfhs.table_camerainfo"
 #define table_batch             "cfhs.table_batch"
 #define table_batch_img         "cfhs.table_batch_img"
 #define table_station           "cfhs.table_station"
-#define table_features          "cfhs.table_features"
 #define table_station_result    "cfhs.table_station_result"
 #define table_final_result      "cfhs.table_final_result"
 
@@ -158,19 +150,10 @@ typedef struct Station
     bool bEnable;
     //工具参数(JSON格式的字符串)
     QString strToolPara;
+    //特征显示(JSON格式的字符串，例如"{"English": "Length#Roundness", "Simplified": "长度#圆度#", "Traditional": "長度#圓度#"}")
+    QString strFeatures;
 
 }stStation;
-
-typedef struct Features
-{
-    //特征中文名(特征名1#特征名2#...特征名N)
-    QString strCH;
-    //特征英文号(特征名1#特征名2#...特征名N)
-    QString strEN;
-    //特征繁体号(特征名1#特征名2#...特征名N)
-    QString strTr;
-
-}stFeatures;
 
 //解决中文乱码
 #pragma execution_character_set("utf-8")

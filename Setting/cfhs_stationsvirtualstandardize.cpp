@@ -185,7 +185,8 @@ bool Cfhs_StationsVirtualStandardize::getStationDefectList(QStringList &listDefe
     }
     if(listDefect.isEmpty())
     {
-        QMessageBox::warning(this, " ", tr("该工位没有缺陷定义信息"));
+        strInfo = QString(tr("工位%1没有缺陷定义信息")).arg(stationNo);
+        QMessageBox::warning(this, " ", strInfo);
         return false;
     }
 

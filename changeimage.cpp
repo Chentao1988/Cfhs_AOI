@@ -9,16 +9,14 @@ QPixmap ChangeImage::addPoint(QPixmap &map,QList<QPoint> point)
 {
     QPixmap newmap(100,100);
     newmap = map;
+    const int number = 300;
+    int max = newmap.width()>newmap.height()?newmap.width():newmap.height();
     QPainter paint;
     int len =0;
     while(len<point.size()){
         if(paint.begin(&newmap)){
-            QPen pen;
-            pen.setWidth(30);
-            pen.setColor(Qt::red);
-            pen.setBrush(Qt::red);
-            paint.setPen(pen);
-            paint.drawEllipse(point[len].x()-2,point[len].y()-2,4,4);
+            paint.setBrush(Qt::red);
+            paint.drawEllipse(point[len].x()-max/number/2,point[len].y()-max/number/2,max/number,max/number);
             paint.end();
         }
         else {
@@ -28,4 +26,5 @@ QPixmap ChangeImage::addPoint(QPixmap &map,QList<QPoint> point)
         len++;
     }
     return newmap;
+
 }
