@@ -150,7 +150,12 @@ void Cfhs_TaskInfoWidget::slot_currentTask_changed()
     else
         index = m_mapButton.key(button);
 
-    m_curTaskIndex = index;
+    if(index == m_curTaskIndex)
+        return;
+
     if(index != 0)
+    {
+        m_curTaskIndex = index;
         emit sig_ShowCurrentTask(index);
+    }
 }

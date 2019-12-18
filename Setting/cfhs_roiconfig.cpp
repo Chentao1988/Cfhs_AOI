@@ -1,52 +1,17 @@
 ﻿#include "cfhs_roiconfig.h"
 #include "../cfhs_base.h"
 #include "../cfhs_global.h"
-#include <QRadioButton>
-#include <QPushButton>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonParseError>
+#include <QMessageBox>
 
 
-Cfhs_RoiConfig::Cfhs_RoiConfig(QWidget *parent)
-    : QDialog (parent)
+Cfhs_RoiConfig::Cfhs_RoiConfig(QObject *parent)
+    : QObject(parent)
 {
-    //自动
-    m_autoButton = new QRadioButton(this);
-    m_autoButton->setText(tr("自动"));
-    m_autoButton->setChecked(true);
-    //手动
-    m_manualButton = new QRadioButton(this);
-    m_manualButton->setText(tr("手动"));
-    //确定
-    m_commitButton = new QPushButton(this);
-    m_commitButton->setText(tr("确定"));
-    m_commitButton->setDefault(true);
-    connect(m_commitButton, &QPushButton::clicked,
-            this, &Cfhs_RoiConfig::on_commitButton_clicked);
-    //取消
-    m_cancelButton = new QPushButton(this);
-    m_cancelButton->setText(tr("取消"));
-    connect(m_cancelButton, &QPushButton::clicked,
-            this, &Cfhs_RoiConfig::on_cancelButton_clicked);
-    //button layout
-    QPointer<QHBoxLayout> bottomLayout = new QHBoxLayout;
-    bottomLayout->addStretch();
-    bottomLayout->addWidget(m_cancelButton);
-    bottomLayout->addStretch();
-    bottomLayout->addWidget(m_commitButton);
-    bottomLayout->addStretch();
-    //添加全局layout
-    QPointer<QVBoxLayout> mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(m_autoButton, 0, Qt::AlignCenter);
-    mainLayout->addWidget(m_manualButton, 0, Qt::AlignCenter);
-    mainLayout->addLayout(bottomLayout);
-    mainLayout->setSpacing(30);
-    mainLayout->setContentsMargins(10, 10, 10, 30);
-    this->setLayout(mainLayout);
-    this->setWindowTitle(tr("Roi设置"));
-    this->resize(300, 200);
+    m_shape.Init();
 }
 
 Cfhs_RoiConfig::~Cfhs_RoiConfig()
@@ -54,21 +19,55 @@ Cfhs_RoiConfig::~Cfhs_RoiConfig()
 
 }
 
-QString Cfhs_RoiConfig::getParaConfig() const
+QString Cfhs_RoiConfig::getParaConfig()
 {
-    return m_strConfig;
+    if(m_shape.Points.isEmpty() || m_shape.Shape == 0)
+        return "null";
+
+    QJsonObject obj;
+    //插入图形索引
+    obj.insert("Shape", QString::number(m_shape.Shape));
+    //插入坐标列表
+    QList<QPointF> list = m_shape.Points;
+    QJsonArray dataArray;
+    foreach(QPointF point, list)
+    {
+        //单个坐标点
+        QJsonObject pointObj;
+        pointObj.insert("X", QString::number(point.x()));
+        pointObj.insert("Y", QString::number(point.y()));
+        dataArray.append(pointObj);
+    }
+    obj.insert("Points", dataArray);
+    QJsonDocument doc;
+    doc.setObject(obj);
+
+    QString strConfig = QString(doc.toJson(QJsonDocument::Compact));
+
+    return strConfig;
+}
+
+void Cfhs_RoiConfig::setPointData(const RoiShape &data)
+{
+    m_shape.Shape = data.Shape;
+    m_shape.Points = data.Points;
+}
+
+const RoiShape Cfhs_RoiConfig::getPointData()
+{
+    return m_shape;
 }
 
 QString Cfhs_RoiConfig::getShowName()
 {
-    QString name = tr("手动Roi");
+    QString name = tr("手动分区");
 
     return name;
 }
 
 QString Cfhs_RoiConfig::getToolTip()
 {
-    QString tip = QString(tr("从大图上通过Roi切图"));
+    QString tip = QString(tr("手动绘制ROI进行分区"));
     return tip;
 }
 
@@ -81,44 +80,60 @@ QString Cfhs_RoiConfig::getIconPath()
 
 QString Cfhs_RoiConfig::getToolPosition()
 {
-    return "2-n";
+    return "2-4";
 }
 
 bool Cfhs_RoiConfig::setParaConfig(const QString &strConfig)
 {
-    QMap<QString, QString> map;
+    m_shape.Init();
+    if(strConfig.isEmpty() || strConfig == "null")
+        return true;
+    QByteArray json;
+    json.append(strConfig);
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(json, &error);
     QString strInfo;
-    if(!getMapFromJson(strConfig, map, strInfo))
-        return false;
-    if(map.contains("AutoRoi"))
+    if(error.error != QJsonParseError::NoError)
     {
-        int isAuto = map.value("AutoRoi").toInt();
-        if(isAuto == 0)
-            m_manualButton->setChecked(true);
-        else
-            m_autoButton->setChecked(true);
+        strInfo = QString(tr("数据解析失败：%1")).arg(error.errorString());
+        QMessageBox::warning(nullptr, " ", strInfo);
+        return false;
+    }
+    if(!doc.isObject())
+    {
+        strInfo = QString(tr("数据解析失败：%1")).arg("data is not a object");
+        QMessageBox::warning(nullptr, " ", strInfo);
+        return false;
+    }
+    QJsonObject obj = doc.object();
+    if(!obj.contains("Shape"))
+    {
+        strInfo = QString(tr("数据解析失败：%1")).arg("data has not Shape");
+        QMessageBox::warning(nullptr, " ", strInfo);
+        return false;
+    }
+    int shape = obj.take("Shape").toString().toInt();
+    if(!obj.contains("Points"))
+    {
+        strInfo = QString(tr("数据解析失败：%1")).arg("data has not Points");
+        QMessageBox::warning(nullptr, " ", strInfo);
+        return false;
+    }
+    QJsonArray dataArray = obj.take("Points").toArray();
+    QList<QPointF> list;
+    for(int j=0; j<dataArray.count(); j++)
+    {
+        QJsonObject dataObj = dataArray.at(j).toObject();
+        double x = dataObj.value("X").toString().toDouble();
+        double y = dataObj.value("Y").toString().toDouble();
+        QPointF point;
+        point.setX(x);
+        point.setY(y);
+        list.append(point);
     }
 
+    m_shape.Shape = shape;
+    m_shape.Points = list;
+
     return true;
-}
-
-void Cfhs_RoiConfig::on_commitButton_clicked()
-{
-    bool isAuto = true;
-    if(m_autoButton->isChecked())
-        isAuto = true;
-    else
-        isAuto = false;
-    QJsonObject obj;
-    obj.insert("AutoRoi", QString::number(isAuto));
-    QJsonDocument doc;
-    doc.setObject(obj);
-    m_strConfig = QString(doc.toJson(QJsonDocument::Compact));
-
-    this->accept();
-}
-
-void Cfhs_RoiConfig::on_cancelButton_clicked()
-{
-    this->reject();
 }

@@ -85,6 +85,7 @@ private slots:
     void ClickButton_zoomin();
     void ClickButton_zoomout();
     void ClickButton_adaptive();
+
 private:
     QMap<int,QList<QPoint>> savemap_point;
     QList<QPoint> Rect_start_save_point;//保存绘制矩形的起始点

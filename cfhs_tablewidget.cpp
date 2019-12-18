@@ -203,10 +203,14 @@ void Cfhs_TableWidget::mousePressEvent(QMouseEvent *event)
     QTableWidgetItem *currentItem = this->itemAt(event->pos());
     if(currentItem)
     {
-        int curColumn = this->column(currentItem);
-        if(curColumn == m_mouseColumn)
+        int curRow = this->row(currentItem);
+        QTableWidgetItem *dataItem = this->item(curRow, m_mouseColumn);
+        if(dataItem)
         {
-            QString text = currentItem->text();
+            QString text = dataItem->text();
+            //不是坐标数据返回
+            if(!text.contains(","))
+                return;
             QPoint point;
             int xPos = text.section(",", 0, 0).toInt();
             int yPos = text.section(",", 1).toInt();

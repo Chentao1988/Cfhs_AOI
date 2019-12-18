@@ -105,8 +105,12 @@ QImage Cfhs_SavePoint::Mat2QImage(cv::Mat& mat)
         // 8-bit, 4 channel
     case CV_8UC4:
     {
-        QImage image(mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB32);
-        return image;
+       //QImage image(mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB32);
+       //return image;
+        cv::Mat mat_temp;
+        cv::cvtColor(mat, mat_temp,cv::COLOR_RGBA2RGB);
+        QImage image(mat_temp.data, mat_temp.cols, mat_temp.rows, mat_temp.step, QImage::Format_RGB888);
+        return image.rgbSwapped();
     }
 
     // 8-bit, 3 channel
@@ -266,14 +270,17 @@ void Cfhs_SavePoint::delectpoint(int x, int y)
     point_x = int(this->width() / 2 - (this->width() / 2 - point_x) / m_ZoomValue);
     int point_y = y - m_YPtInterval;
     point_y = int(this->height() / 2 - (this->height() / 2 - point_y) / m_ZoomValue);
-    for (int i = 0;i < nPoint.size();i++) {
-        if ((point_x > nPoint[i].Start_Point.x() && point_y > nPoint[i].Start_Point.y() &&
-            point_x < (nPoint[i].End_Point.x()) &&
-            point_y < (nPoint[i].End_Point.y()))
-            || (point_x < nPoint[i].Start_Point.x() && point_y < nPoint[i].Start_Point.y() &&
-            point_x > (nPoint[i].End_Point.x()) &&
-            point_y > (nPoint[i].End_Point.y()))
-            ) {
+    for (int i = 0;i < nPoint.size();i++)
+    {
+        QPoint max, min;
+        min.setX(MIN(nPoint[i].Start_Point.x(), nPoint[i].End_Point.x()));
+        min.setY(MIN(nPoint[i].Start_Point.y(), nPoint[i].End_Point.y()));
+        max.setX(MAX(nPoint[i].Start_Point.x(), nPoint[i].End_Point.x()));
+        max.setY(MAX(nPoint[i].Start_Point.y(), nPoint[i].End_Point.y()));
+        if ((point_x >= min.x() && point_y >= min.y() &&
+            point_x <= max.x()) &&
+            point_y <= max.y())
+        {
             nPoint.removeAt(i);
         }
     }
@@ -362,7 +369,8 @@ void Cfhs_SavePoint::paintEvent(QPaintEvent *event)
 {
     // 绘制样式
     QPainter painter(this);
-    if (save_map.isNull())	 return QWidget::paintEvent(event);
+    if (save_map.isNull())
+        return QWidget::paintEvent(event);
     // 根据窗口计算应该显示的图片的大小
     int width = qMin(save_map.width(), this->width());
     int height = static_cast<int>(width * 1.0 / (save_map.width() * 1.0 / save_map.height()));

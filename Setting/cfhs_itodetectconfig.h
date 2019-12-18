@@ -12,6 +12,8 @@ class Cfhs_AlgorithmTable;
 //该类用于设置算法“ITO检测”的参数
 class Cfhs_ItoDetectConfig : public QDialog
 {
+    Q_OBJECT
+
 public:
     Cfhs_ItoDetectConfig(QWidget *parent = nullptr);
     ~Cfhs_ItoDetectConfig();

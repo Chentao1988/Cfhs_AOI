@@ -21,8 +21,6 @@ typedef struct _NPoint
     QPointF End_Point;
 }NPoint;
 
-
-
 class Cfhs_SavePoint : public QWidget
 {
 	Q_OBJECT

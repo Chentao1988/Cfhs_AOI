@@ -309,8 +309,12 @@ void Cfhs_DefectInfoTable::onDelRowAction_triggered()
 
 void Cfhs_DefectInfoTable::onEditDefectAction_triggered()
 {
+    QString strData = "";
+    QTableWidgetItem *item = this->item(m_curRow, m_curCol);
+    if(item)
+        strData = item->text();
     Cfhs_DefectJudgeWidget dialog(m_functionName, m_listFeature, this);
-
+    dialog.setDefectData(strData);
     connect(&dialog, &Cfhs_DefectJudgeWidget::sendDefectInfo,
             this, &Cfhs_DefectInfoTable::setDefectInfo);
 

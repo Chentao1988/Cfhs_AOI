@@ -54,6 +54,13 @@ Cfhs_DefectJudgeWidget::~Cfhs_DefectJudgeWidget()
 
 }
 
+void Cfhs_DefectJudgeWidget::setDefectData(const QString &strData)
+{
+    if(strData.isEmpty())
+        return;
+    m_defectTable->setDefectData(strData);
+}
+
 void Cfhs_DefectJudgeWidget::onAddButton_clicked()
 {
     m_defectTable->addOneRow();

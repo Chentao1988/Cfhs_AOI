@@ -42,7 +42,7 @@ void Cfhs_SoftwareVersion::init()
     m_lockLabel = new QLabel(tr("加密狗到期日期："), this);
     m_lockLineEdit = new QLineEdit(this);
     m_lockLineEdit->setReadOnly(true);
-    m_lockLineEdit->setText("2020-02-29");
+    m_lockLineEdit->setText("2020-03-10");
     m_addLockTimeButton = new QPushButton(this);
     m_addLockTimeButton->setText(tr("续期"));
     connect(m_addLockTimeButton, &QPushButton::clicked,

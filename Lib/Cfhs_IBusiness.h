@@ -209,10 +209,10 @@ signals:
     //bRun:软件是否正常运行（true：运行中；false：已停止）
     void sig_ShowSoftStatus(bool bRun);
 
-    //---显示弹框信息
-    //bOK:离线模式执行结果
+    //---显示弹框信息(离线模式)
+    //bNormal:true-正常信息，正常字体;false-异常信息，红色字体
     //strInfo:弹框信息
-    void sig_ShowFrameInfo(bool bOK, const QString &strInfo);
+    void sig_ShowFrameInfo(bool bNormal, const QString &strInfo);
 
     //---显示日志信息
     //bNormal:true-正常信息，白色字体;false-异常信息，红色字体

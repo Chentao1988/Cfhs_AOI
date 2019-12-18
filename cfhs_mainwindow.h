@@ -248,7 +248,6 @@ private:
     bool m_isMesReported;  //MES上传开关
     QPointer<QTimer> m_closeTimer;  //关闭软件和电脑定时器
     bool m_isSystemStatus; //系统运行状态
-    QPointer<QMessageBox> m_showMessage;  //显示弹出信息
     QPointer<cfhs_mainwindows_img> m_bigImageWidget;  //大图
     QPointer<Cfhs_ShowZoomImage> m_zoomImageWidget; // 放大图
     QPointer<Cfhs_TaskInfoWidget> m_taskWidget;  //工位栏

@@ -6,12 +6,18 @@
 #include <QPixmap>
 #include <QMessageBox>
 #include <QFont>
+#include <QImage>
 
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+#if 0
+    QImage *image = new QImage();
+    if(image->load("D:/share/2_2.bmp"))
+        qDebug()<<__FUNCTION__<<"load true";
+#endif
     //加载qss
     QFile qss(":/style.qss");
     if(qss.open(QFile::ReadOnly))

@@ -26,5 +26,4 @@ QPixmap ChangeImage::addPoint(QPixmap &map,QList<QPoint> point)
         len++;
     }
     return newmap;
-
 }

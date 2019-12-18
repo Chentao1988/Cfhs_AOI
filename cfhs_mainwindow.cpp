@@ -514,8 +514,6 @@ void Cfhs_MainWindow::showBigImage(const QImage &image, const QPolygon &vectorPo
     m_bigImageWidget->setImage(image);
     //添加坐标
     int size = vectorPoint.size();
-    //if(size == 0)
-        //return;
     for(int i=0; i<size; i++)
     {
         QPoint point = vectorPoint.at(i);
@@ -526,8 +524,7 @@ void Cfhs_MainWindow::showBigImage(const QImage &image, const QPolygon &vectorPo
 void Cfhs_MainWindow::slot_ShowFrameInfo(bool bOK, const QString &strInfo)
 {
     Q_UNUSED(bOK);
-    m_showMessage->setText(strInfo);
-    m_showMessage->show();
+    ShowMessage(strInfo);
 }
 
 void Cfhs_MainWindow::slot_ShowInfo(bool bNormal, const QString &strInfo)
@@ -689,14 +686,12 @@ void Cfhs_MainWindow::slot_ShowBatchChartInfo(const QString &strHourName, const 
 
 void Cfhs_MainWindow::slot_ShowDiskSpaceAlarm(const QString &strInfo)
 {
-    m_showMessage->setText(strInfo);
-    m_showMessage->show();
+    ShowMessage(strInfo);
 }
 
 void Cfhs_MainWindow::slot_ShowYieldAlarm(const QString &strInfo)
 {
-    m_showMessage->setText(strInfo);
-    m_showMessage->show();
+    ShowMessage(strInfo);
 }
 
 void Cfhs_MainWindow::slot_ShowCurrentTask(const int &index)
@@ -1048,8 +1043,7 @@ void Cfhs_MainWindow::on_startPushButton_clicked()
     if(dialog.exec() == QDialog::Accepted)
     {
         ui->startPushButton->setEnabled(false);
-        slot_ShowFrameInfo(true, tr("设备启动中，请稍后..."));
-        Sleep(10);
+        ShowMessage(tr("设备启动中，请稍后..."));
         //侧边栏隐藏
         if(m_sideToolWidget->isSideShow())
             m_sideToolWidget->setSideShow(false);

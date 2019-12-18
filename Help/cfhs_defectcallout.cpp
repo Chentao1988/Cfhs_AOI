@@ -49,16 +49,23 @@ void Cfhs_DefectCallout::setDirectory(const QString &dir)
         else
         {
             QString strName = fileInfo.fileName();
-            if(!strName.contains(".conf"))
-            {
-                listName.append(strName);
-                continue;
-            }
-            else if(strName == ConfigFile)
+            if(strName == ConfigFile)
             {
                 QString strPath = fileInfo.absoluteFilePath();
                 readConfigFile(strPath);
                 continue;
+            }
+            else
+            {
+                QString strLower = strName.toLower();
+                if(strLower.contains(".png")
+                        || strLower.contains(".bmp")
+                        || strLower.contains(".jpg")
+                        || strLower.contains(".jpeg"))
+                {
+                    listName.append(strName);
+                    continue;
+                }
             }
         }
     }
@@ -448,12 +455,12 @@ void Cfhs_DefectCallout::on_imageTable_cellDoubleClicked(int row, int column)
         return;
     //更新当前画面的信息
     updateImagePoint(row);
+    //检测该工具是否有缺陷坐标
     if(m_mapPoints.value(row).isEmpty())
     {
         QMessageBox::warning(this, " ", tr("请标记缺陷位置"));
         return;
     }
-    //检测该工具是否有缺陷坐标
     QString strName = tr("缺陷名");
     Cfhs_MessageInput msg(strName, this);
     if(msg.exec() == QDialog::Accepted)

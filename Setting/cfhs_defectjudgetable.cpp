@@ -143,6 +143,129 @@ bool Cfhs_DefectJudgeTable::saveData(QString& defectInfo)
     return true;
 }
 
+void Cfhs_DefectJudgeTable::addOneRowData(const QString &data)
+{
+    //添加一行
+    addOneRow();
+    int curRow = this->rowCount() - 1;
+    int curCol = 0;
+    QString strDefect = data;
+    //逻辑符号
+    QString strLogicalSymbol = "";
+    if(strDefect.contains("&&"))
+        strLogicalSymbol = "&&";
+    else if(data.contains("||"))
+        strLogicalSymbol = "||";
+    curCol = static_cast<int>(LogicalSymbol);
+    Cfhs_ComboBox *logicalSymbolCombo = static_cast<Cfhs_ComboBox*>(this->cellWidget(curRow, curCol));
+    logicalSymbolCombo->setCurrentText(strLogicalSymbol);
+    strDefect.remove(strLogicalSymbol);
+    //左括号
+    QString strLeftBrackets;
+    if(strDefect.contains("(("))
+        strLeftBrackets = "((";
+    else
+        strLeftBrackets = "(";
+    curCol = static_cast<int>(LeftBrackets);
+    Cfhs_ComboBox *comboLeftBrackets = static_cast<Cfhs_ComboBox*>(this->cellWidget(curRow, curCol));
+    comboLeftBrackets->setCurrentText(strLeftBrackets);
+    strDefect.remove(strLeftBrackets);
+    //运算符
+    QString strAssociatedSymbol = "";
+    if(strDefect.contains(">="))
+        strAssociatedSymbol = ">=";
+    else if(strDefect.contains("<="))
+        strAssociatedSymbol = "<=";
+    else if(strDefect.contains(">"))
+        strAssociatedSymbol = ">";
+    else if(strDefect.contains("="))
+        strAssociatedSymbol = "=";
+    else if(strDefect.contains("<"))
+        strAssociatedSymbol = "<";
+    curCol = static_cast<int>(AssociatedSymbol);
+    Cfhs_ComboBox *comboAssociatedSymbol = static_cast<Cfhs_ComboBox*>(this->cellWidget(curRow, curCol));
+    comboAssociatedSymbol->setCurrentText(strAssociatedSymbol);
+    //右括号
+    QString strRightBrackets;
+    if(strDefect.contains("))"))
+        strRightBrackets = "))";
+    else
+        strRightBrackets = ")";
+    curCol = static_cast<int>(RightBrackets);
+    Cfhs_ComboBox *comboRightBrackets = static_cast<Cfhs_ComboBox*>(this->cellWidget(curRow, curCol));
+    comboRightBrackets->setCurrentText(strRightBrackets);
+    //参数名
+    QString strAssociatedName = strDefect.section(strAssociatedSymbol, 0, 0);
+    curCol = static_cast<int>(AssociatedName);
+    Cfhs_ComboBox *comboAssociatedName = static_cast<Cfhs_ComboBox*>(this->cellWidget(curRow, curCol));
+    comboAssociatedName->setCurrentText(strAssociatedName);
+    //参数值
+    QString strAssociatedVal = strDefect.remove(strAssociatedName)
+            .remove(strAssociatedSymbol).remove(strRightBrackets);
+    curCol = static_cast<int>(AssociatedVal);
+    QSpinBox *spinAssociatedVal = static_cast<QSpinBox*>(this->cellWidget(curRow, curCol));
+    spinAssociatedVal->setValue(strAssociatedVal.toInt());
+    //结果
+    QString strResultInfo = data;
+    curCol = static_cast<int>(ResultInfo);
+    QTableWidgetItem *itemResultInfo = this->item(curRow, curCol);
+    if(!itemResultInfo)
+    {
+        itemResultInfo = new QTableWidgetItem;
+        this->setItem(curRow, curCol, itemResultInfo);
+    }
+    itemResultInfo->setText(strResultInfo);
+}
+
+void Cfhs_DefectJudgeTable::setDefectData(const QString &strDefect)
+{
+    QStringList listDefect = getDefectList(strDefect);
+    if(listDefect.isEmpty())
+        return;
+    foreach(QString strData, listDefect)
+    {
+        addOneRowData(strData);
+    }
+}
+
+QStringList Cfhs_DefectJudgeTable::getDefectList(const QString &strDefect)
+{
+    QList<int> Number_List;
+    int Nubmer_Find = 1;
+    while (1) {
+        Nubmer_Find = strDefect.indexOf("||",Nubmer_Find);
+        if(Nubmer_Find == -1) {
+            break;
+        }
+        Number_List<< Nubmer_Find;
+        Nubmer_Find++;
+    }
+    Nubmer_Find = 1;
+    while (1) {
+        Nubmer_Find = strDefect.indexOf("&&",Nubmer_Find);
+        if(Nubmer_Find == -1) {
+            break;
+        }
+        Number_List<< Nubmer_Find;
+        Nubmer_Find++;
+    }
+    QStringList String_List;
+    if(!Number_List.empty()){
+        std::sort(Number_List.begin(), Number_List.end());
+        int Count;
+        String_List<<strDefect.mid(0,Number_List[0]);
+        for (Count = 1;Count<Number_List.size();Count++) {
+            String_List<<strDefect.mid(Number_List[Count-1],Number_List[Count]-Number_List[Count-1]);
+        }
+        String_List<<strDefect.mid(Number_List[Count-1]);
+    }
+    else {
+        String_List.append(strDefect);
+    }
+
+    return String_List;
+}
+
 void Cfhs_DefectJudgeTable::contextMenuEvent(QContextMenuEvent *event)
 {
     Q_UNUSED(event);

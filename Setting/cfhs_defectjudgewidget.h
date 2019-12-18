@@ -17,6 +17,7 @@ public:
                            const QStringList& nameList,
                            QWidget *parent = nullptr);
     ~Cfhs_DefectJudgeWidget();
+    void setDefectData(const QString &strData);
 
 private slots:
     void onAddButton_clicked();

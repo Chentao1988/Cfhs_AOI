@@ -41,6 +41,14 @@ public:
     //保存信息
     //defectInfo 返回的缺陷判定方式
     bool saveData(QString& defectInfo);
+    //添加一行并设置该行的数据
+    void addOneRowData(const QString &data);
+    //设置判定语句
+    void setDefectData(const QString &strDefect);
+    //获取缺陷判断语句列表
+    //输入
+    //strDefect  完整的判定语句
+    static QStringList getDefectList(const QString &strDefect);
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event);

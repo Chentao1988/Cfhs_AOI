@@ -164,6 +164,7 @@ QString Cfhs_SideTool::getDirFromFilePath(const QString &file)
 void Cfhs_SideTool::on_offlineButton_clicked()
 {
     m_offlineButton->setEnabled(false);
+    ShowMessage(tr("命令执行中，请稍后..."));
     m_logicInterface->OffLineInit();
     m_isOfflineOpened = true;
     m_offlineButton->setEnabled(true);
@@ -176,34 +177,16 @@ void Cfhs_SideTool::on_importImageButton_clicked()
         return;
     QString dir = getDirFromFilePath(filePath);
     m_importImageButton->setEnabled(false);
-#if 0
-    QString strInfo;
-    stConfig con;
-    if(!m_logicInterface->GetConfigInfo(con, strInfo))
-    {
-        QMessageBox::warning(this, " ", strInfo);
-        m_importImageButton->setEnabled(true);
-        return;
-    }
-    con.strInImage = dir;
-    if(!m_logicInterface->SetConfigInfo(con, strInfo))
-    {
-        QMessageBox::warning(this, " ", strInfo);
-        m_importImageButton->setEnabled(true);
-        return;
-    }
-    //发送信号
-    m_logicInterface->OffLineInImg();
-#else
+    ShowMessage(tr("命令执行中，请稍后..."));
     //发送信号
     m_logicInterface->OffLineInImg(dir);
-#endif
     m_importImageButton->setEnabled(true);
 }
 
 void Cfhs_SideTool::on_exportImageButton_clicked()
 {
     m_exportImageButton->setEnabled(false);
+    ShowMessage(tr("命令执行中，请稍后..."));
     m_logicInterface->OffLineOutImg();
     m_exportImageButton->setEnabled(true);
 }
@@ -211,6 +194,7 @@ void Cfhs_SideTool::on_exportImageButton_clicked()
 void Cfhs_SideTool::on_retestButton_clicked()
 {
     m_retestButton->setEnabled(false);
+    ShowMessage(tr("命令执行中，请稍后..."));
     m_logicInterface->OffLineOne();
     m_retestButton->setEnabled(true);
 }
@@ -218,6 +202,7 @@ void Cfhs_SideTool::on_retestButton_clicked()
 void Cfhs_SideTool::on_prevImageButton_clicked()
 {
     m_prevImageButton->setEnabled(false);
+    ShowMessage(tr("命令执行中，请稍后..."));
     m_logicInterface->OffLineLast();
     m_prevImageButton->setEnabled(true);
 }
@@ -225,6 +210,7 @@ void Cfhs_SideTool::on_prevImageButton_clicked()
 void Cfhs_SideTool::on_nextImageButton_clicked()
 {
     m_nextImageButton->setEnabled(false);
+    ShowMessage(tr("命令执行中，请稍后..."));
     m_logicInterface->OffLineNext();
     m_nextImageButton->setEnabled(true);
 }
@@ -232,6 +218,7 @@ void Cfhs_SideTool::on_nextImageButton_clicked()
 void Cfhs_SideTool::on_cycleButton_clicked()
 {
     m_cycleButton->setEnabled(false);
+    ShowMessage(tr("命令执行中，请稍后..."));
     m_logicInterface->OffLineLoop();
     m_cycleButton->setEnabled(true);
 }
@@ -254,6 +241,7 @@ void Cfhs_SideTool::on_loadFileAreaButton_clicked()
         return;
 #endif
     m_loadFileAreaButton->setEnabled(false);
+    ShowMessage(tr("命令执行中，请稍后..."));
     //发送信号
     m_logicInterface->OffLineDownFile(dir);
     m_loadFileAreaButton->setEnabled(true);
@@ -262,6 +250,7 @@ void Cfhs_SideTool::on_loadFileAreaButton_clicked()
 void Cfhs_SideTool::on_reportQueryButton_clicked()
 {
     m_reportQueryButton->setEnabled(false);
+    ShowMessage(tr("命令执行中，请稍后..."));
     m_logicInterface->OffLineReport();
     m_reportQueryButton->setEnabled(true);
 }

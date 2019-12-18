@@ -12,6 +12,7 @@ Cfhs_IBusiness *m_logicInterface = new Cfhs_IBusiness();
 QString m_curProgramName = "";
 LanguageEnum m_currentLang = SimplifiedChinese;
 int m_curStationNo = 1;
+QMessageBox *m_showMessage = nullptr;
 
 
 void Sleep(int ms)
@@ -209,4 +210,11 @@ bool getMapFromJson(const QString &json, QMap<QString, int> &map, QString &strIn
 
     strInfo = "Conversion successed";
     return true;
+}
+
+void ShowMessage(const QString &message)
+{
+    m_showMessage->setText(message);
+    m_showMessage->show();
+    Sleep(10);
 }

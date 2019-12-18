@@ -5,6 +5,7 @@
 #include <QPolygon>
 #include <QMap>
 #include <QStringList>
+#include <QMessageBox>
 #include "cfhs_base.h"
 #include "Lib/Cfhs_IBusiness.h"
 
@@ -16,8 +17,10 @@ extern QString m_curProgramName;
 extern LanguageEnum m_currentLang;
 //当前工位
 extern int m_curStationNo;
+//消息弹窗
+extern QMessageBox *m_showMessage;
 
-
+extern void ShowMessage(const QString &message);
 //程序睡眠
 //ms  睡眠时间(毫秒)
 extern void Sleep(int ms);

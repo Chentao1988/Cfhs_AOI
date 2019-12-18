@@ -261,22 +261,23 @@ QString Cfhs_StationProcess::getStationFeature() const
             strFeatureCnt.append(listCnt.at(i));
         }
     }
-    //添加距离和个数
+    //添加个数和距离
     //英文版
     strFeatureEn.append("#");
-    strFeatureEn.append("DefectDis");
-    strFeatureEn.append("#");
     strFeatureEn.append("DefectNum");
+    strFeatureEn.append("#");
+    strFeatureEn.append("DefectDis");
     //简体中文版
     strFeatureCns.append("#");
-    strFeatureCns.append("距离");
-    strFeatureCns.append("#");
     strFeatureCns.append("个数");
+    strFeatureCns.append("#");
+    strFeatureCns.append("距离");
     //繁体中文版
     strFeatureCnt.append("#");
-    strFeatureCnt.append("距離");
-    strFeatureCnt.append("#");
     strFeatureCnt.append("個數");
+    strFeatureCnt.append("#");
+    strFeatureCnt.append("距離");
+
 
     QJsonObject obj;
     obj.insert("English", strFeatureEn);

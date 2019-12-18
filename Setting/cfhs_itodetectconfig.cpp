@@ -11,7 +11,7 @@
 #include <QMessageBox>
 
 
-const int m_paraNum = 2;
+const int m_paraNum = 6;
 
 Cfhs_ItoDetectConfig::Cfhs_ItoDetectConfig(QWidget *parent)
     : QDialog(parent)
@@ -25,8 +25,12 @@ Cfhs_ItoDetectConfig::Cfhs_ItoDetectConfig(QWidget *parent)
     m_nameLabel->setStyleSheet(style);
     //参数表
     m_algoTable = new Cfhs_AlgorithmTable(this);
-    m_algoTable->addOnePara(tr("统计长度"), tr("统计平均阈值的线条长度"));
-    m_algoTable->addOnePara(tr("判定阈值"), tr("灰度突变判定阈值"));
+    m_algoTable->addOnePara(tr("缺陷长度"), tr("设定判定为缺陷的长度阈值"));
+    m_algoTable->addOnePara(tr("分割阈值"), tr("网格与背景之间的灰度差大于该阈值将被分割出来"));
+    m_algoTable->addOnePara(tr("上边缘"), tr("顶部边缘忽略宽度"));
+    m_algoTable->addOnePara(tr("左边缘"), tr("左部边缘忽略宽度"));
+    m_algoTable->addOnePara(tr("右边缘"), tr("右部边缘忽略宽度"));
+    m_algoTable->addOnePara(tr("下边缘"), tr("下部边缘忽略宽度"));
     //commit button
     m_commitButton = new QPushButton(this);
     m_commitButton->setText(tr("确定"));
@@ -54,7 +58,7 @@ Cfhs_ItoDetectConfig::Cfhs_ItoDetectConfig(QWidget *parent)
     mainLayout->setContentsMargins(10,10,10,20);
     this->setLayout(mainLayout);
     this->setWindowTitle(getShowName());
-    this->resize(600, 300);
+    this->resize(600, 460);
 }
 
 Cfhs_ItoDetectConfig::~Cfhs_ItoDetectConfig()
@@ -92,8 +96,12 @@ QString Cfhs_ItoDetectConfig::getToolPosition()
 QString Cfhs_ItoDetectConfig::getToolParaDefault()
 {
     QJsonObject obj;
-    obj.insert("detector_length", "80");
-    obj.insert("detector_thresh", "10");
+    obj.insert("set_length", "40");
+    obj.insert("set_thresh", "15");
+    obj.insert("set_top", "800");
+    obj.insert("set_left", "1400");
+    obj.insert("set_right", "200");
+    obj.insert("set_bottom", "800");
     QJsonDocument doc;
     doc.setObject(obj);
 
@@ -151,10 +159,10 @@ bool Cfhs_ItoDetectConfig::setParaConfig(const QString &strConfig)
     }
     QString strValue = "";
     int row = 0;
-    if(map.contains("detector_length"))
+    if(map.contains("set_length"))
     {
-        strValue = map.take("detector_length");
-        row = getRowFromName("detector_length");
+        strValue = map.take("set_length");
+        row = getRowFromName("set_length");
         QTableWidgetItem *item = m_algoTable->item(row, 1);
         if(!item)
         {
@@ -163,10 +171,58 @@ bool Cfhs_ItoDetectConfig::setParaConfig(const QString &strConfig)
         }
         item->setText(strValue);
     }
-    if(map.contains("detector_thresh"))
+    if(map.contains("set_thresh"))
     {
-        strValue = map.take("detector_thresh");
-        row = getRowFromName("detector_thresh");
+        strValue = map.take("set_thresh");
+        row = getRowFromName("set_thresh");
+        QTableWidgetItem *item = m_algoTable->item(row, 1);
+        if(!item)
+        {
+            item = new QTableWidgetItem;
+            m_algoTable->setItem(row, 1, item);
+        }
+        item->setText(strValue);
+    }
+    if(map.contains("set_top"))
+    {
+        strValue = map.take("set_top");
+        row = getRowFromName("set_top");
+        QTableWidgetItem *item = m_algoTable->item(row, 1);
+        if(!item)
+        {
+            item = new QTableWidgetItem;
+            m_algoTable->setItem(row, 1, item);
+        }
+        item->setText(strValue);
+    }
+    if(map.contains("set_left"))
+    {
+        strValue = map.take("set_left");
+        row = getRowFromName("set_left");
+        QTableWidgetItem *item = m_algoTable->item(row, 1);
+        if(!item)
+        {
+            item = new QTableWidgetItem;
+            m_algoTable->setItem(row, 1, item);
+        }
+        item->setText(strValue);
+    }
+    if(map.contains("set_right"))
+    {
+        strValue = map.take("set_right");
+        row = getRowFromName("set_right");
+        QTableWidgetItem *item = m_algoTable->item(row, 1);
+        if(!item)
+        {
+            item = new QTableWidgetItem;
+            m_algoTable->setItem(row, 1, item);
+        }
+        item->setText(strValue);
+    }
+    if(map.contains("set_bottom"))
+    {
+        strValue = map.take("set_bottom");
+        row = getRowFromName("set_bottom");
         QTableWidgetItem *item = m_algoTable->item(row, 1);
         if(!item)
         {
@@ -182,10 +238,18 @@ bool Cfhs_ItoDetectConfig::setParaConfig(const QString &strConfig)
 int Cfhs_ItoDetectConfig::getIndexFromName(const QString &name)
 {
     int index = 0;
-    if(name == "detector_length")
+    if(name == "set_length")
         index = 1;
-    else if(name == "detector_thresh")
+    else if(name == "set_thresh")
         index = 2;
+    else if(name == "set_top")
+        index = 3;
+    else if(name == "set_left")
+        index = 4;
+    else if(name == "set_right")
+        index = 5;
+    else if(name == "set_bottom")
+        index = 6;
 
     return index;
 }
@@ -193,10 +257,27 @@ int Cfhs_ItoDetectConfig::getIndexFromName(const QString &name)
 QString Cfhs_ItoDetectConfig::getNameFromIndex(const int &index)
 {
     QString name = "";
-    if(index == 1)
-        name = "detector_length";
-    else if(index == 2)
-        name = "detector_thresh";
+    switch(index)
+    {
+    case 1:
+        name = "set_length";
+        break;
+    case 2:
+        name = "set_thresh";
+        break;
+    case 3:
+        name = "set_top";
+        break;
+    case 4:
+        name = "set_left";
+        break;
+    case 5:
+        name = "set_right";
+        break;
+    case 6:
+        name = "set_bottom";
+        break;
+    }
 
     return name;
 }
