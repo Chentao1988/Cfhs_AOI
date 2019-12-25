@@ -73,7 +73,10 @@ private:
     //设置结果输出模式
     void setResultMode(const int &mode);
     //显示大图及缺陷点
-    void showBigImage(const QImage &image, const QPolygon &vectorPoint);
+    void showBigImagePoints(const QPolygon &vectorPoint);
+    void showBigImage(const QImage &image, const QList<itoPoint> &list = QList<itoPoint>());
+    void showBigImageTotal(const QPolygon &vectorPoint, const QImage &image,
+                           const QList<itoPoint> &list = QList<itoPoint>());
     //显示系统状态
     void setSystemStatus(const bool& isStatused);
     //显示工位状态
@@ -266,6 +269,7 @@ private:
     QMap<int, QMap<int, QImage>> m_mapStationDefectImg;
     //工位缺陷坐标
     QMap<int, QPolygon> m_mapStationPoint;
+    QMap<int, QList<itoPoint>> m_mapStationItoPoint;
     //结果大图
     QImage m_resultImg;
     //结果缺陷名
@@ -321,7 +325,6 @@ private:
     QPointer<QAction> m_imageSaveAction;  //图像保存功能
     QPointer<QAction> m_imageSubsetAction;  //图像分区设置
     QPointer<ImgSubSet> m_imgPartitionWidget;  //图像分区界面
-
 };
 
 #endif // CFHS_MAINWINDOW_H

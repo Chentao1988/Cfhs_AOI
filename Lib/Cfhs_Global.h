@@ -88,6 +88,8 @@ typedef struct Programme
     QString strDefectDetermination;
     //缺陷筛选(JSON格式的字符串，例如"{"白点": "((缺陷面积1>2)&&(缺陷面积2>0))||(缺陷宽度>=4)", "黑点": "(缺陷面积1>=7)&&(缺陷面积2<8)"}")
     QString strNGScreening;
+    //图象分区设置(JSON格式的字符串，：{"Ax": 12,"Ay": 23,"Dx": 12,"Dy": 23,"Row":3,"Column":3,"Forward":true,"Open":true})
+    QString strImagePart;
 
 }stProgramme;
 

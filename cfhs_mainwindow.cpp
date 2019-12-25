@@ -266,7 +266,7 @@ void Cfhs_MainWindow::mainWindowInit()
     this->setFixedSize(1920, 1080);
     this->setWindowFlags(this->windowFlags()|Qt::FramelessWindowHint);
     //工位栏
-    m_taskWidget = new Cfhs_TaskInfoWidget(this, false);
+    m_taskWidget = new Cfhs_TaskInfoWidget(this, true);
     ui->taskFrame->setWidget(m_taskWidget);
     connect(this, &Cfhs_MainWindow::sig_ShowStationStatus,
             m_taskWidget, &Cfhs_TaskInfoWidget::slot_ShowStationStatus);
@@ -274,8 +274,6 @@ void Cfhs_MainWindow::mainWindowInit()
             this, &Cfhs_MainWindow::slot_ShowCurrentTask);
     //大图
     m_bigImageWidget = new cfhs_mainwindows_img(this);
-    QString path = QCoreApplication::applicationDirPath()+"/Resource/1.bmp";
-    m_bigImageWidget->setImage(path);
     m_bigImageWidget->installEventFilter(this);
     ui->mainFrame->setWidget(m_bigImageWidget);
     m_sumAnalysisTime = 12;
@@ -397,6 +395,11 @@ void Cfhs_MainWindow::functionInit()
     m_imageSubsetAction = new QAction(tr("图像分区设置"), this);
     connect(m_imageSubsetAction, &QAction::triggered,
             this, &Cfhs_MainWindow::imageSubsetAction_triggered);
+    m_imgPartitionWidget = new ImgSubSet(this);
+    connect(m_imgPartitionWidget, &ImgSubSet::sig_setPoint,
+            m_bigImageWidget, &cfhs_mainwindows_img::setPoint);
+    connect(m_imgPartitionWidget, &ImgSubSet::sig_setGridView,
+            this, &Cfhs_MainWindow::slot_ShowGridView);
     //添加到menu
     m_functionMenu->addAction(m_imageManageAction);
     m_functionMenu->addAction(m_imageSaveAction);
@@ -405,7 +408,6 @@ void Cfhs_MainWindow::functionInit()
     ui->functionPushButton->setMenu(m_functionMenu);
     //添加事件过滤器
     ui->functionLabel->installEventFilter(this);
-    m_imgPartitionWidget = nullptr;
 }
 
 void Cfhs_MainWindow::helpInit()
@@ -488,6 +490,8 @@ bool Cfhs_MainWindow::setProgram(const stProgramme &stPro)
     m_defectSmallImage[0]->clearContent();
     m_defectSmallImage[1]->clearContent();
     m_defectSmallImage[2]->clearContent();
+    //设置九宫格数据
+    m_imgPartitionWidget->SetDataUpdate(stPro.strImagePart);
 
     return true;
 }
@@ -509,9 +513,9 @@ void Cfhs_MainWindow::setResultMode(const int &mode)
     }
 }
 
-void Cfhs_MainWindow::showBigImage(const QImage &image, const QPolygon &vectorPoint)
+void Cfhs_MainWindow::showBigImagePoints(const QPolygon &vectorPoint)
 {
-    m_bigImageWidget->setImage(image);
+    m_bigImageWidget->ClearPoint();
     //添加坐标
     int size = vectorPoint.size();
     for(int i=0; i<size; i++)
@@ -519,6 +523,20 @@ void Cfhs_MainWindow::showBigImage(const QImage &image, const QPolygon &vectorPo
         QPoint point = vectorPoint.at(i);
         m_bigImageWidget->addPoint(point);
     }
+}
+
+void Cfhs_MainWindow::showBigImage(const QImage &image, const QList<itoPoint> &list)
+{
+    m_bigImageWidget->setImage(image, list);
+}
+
+void Cfhs_MainWindow::showBigImageTotal(const QPolygon &vectorPoint, const QImage &image,
+                                        const QList<itoPoint> &list)
+{
+    //显示缺陷图
+    showBigImage(image, list);
+    //显示缺陷坐标
+    showBigImagePoints(vectorPoint);
 }
 
 void Cfhs_MainWindow::slot_ShowFrameInfo(bool bOK, const QString &strInfo)
@@ -553,11 +571,51 @@ void Cfhs_MainWindow::slot_ShowFeatureData(const int &stationNo, const QString &
         m_mapStationFeature[stationNo] = strData;
     else
         m_mapStationFeature.insert(stationNo, strData);
+    //添加坐标
+    QList<itoPoint> listPoint;
+    if(!strData.isEmpty())
+    {
+        QStringList allList = strData.split("@");
+        foreach(QString info, allList)
+        {
+            QStringList singleList = info.split("#");
+            if(singleList.size() < 6)
+                break;
+            itoPoint point;
+            //起始坐标
+            QString strPos = singleList.at(3);
+            if(!strPos.contains(","))
+                continue;
+            int x = strPos.section(",",0,0).toInt();
+            int y = strPos.section(",",1).toInt();
+            point.Start.setX(x);
+            point.Start.setY(y);
+            //终点坐标
+            strPos = singleList.at(4);
+            if(!strPos.contains(","))
+                continue;
+            x = strPos.section(",",0,0).toInt();
+            y = strPos.section(",",1).toInt();
+            point.End.setX(x);
+            point.End.setY(y);
+            listPoint.append(point);
+        }
+        if(m_mapStationItoPoint.contains(stationNo))
+            m_mapStationItoPoint[stationNo] = listPoint;
+        else
+            m_mapStationItoPoint.insert(stationNo, listPoint);
+    }
+
     //如果是当前工位显示
     if(m_taskWidget->getCurrentTask() == stationNo)
     {
         QStringList listFeature = m_mapStationFeatureName.value(stationNo);
         setFeatureData(listFeature, strData);
+        //显示工位图
+        QImage image;
+        if(m_mapStationImg.contains(stationNo))
+            image = m_mapStationImg[stationNo];
+        showBigImage(image, listPoint);
     }
 }
 
@@ -602,11 +660,15 @@ void Cfhs_MainWindow::slot_ShowStationImagePoint(int iStation, const QImage &ima
         m_mapStationPoint[iStation] = polygon;
     else
         m_mapStationPoint.insert(iStation, polygon);
+
     //显示信息
     if(m_taskWidget->getCurrentTask() == iStation)
     {
         //显示大图
-        showBigImage(imageBig, polygon);
+        QList<itoPoint> listPoint;
+        if(m_mapStationItoPoint.contains(iStation))
+            listPoint = m_mapStationItoPoint[iStation];
+        showBigImageTotal(polygon, imageBig, listPoint);
         //显示缺陷小图
         m_defectSmallImage[0]->showDefect(imageSmall1, strDefectName1);
         m_defectSmallImage[1]->showDefect(imageSmall2, strDefectName2);
@@ -653,7 +715,7 @@ void Cfhs_MainWindow::slot_ShowResultImagePoint(const QImage &imageBig, const QS
     if(m_taskWidget->getCurrentTask() == Cfhs_TaskInfoWidget::ResultTask)
     {
         //显示大图
-        showBigImage(m_resultImg, m_polygonResultPoint);
+        showBigImageTotal(m_polygonResultPoint, m_resultImg);
         //显示缺陷小图
         for(int i=0; i<3; i++)
         {
@@ -662,7 +724,6 @@ void Cfhs_MainWindow::slot_ShowResultImagePoint(const QImage &imageBig, const QS
             m_defectSmallImage[i]->showDefect(img, name);
         }
     }
-    qDebug()<<__FUNCTION__;
 }
 
 void Cfhs_MainWindow::slot_ShowAnalysisImagePoint(const QImage &imageBig, const QString &strPoint)
@@ -674,9 +735,8 @@ void Cfhs_MainWindow::slot_ShowAnalysisImagePoint(const QImage &imageBig, const 
     if(m_taskWidget->getCurrentTask() == Cfhs_TaskInfoWidget::AnalysisTask)
     {
         //显示大图
-        showBigImage(m_analysisImg, m_polygonAnalysisPoint);
+        showBigImageTotal(m_polygonAnalysisPoint, m_analysisImg);
     }
-    qDebug()<<__FUNCTION__;
 }
 
 void Cfhs_MainWindow::slot_ShowBatchChartInfo(const QString &strHourName, const QString &strHourInput, const QString &strHourYield, const QString &strHourTotalYield)
@@ -704,7 +764,7 @@ void Cfhs_MainWindow::slot_ShowCurrentTask(const int &index)
     {
         //显示结果信息
         //显示大图
-        showBigImage(m_resultImg, m_polygonResultPoint);
+        showBigImageTotal(m_polygonResultPoint, m_resultImg);
         //显示缺陷图
         for(int i=0; i<3; i++)
         {
@@ -718,7 +778,7 @@ void Cfhs_MainWindow::slot_ShowCurrentTask(const int &index)
     {
         //显示分析界面
         //显示大图
-        showBigImage(m_analysisImg, m_polygonAnalysisPoint);
+        showBigImageTotal(m_polygonAnalysisPoint, m_analysisImg);
         //缺陷图清空
         for(int i=0; i<3; i++)
             m_defectSmallImage[i]->clearContent();
@@ -729,7 +789,8 @@ void Cfhs_MainWindow::slot_ShowCurrentTask(const int &index)
         //显示大图
         QImage img = m_mapStationImg.value(index);
         QPolygon polygon = m_mapStationPoint.value(index);
-        showBigImage(img, polygon);
+        QList<itoPoint> points = m_mapStationItoPoint.value(index);
+        showBigImageTotal(polygon, img, points);
         //显示缺陷图
         for(int i=0; i<3; i++)
         {
@@ -969,7 +1030,7 @@ bool Cfhs_MainWindow::eventFilter(QObject* obj, QEvent* event)
                 QImage img = m_analysisImg;
                 QPolygon points = getPolygonFromQString(strPoint);
                 //显示图片和缺陷点
-                showBigImage(img, points);
+                showBigImageTotal(points, img);
                 //保存时间段
                 m_sumAnalysisTime = time;
             }
@@ -1163,26 +1224,7 @@ void Cfhs_MainWindow::imageSaveAction_triggered()
 
 void Cfhs_MainWindow::imageSubsetAction_triggered()
 {
-
-    if(m_imgPartitionWidget == nullptr)
-    {
-        m_imgPartitionWidget = new ImgSubSet(this);
-        connect(m_imgPartitionWidget, &ImgSubSet::sig_setPoint,
-                m_bigImageWidget, &cfhs_mainwindows_img::setPoint);
-        connect(m_imgPartitionWidget, &ImgSubSet::sig_setGridView,
-                this, &Cfhs_MainWindow::slot_ShowGridView);
-    }
-    //同步坐标点
-    QPoint left_top;
-    QPoint right_top;
-    QPoint left_bottom;
-    QPoint right_bottom;
-    bool flg_alphabet;
-    m_bigImageWidget->getPoint(left_top, right_top, left_bottom, right_bottom, flg_alphabet);
-    m_imgPartitionWidget->Set_Point(left_top, right_top, left_bottom, right_bottom, flg_alphabet);
-    //同步分区行列数
-    m_imgPartitionWidget->Set_Grid_View(m_openGridview, m_xGridview, m_yGridview);
-    m_imgPartitionWidget->exec();
+    m_imgPartitionWidget->DialogShow();
 }
 
 void Cfhs_MainWindow::softVersionAction_triggered()
@@ -1352,7 +1394,7 @@ void Cfhs_MainWindow::createData()
     listPoint.append(QPoint(9470, 3200));
     listPoint.append(QPoint(3600, 8560));
     listPoint.append(QPoint(5840, 17820));
-    showBigImage(m_resultImg, listPoint);
+    showBigImageTotal(listPoint, m_resultImg);
     //缺陷小图
     //1
     QString strName = "黑点";
@@ -1377,12 +1419,14 @@ void Cfhs_MainWindow::createData()
     QString strBatch = "1910091806_A_01_0002#252#220#30#87.3%";
     m_batchTable->addData(strBatch);
     //特征表
-    QString strFeat1 = "1910091809#2#黑点#3600,8560#100.2#200.3#20#30#40#10#20#12.5";
-    QString strFeat2 = "1910091817#1#黑线#9470,3200#200.2#400.3#18#330#34#10#30#32.5";
-    QString strFeat3 ="1910091817#3#白线#5840,17820#220.2#360.3#25#430#24#30#27#72.5";
-    m_featureTable->addData(strFeat1);
-    m_featureTable->addData(strFeat2);
-    m_featureTable->addData(strFeat3);
+    //QString strFeat1 = "1910091809#2#黑点#3600,8560#100.2#200.3#20#30#40#10#20#12.5";
+    //QString strFeat2 = "1910091817#1#黑线#9470,3200#200.2#400.3#18#330#34#10#30#32.5";
+    //QString strFeat3 ="1910091817#3#白线#5840,17820#220.2#360.3#25#430#24#30#27#72.5";
+    //m_featureTable->addData(strFeat1);
+    //m_featureTable->addData(strFeat2);
+    //m_featureTable->addData(strFeat3);
+    QString strFeat1 = "1910091809#2#黑点#0,0#3600,8560#10000";
+    slot_ShowFeatureData(1, strFeat1);
     //良率表
     QString strHour = "7#8#9#10#11#12#13#14#15#16#17#18";
     QString strInput = "200#789#658#549#657#895#788#864#765#698#655#821";

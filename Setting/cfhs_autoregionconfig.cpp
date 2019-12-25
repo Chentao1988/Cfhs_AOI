@@ -18,10 +18,7 @@ Cfhs_AutoRegionConfig::Cfhs_AutoRegionConfig(QWidget *parent)
     //功能名
     m_nameLabel = new QLabel(this);
     m_nameLabel->setText(tr("分区参数"));
-    QString style = QString("QLabel{background:#3954C9;border:none;font-size:16px;"
-                            "font-family:Mircosoft Yahei; min-height:26px;"
-                            "color:#2193AB;padding-left:15px;}");
-    m_nameLabel->setStyleSheet(style);
+    m_nameLabel->setStyleSheet(Cfhs_AutoRegionConfig::getToolLabelStyle());
     //参数表
     m_algoTable = new Cfhs_AlgorithmTable(this);
     m_algoTable->addOnePara(tr("边缘低阈值"), tr("a区提取亮度下限"));
@@ -149,6 +146,15 @@ bool Cfhs_AutoRegionConfig::setParaConfig(const QString &strConfig)
     }
 
     return true;
+}
+
+QString Cfhs_AutoRegionConfig::getToolLabelStyle()
+{
+    QString style = QString("QLabel{background:#3954C9;border:none;font-size:16px;"
+                            "font-family:Mircosoft Yahei; min-height:26px;"
+                            "color:#0077FF;padding-left:15px;}");
+
+    return style;
 }
 
 int Cfhs_AutoRegionConfig::getIndexFromName(const QString &name)

@@ -18,10 +18,11 @@
 #include <QPushButton>
 #include <QButtonGroup>
 #include "changeimage.h"
-
 #pragma execution_character_set("utf-8")
 class QAction;
 class QMenu;
+
+
 
 class cfhs_mainwindows_img : public QWidget
 {
@@ -34,20 +35,23 @@ public slots:
     //载入图片
     void setImage(const QString& path);
     void setImage(const QImage img);
+    void setImage(const QImage img,QList<itoPoint>list_point, const ShapeType &shape = Line);
+
+    //清除旧坐标点
+    void ClearPoint();
     //放大倍数
     void setTimes(int num);
     //添加缺陷点
     void addPoint(QPoint point);
 
     //手动输入四个点以及是否反向判断
-    void setPoint(QPoint left_top,QPoint right_top,QPoint left_bottom,QPoint right_bottom,bool flg_alphabet = true);
+    void setPoint(QPoint left_top,QPoint right_bottom,bool flg_alphabet = true);
     //九宫格开启判断以及行列数
     void setGridView(bool open_gridview,int x_gridview = 3,int y_gridview = 3);
     //保存图片
     bool saveImage(QString savepath);
 
-    void getPoint(QPoint &left_top,QPoint &right_top,
-                  QPoint &left_bottom,QPoint &right_bottom,
+    void getPoint(QPoint &left_top,QPoint &right_bottom,
                   bool &flg_alphabet);
     //九宫格开启判断以及行列数
     void getGridView(bool &open_gridview,int &x_gridview,int &y_gridview);
@@ -82,6 +86,7 @@ private:
 
 
 private:
+    QTime time;
     QPushButton *DownLoad_Button;
     QHBoxLayout* pLayout;
     QButtonGroup *pButtonGroup;
@@ -104,8 +109,6 @@ private:
     QPoint p_end;       //矩形结束点
     QPoint point_show;  //用于左上角显示的坐标
     QPoint p_left_top;  //A
-    QPoint p_right_top; //B
-    QPoint p_left_bottom;//C
     QPoint p_right_bottom;//D
     QTime show_time;    //发送img的时间
     QPoint save_point;  //防止矩形范围超出图片的记录点

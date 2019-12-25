@@ -2,6 +2,7 @@
 #include "../cfhs_base.h"
 #include "../cfhs_global.h"
 #include "cfhs_algorithmtable.h"
+#include "cfhs_autoregionconfig.h"
 #include <QLabel>
 #include <QPushButton>
 #include <QMessageBox>
@@ -19,10 +20,7 @@ Cfhs_DefectConfig_hjh::Cfhs_DefectConfig_hjh(QWidget *parent)
     //功能名
     m_nameLabel = new QLabel(this);
     m_nameLabel->setText(tr("缺陷参数"));
-    QString style = QString("QLabel{background:#3954C9;border:none;font-size:16px;"
-                            "font-family:Mircosoft Yahei; min-height:26px;"
-                            "color:#2193AB;padding-left:15px;}");
-    m_nameLabel->setStyleSheet(style);
+    m_nameLabel->setStyleSheet(Cfhs_AutoRegionConfig::getToolLabelStyle());
     //参数表
     m_algoTable = new Cfhs_AlgorithmTable(this);
     m_algoTable->addOnePara(tr("缺陷面积上限"), tr("单一瑕疵面积检测上限"));

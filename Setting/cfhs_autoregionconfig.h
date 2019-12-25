@@ -24,6 +24,8 @@ public:
     static QString getToolParaDefault();  //默认参数
     QString getParaConfig() const;
     bool setParaConfig(const QString& strConfig);
+    //设置label样式
+    static QString getToolLabelStyle();
 
 private:
     //根据参数名获取参数位置索引

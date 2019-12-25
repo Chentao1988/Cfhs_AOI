@@ -15,6 +15,8 @@
 #include <QLineEdit>
 #include "switch_button.h"
 #include "edit_double.h"
+#include "../cfhs_global.h"
+
 class ImgSubSet : public QDialog
 {
     Q_OBJECT
@@ -22,15 +24,18 @@ class ImgSubSet : public QDialog
 public:
     explicit ImgSubSet(QWidget *parent = nullptr);
     ~ImgSubSet();
-    void Set_Point(QPoint left_top,QPoint right_top,
-                   QPoint left_bottom,QPoint right_bottom,
-                   bool flg_alphabet);
+    void DialogShow();
+    bool setConfigPara(const QString &strConfig);
+    const QString getConfigPara();
+    void SetDataUpdate(const QString &strConfig);
+
+private:
+    void Set_Point(QPoint left_top, QPoint right_bottom, bool flg_alphabet);
     void Set_Grid_View(bool open_gridview,int x_gridview,int y_gridview);
+    void DataInit();
 
 signals:
-    void sig_setPoint(QPoint left_top,QPoint right_top,
-                      QPoint left_bottom,QPoint right_bottom,
-                      bool flg_alphabet);
+    void sig_setPoint(QPoint left_top, QPoint right_bottom, bool flg_alphabet);
     void sig_setGridView(bool open_gridview,int x_gridview,int y_gridview);
 
 private slots:
@@ -43,12 +48,19 @@ private:
     QPushButton *button_cancel;
     QPushButton *button_detemine;
     Edit_Double *edit_PointA;
-    Edit_Double *edit_PointB;
-    Edit_Double *edit_PointC;
     Edit_Double *edit_PointD;
     Edit_Double *edit_Partition;
     switch_button *negate_button;
     switch_button *open_button;
+    stProgramme stPro;
+    QPoint pointA;
+    QPoint pointD;
+    //功能开关
+    bool funcOpen;
+    //图片取反
+    bool imageNegate;
+    //行列数
+    QPoint linePot;
 };
 
 #endif // IMGSUBSET_H

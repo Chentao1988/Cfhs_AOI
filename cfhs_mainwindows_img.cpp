@@ -64,20 +64,36 @@ void cfhs_mainwindows_img::setImage(const QString &path)
     *right_label_map = save_map;
     *gridview_map = save_map;
     *result_map = save_map;
-    save_list.clear();
     show_time.start();
     this->update();
 }
 //重载载入图片函数
 void cfhs_mainwindows_img::setImage(const QImage img)
 {
+
     save_map= QPixmap::fromImage(img);
     *right_label_map = save_map;
     *gridview_map = save_map;
     *result_map = save_map;
-    save_list.clear();
     show_time.start();
     this->update();
+}
+
+void cfhs_mainwindows_img::setImage(const QImage img, QList<itoPoint> list_point, const ShapeType &shape)
+{
+    time.start();
+    save_map= ChangeImage::AddPoint_Draw(img,list_point,shape);
+    *right_label_map = save_map;
+    *gridview_map = save_map;
+    *result_map = save_map;
+
+    show_time.start();
+    this->update();
+}
+
+void cfhs_mainwindows_img::ClearPoint()
+{
+    save_list.clear();
 }
 
 void cfhs_mainwindows_img::setGridView(bool flg,int x,int y)
@@ -87,13 +103,11 @@ void cfhs_mainwindows_img::setGridView(bool flg,int x,int y)
     set_y_gridview = y;
 }
 
-void cfhs_mainwindows_img::setPoint(QPoint p1,QPoint p2,QPoint p3,QPoint p4,bool flg_alphabet)
+void cfhs_mainwindows_img::setPoint(QPoint p1,QPoint p4,bool flg_alphabet)
 {
     p_left_top = p1;
-    p_right_top = p2;
-    p_left_bottom = p3;
     p_right_bottom = p4;
-    alphabet_flg = flg_alphabet;    //是否方向判断
+    alphabet_flg = flg_alphabet;    //是否反向判断
 }
 
 
@@ -137,12 +151,9 @@ bool cfhs_mainwindows_img::saveImage(QString savepath)
     return false;
 }
 
-void cfhs_mainwindows_img::getPoint(QPoint &left_top, QPoint &right_top,
-                                    QPoint &left_bottom, QPoint &right_bottom, bool &flg_alphabet)
+void cfhs_mainwindows_img::getPoint(QPoint &left_top, QPoint &right_bottom, bool &flg_alphabet)
 {
     left_top = p_left_top;
-    right_top = p_right_top;
-    left_bottom = p_left_bottom;
     right_bottom = p_right_bottom;
     flg_alphabet = alphabet_flg;
 }
@@ -169,9 +180,7 @@ QString cfhs_mainwindows_img::getFunctionButtonStyle(const QString &name)
 {
     QString style = QString("QPushButton{image:url(:/%1_normal.png);"
             "background:transparent; border:none;}"
-            "QPushButton:pressed{image:url(:/%2_press.png)}"
-            "QPushButton:checked{image:url(:/%3_press.png);"
-            "border: 1px solid red}").arg(name).arg(name).arg(name);
+            "QPushButton:pressed{image:url(:/%2_press.png)}").arg(name).arg(name);
     return style;
 }
 
@@ -190,8 +199,11 @@ QPushButton *cfhs_mainwindows_img::getButton(const QString &name)
 
 void cfhs_mainwindows_img::Clicked_DownLoad()
 {
+    QTime time_s;
+    time_s.start();
     save_img = ChangeImage::addPoint(save_map,save_list);
-    QString file_path = QFileDialog::getSaveFileName(this, tr("保存路径..."),"..",tr("Images (*.png *.bmp *.jpg)"));
+    qDebug()<<time_s.elapsed();
+    QString file_path = QFileDialog::getSaveFileName(this, tr("保存路径..."),"", "*.jpg\n *.bmp\n *.png\n");
     saveImage(file_path);
 }
 
@@ -225,6 +237,7 @@ void cfhs_mainwindows_img::paintEvent(QPaintEvent *event)
     if(gridview_flg)//九宫格开启
         CDrawFourPoint();
     painter.end();
+    //qDebug()<<time.elapsed();
 }
 
 void cfhs_mainwindows_img::CRect()
@@ -263,10 +276,8 @@ void cfhs_mainwindows_img::CDrawPoint()
 
 void cfhs_mainwindows_img::CDrawFourPoint()
 {
-    QPoint A,B,C,D;
+    QPoint A,D;
     A = imgtothis(p_left_top);
-    B = imgtothis(p_right_top);
-    C = imgtothis(p_left_bottom);
     D = imgtothis(p_right_bottom);
     int x,y;
     x = set_x_gridview;
@@ -385,8 +396,6 @@ void cfhs_mainwindows_img::init()
     alphabet_flg = false;
 
     p_left_top = QPoint(0, 0);
-    p_right_top = QPoint(0, 0);
-    p_left_bottom = QPoint(0, 0);
     p_right_bottom = QPoint(0, 0);
     p_light_point = QPoint(0, 0);
 }

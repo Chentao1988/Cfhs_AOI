@@ -2,6 +2,7 @@
 #include "../cfhs_base.h"
 #include "../cfhs_global.h"
 #include "cfhs_algorithmtable.h"
+#include "cfhs_autoregionconfig.h"
 #include <QLabel>
 #include <QPushButton>
 #include <QMessageBox>
@@ -18,10 +19,7 @@ Cfhs_AutoRegionConfig_hjh::Cfhs_AutoRegionConfig_hjh(QWidget *parent)
     //功能名
     m_nameLabel = new QLabel(this);
     m_nameLabel->setText(tr("分区参数"));
-    QString style = QString("QLabel{background:#3954C9;border:none;font-size:16px;"
-                            "font-family:Mircosoft Yahei; min-height:26px;"
-                            "color:#2193AB;padding-left:15px;}");
-    m_nameLabel->setStyleSheet(style);
+    m_nameLabel->setStyleSheet(Cfhs_AutoRegionConfig::getToolLabelStyle());
     //参数表
     m_algoTable = new Cfhs_AlgorithmTable(this);
     m_algoTable->addOnePara(tr("A区低阈值"), tr("相对于A区平均亮度下沉值"));

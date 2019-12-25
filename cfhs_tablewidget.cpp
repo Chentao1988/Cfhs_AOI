@@ -17,18 +17,19 @@
 #include <QVariant>
 #include <QVariantList>
 
-
 //排序方式 升序
-static bool sortLessThan(float val1, float val2)
+static bool sortLess(float val1, float val2)
 {
-    return val1 <= val2;
+    return val1 < val2;
 }
 
 //排序方式  降序
-static bool sortGreaterThan(float val1, float val2)
+static bool sortGreater(float val1, float val2)
 {
-    return val1 >= val2;
+    return val1 > val2;
 }
+
+
 //排序列表
 static QList<float> m_sortList;
 
@@ -293,9 +294,9 @@ bool Cfhs_TableWidget::sortData(const int& column, const SortEnum& eSort)
     }
     //排序
     if(eSort == SortAscend)
-        std::sort(m_sortList.begin(), m_sortList.end(), sortLessThan);
+        std::sort(m_sortList.begin(), m_sortList.end(), sortLess);
     else
-        std::sort(m_sortList.begin(), m_sortList.end(), sortGreaterThan);
+        std::sort(m_sortList.begin(), m_sortList.end(), sortGreater);
 
 
     qDebug()<<"list" << m_sortList;
