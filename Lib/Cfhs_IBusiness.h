@@ -106,6 +106,12 @@ public:
     //输出
     //strInfo:执行信息
     bool InsertNewBatchName(const QString &strNewName, QString &strInfo);
+    //---删除批次名
+    //输入
+    //strName：批次名
+    //输出
+    //strInfo:执行信息
+    bool DeleteBatchName(const QString &strName, QString &strInfo);
     //---获取批次信息
     //输入
     //strNowName：系统的当前批次名

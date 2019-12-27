@@ -29,7 +29,7 @@ public:
 private slots:
     void insertRecordButton_clicked();
     void startButton_clicked();
-    void cancelButton_clicked();
+    void deleteButton_clicked();
 
 private:
     QPointer<QLabel> m_curRecordLabel;
@@ -38,7 +38,7 @@ private:
     QPointer<Cfhs_ComboBox> m_alreadyRecodeCombo;  //已有批次
     QPointer<QPushButton> m_insertRecordButton;  //插入批次
     QPointer<QPushButton> m_startButton;  //开始
-    QPointer<QPushButton> m_cancelButton;  //取消
+    QPointer<QPushButton> m_deleteButton;  //删除
 };
 
 #endif // CFHS_STARTBATCHDETECT_H

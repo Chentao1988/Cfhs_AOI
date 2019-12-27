@@ -151,7 +151,7 @@ bool ImgSubSet::setConfigPara(const QString &strConfig)
     //行列数
     int row = obj.take("Row").toInt();
     int col = obj.take("Column").toInt();
-    qDebug()<<__FUNCTION__<<row<<","<<col;
+    //qDebug()<<__FUNCTION__<<row<<","<<col;
     linePot.setX(row);
     linePot.setY(col);
     //取反

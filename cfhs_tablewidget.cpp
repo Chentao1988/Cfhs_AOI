@@ -419,6 +419,7 @@ bool Cfhs_TableWidget::exportToExcel(const QString& filename, const int& topRow,
             for (j=0; j<columnCount; j++)
             {
                 QString text = this->item(i,j)?this->item(i,j)->text():"";
+                text = text.replace(',', '/'); //逗号转成“/”，处理Excel给数值自动添加“,”
                 listSingle.append(text);
             }
             listData.append(listSingle);
@@ -431,6 +432,8 @@ bool Cfhs_TableWidget::exportToExcel(const QString& filename, const int& topRow,
         vrange.append(QString::number(rowCount + 1));
         range = worksheet->querySubObject("Range(const QString&)", vrange);
         range->dynamicCall("SetValue(const QVariant&)", varData);
+        range->setProperty("HorizontalAlignment", -4108);//xlCenter
+        range->setProperty("VerticalAlignment", -4108);//xlCenter
 #endif
 
         //画框线
@@ -534,7 +537,7 @@ void Cfhs_TableWidget::on_exportAction_triggered() //导出触发
     QString filename = QFileDialog::getSaveFileName(this,
                                                     tr("导出数据"),
                                                     "",
-                                                    tr("Excel文件(*.xls *.xlsx)"));
+                                                    tr("*.xls\n *.xlsx\n"));
     if(filename.isEmpty())
         return;
 

@@ -41,14 +41,15 @@ Cfhs_StartBatchDetect::Cfhs_StartBatchDetect(QWidget* parent)
     m_startButton->setText(tr("开始"));
     connect(m_startButton, &QPushButton::clicked, this, &Cfhs_StartBatchDetect::startButton_clicked);
     //取消
-    m_cancelButton = new QPushButton(this);
-    m_cancelButton->setText(tr("取消"));
-    connect(m_cancelButton, &QPushButton::clicked, this, &Cfhs_StartBatchDetect::cancelButton_clicked);
+    m_deleteButton = new QPushButton(this);
+    m_deleteButton->setText(tr("删除"));
+    connect(m_deleteButton, &QPushButton::clicked, this, &Cfhs_StartBatchDetect::deleteButton_clicked);
     //给三个Button添加layout
     QPointer<QHBoxLayout> buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(m_insertRecordButton);
+    buttonLayout->addWidget(m_deleteButton);
     buttonLayout->addWidget(m_startButton);
-    buttonLayout->addWidget(m_cancelButton);
+
     //添加主界面layout
     QPointer<QVBoxLayout> mainLayout = new QVBoxLayout();
     mainLayout->addLayout(curRecordLayout);
@@ -137,7 +138,39 @@ void Cfhs_StartBatchDetect::startButton_clicked()
     this->accept();
 }
 
-void Cfhs_StartBatchDetect::cancelButton_clicked()
+void Cfhs_StartBatchDetect::deleteButton_clicked()
 {
-    this->reject();
+#if 1
+    QString delBatch = m_alreadyRecodeCombo->currentText();
+    if(delBatch.isEmpty())
+    {
+        QMessageBox::warning(this, " ", tr("请选择删除批次"));
+        return;
+    }
+    QString strInfo;
+    //删除批次
+    if(!m_logicInterface->DeleteBatchName(delBatch, strInfo))
+    {
+        QMessageBox::warning(this, " ", strInfo);
+        return;
+    }
+    //获取所有批次
+    QString strAllBatch;
+    if(!m_logicInterface->GetAllBatchName(strAllBatch, strInfo))
+    {
+        QMessageBox::warning(this, " ", strInfo);
+        return;
+    }
+    QStringList listBatch = getListFromQString(strAllBatch);
+    if(listBatch.contains(delBatch))
+        QMessageBox::warning(this, " ", tr("批次删除失败"));
+    else
+    {
+        setBatchList(listBatch);
+        //删除的是当前批次的话清空
+        if(m_curRecordLineEdit->text() == delBatch)
+            m_curRecordLineEdit->clear();
+        QMessageBox::information(this, " ", tr("批次删除成功"));
+    }
+#endif
 }

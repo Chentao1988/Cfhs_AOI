@@ -23,6 +23,8 @@
 #include <QMessageBox>
 #include <QStringList>
 #include <QString>
+#include <QDate>
+
 
 class DistroScaleDraw: public QwtScaleDraw
 {
@@ -442,7 +444,8 @@ void Cfhs_Barchart::timeout()
 void Cfhs_Barchart::exportChart()
 {
     QwtPlotRenderer renderer;
-    if(renderer.exportTo(this, tr("良率报表.pdf")))
+    QString filename = QString(tr("良率报表%1.pdf")).arg(QDate::currentDate().toString("yyyy-MM-dd"));
+    if(renderer.exportTo(this, filename))
         QMessageBox::information(this, tr("提示"), tr("报表导出成功"));
 }
 
