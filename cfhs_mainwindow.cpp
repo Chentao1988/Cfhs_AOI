@@ -17,6 +17,7 @@
 #include <QHeaderView>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDesktopWidget>
 
 
 Cfhs_MainWindow::Cfhs_MainWindow(QWidget *parent) :
@@ -276,6 +277,9 @@ void Cfhs_MainWindow::mainWindowInit()
     m_bigImageWidget = new cfhs_mainwindows_img(this);
     m_bigImageWidget->installEventFilter(this);
     ui->mainFrame->setWidget(m_bigImageWidget);
+    connect(this, &Cfhs_MainWindow::sig_ShowBigImageSampleStatus,
+            m_bigImageWidget, &cfhs_mainwindows_img::setPyr);
+    //分析界面，缺陷汇总时间段
     m_sumAnalysisTime = 12;
     //同步九宫格参数
     m_bigImageWidget->getGridView(m_openGridview, m_xGridview, m_yGridview);
@@ -349,6 +353,8 @@ void Cfhs_MainWindow::mainWindowInit()
 
 void Cfhs_MainWindow::setFunctionEnable(const bool &isEnable)
 {
+    //方案选择
+    ui->programPushButton->setEnabled(isEnable);
     //功能键
     ui->functionPushButton->setEnabled(isEnable);
     ui->functionLabel->setEnabled(isEnable);
@@ -359,8 +365,8 @@ void Cfhs_MainWindow::setFunctionEnable(const bool &isEnable)
     ui->settingLabel->setEnabled(isEnable);
     ui->settingPushButton->setEnabled(isEnable);
     //帮助键
-    //ui->helpLabel->setEnabled(isEnable);
-    //ui->helpPushButton->setEnabled(isEnable);
+    ui->helpLabel->setEnabled(isEnable);
+    ui->helpPushButton->setEnabled(isEnable);
     //解码开关
     ui->readCodePushButton->setEnabled(isEnable);
     //Mes开关
@@ -887,6 +893,7 @@ bool Cfhs_MainWindow::ReadProgram()
         QMessageBox::information(this, " ", strInfo);
         return false;
     }
+    emit sig_ShowBigImageSampleStatus(conf.bSamplingCompressedImg);
     m_curProgramName = conf.strNowProName;
     if(m_curProgramName.isEmpty())
     {
@@ -1171,6 +1178,15 @@ void Cfhs_MainWindow::programConfigAction_triggered() //方案配置
     m_programConfigWidget->show();
     if(m_programConfigWidget->windowState() == Qt::WindowMinimized)
         m_programConfigWidget->setWindowState(Qt::WindowNoState);
+    else if(m_programConfigWidget->windowState() == Qt::WindowMaximized)
+    {
+        m_programConfigWidget->setWindowState(Qt::WindowNoState);
+        int width = 1130, height = 768;
+        QDesktopWidget desktop;
+        int xPos = (desktop.availableGeometry(this).width()- width)/2;
+        int yPos = (desktop.availableGeometry(this).height()- height)/2;
+        m_programConfigWidget->setGeometry(xPos, yPos, width, height);
+    }
 }
 
 void Cfhs_MainWindow::imageSpliceAction_triggered()  //图像拼接管理

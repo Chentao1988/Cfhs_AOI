@@ -147,7 +147,19 @@ void Cfhs_StartBatchDetect::deleteButton_clicked()
         QMessageBox::warning(this, " ", tr("请选择删除批次"));
         return;
     }
-    QString strInfo;
+    QString strInfo = QString(tr("确定删除批次%1?")).arg(delBatch);
+    QPointer<QMessageBox> msg = new QMessageBox(QMessageBox::Information,
+                                                tr("提示"),
+                                                strInfo,
+                                                QMessageBox::Yes|
+                                                QMessageBox::No,
+                                                this);
+    msg->setButtonText(QMessageBox::Yes, tr("是"));
+    msg->setButtonText(QMessageBox::No, tr("否"));
+    msg->setDefaultButton(QMessageBox::Yes);
+    if(msg->exec() == QMessageBox::No)
+        return;
+
     //删除批次
     if(!m_logicInterface->DeleteBatchName(delBatch, strInfo))
     {

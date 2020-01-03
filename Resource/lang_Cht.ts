@@ -1252,7 +1252,7 @@
     </message>
     <message>
         <location filename="../cfhs_mainwindow.ui" line="148"/>
-        <location filename="../cfhs_mainwindow.cpp" line="822"/>
+        <location filename="../cfhs_mainwindow.cpp" line="827"/>
         <source>关闭</source>
         <translation>關閉</translation>
     </message>
@@ -1312,219 +1312,219 @@
         <translation>添加相機記錄</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="326"/>
-        <location filename="../cfhs_mainwindow.cpp" line="327"/>
+        <location filename="../cfhs_mainwindow.cpp" line="329"/>
+        <location filename="../cfhs_mainwindow.cpp" line="330"/>
         <source>日志显示</source>
         <translation>日誌顯示</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="387"/>
+        <location filename="../cfhs_mainwindow.cpp" line="392"/>
         <source>图像显示管理</source>
         <translation>圖像顯示管理</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="391"/>
+        <location filename="../cfhs_mainwindow.cpp" line="396"/>
         <source>图像保存功能</source>
         <translation>圖像保存功能</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="395"/>
+        <location filename="../cfhs_mainwindow.cpp" line="400"/>
         <source>图像分区设置</source>
         <translation>圖像分區設置</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="418"/>
+        <location filename="../cfhs_mainwindow.cpp" line="423"/>
         <source>软件版本</source>
         <translation>軟件版本</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="422"/>
+        <location filename="../cfhs_mainwindow.cpp" line="427"/>
         <source>软件常见问题sop</source>
         <translation>軟件常見問題sop</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="426"/>
+        <location filename="../cfhs_mainwindow.cpp" line="431"/>
         <source>软件使用说明</source>
         <translation>軟件使用說明</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="430"/>
+        <location filename="../cfhs_mainwindow.cpp" line="435"/>
         <source>易损件清单</source>
         <translation>易損件清單</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="434"/>
+        <location filename="../cfhs_mainwindow.cpp" line="439"/>
         <source>远程协助</source>
         <translation>遠程協助</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="438"/>
+        <location filename="../cfhs_mainwindow.cpp" line="443"/>
         <source>缺陷打标</source>
         <translation>缺陷打標</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="472"/>
+        <location filename="../cfhs_mainwindow.cpp" line="477"/>
         <source>检测批次</source>
         <translation>檢測批次</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="473"/>
+        <location filename="../cfhs_mainwindow.cpp" line="478"/>
         <source>检测总量</source>
         <translation>檢測總量</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="474"/>
+        <location filename="../cfhs_mainwindow.cpp" line="479"/>
         <source>合格数量</source>
         <translation>合格數量</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="475"/>
+        <location filename="../cfhs_mainwindow.cpp" line="480"/>
         <source>次品数量</source>
         <translation>次品數量</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="476"/>
+        <location filename="../cfhs_mainwindow.cpp" line="481"/>
         <source>产品良率</source>
         <translation>產品良率</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="482"/>
+        <location filename="../cfhs_mainwindow.cpp" line="487"/>
         <source>执行区名称</source>
         <translation>執行區名稱</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="483"/>
+        <location filename="../cfhs_mainwindow.cpp" line="488"/>
         <source>使用算法汇总</source>
         <translation>使用算法彙總</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="558"/>
+        <location filename="../cfhs_mainwindow.cpp" line="563"/>
         <source>解码率%1</source>
         <translation>解碼率%1</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="564"/>
+        <location filename="../cfhs_mainwindow.cpp" line="569"/>
         <source>上报率%1</source>
         <translation>上報率%1</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="823"/>
+        <location filename="../cfhs_mainwindow.cpp" line="828"/>
         <source>确定关闭软件和电脑？</source>
         <translation>確定關閉軟件和電腦？</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="893"/>
+        <location filename="../cfhs_mainwindow.cpp" line="899"/>
         <source>当前没有可执行方案</source>
         <translation>當前沒有可執行方案</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="930"/>
+        <location filename="../cfhs_mainwindow.cpp" line="936"/>
         <source>工位%1的缺陷特征获取失败：%2</source>
         <translation>工位%1的缺陷特徵獲取失敗：%2</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="988"/>
+        <location filename="../cfhs_mainwindow.cpp" line="994"/>
         <source>前%1小时</source>
         <translation>前%1小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="989"/>
+        <location filename="../cfhs_mainwindow.cpp" line="995"/>
         <source>统计缺陷点的时间段</source>
         <translation>統計缺陷點的時間段</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="991"/>
+        <location filename="../cfhs_mainwindow.cpp" line="997"/>
         <source>前1小时</source>
         <translation>前1小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="992"/>
+        <location filename="../cfhs_mainwindow.cpp" line="998"/>
         <source>前6小时</source>
         <translation>前6小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="993"/>
+        <location filename="../cfhs_mainwindow.cpp" line="999"/>
         <source>前8小时</source>
         <translation>前8小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="994"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1000"/>
         <source>前12小时</source>
         <translation>前12小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="995"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1001"/>
         <source>前24小时</source>
         <translation>前24小時</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1059"/>
-        <location filename="../cfhs_mainwindow.cpp" line="1202"/>
-        <location filename="../cfhs_mainwindow.cpp" line="1585"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1065"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1208"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1591"/>
         <source>提示</source>
         <translation>提示</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1060"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1066"/>
         <source>是否显示附加功能？</source>
         <translation>是否顯示附加功能？</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1064"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1070"/>
         <source>显示</source>
         <translation>顯示</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1065"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1071"/>
         <source>隐藏</source>
         <translation>隱藏</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1107"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1113"/>
         <source>设备启动中，请稍后...</source>
         <translation>設備啟動中，請稍後...</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1132"/>
-        <location filename="../cfhs_mainwindow.cpp" line="1159"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1138"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1165"/>
         <source>设置成功</source>
         <translation>設置成功</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1191"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1197"/>
         <source>相机记录添加成功</source>
         <translation>相機記錄添加成功</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1203"/>
-        <location filename="../cfhs_mainwindow.cpp" line="1586"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1209"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1592"/>
         <source>方案读取中，请稍后...</source>
         <translation>方案讀取中，請稍後...</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1273"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1279"/>
         <source>选择缺陷图</source>
         <translation>選擇缺陷圖</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1283"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1289"/>
         <source>缺陷图路径错误，请重新选择</source>
         <translation>缺陷圖路徑錯誤，請重新選擇</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1456"/>
-        <location filename="../cfhs_mainwindow.cpp" line="1476"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1462"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1482"/>
         <source>数据为空</source>
         <translation>數據為空</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1564"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1570"/>
         <source>方案名</source>
         <translation>方案名</translation>
     </message>
     <message>
-        <location filename="../cfhs_mainwindow.cpp" line="1211"/>
-        <location filename="../cfhs_mainwindow.cpp" line="1594"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1217"/>
+        <location filename="../cfhs_mainwindow.cpp" line="1600"/>
         <source>方案选择成功</source>
         <translation>方案選擇成功</translation>
     </message>
@@ -2245,12 +2245,32 @@
         <translation>請選擇刪除批次</translation>
     </message>
     <message>
-        <location filename="../cfhs_startbatchdetect.cpp" line="166"/>
+        <location filename="../cfhs_startbatchdetect.cpp" line="150"/>
+        <source>确定删除批次%1?</source>
+        <translation>確定刪除批次%1?</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_startbatchdetect.cpp" line="152"/>
+        <source>提示</source>
+        <translation>提示</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_startbatchdetect.cpp" line="157"/>
+        <source>是</source>
+        <translation>是</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_startbatchdetect.cpp" line="158"/>
+        <source>否</source>
+        <translation>否</translation>
+    </message>
+    <message>
+        <location filename="../cfhs_startbatchdetect.cpp" line="178"/>
         <source>批次删除失败</source>
         <translation>批次刪除失敗</translation>
     </message>
     <message>
-        <location filename="../cfhs_startbatchdetect.cpp" line="170"/>
+        <location filename="../cfhs_startbatchdetect.cpp" line="185"/>
         <source>批次删除成功</source>
         <translation>批次刪除成功</translation>
     </message>
@@ -2899,7 +2919,7 @@
 <context>
     <name>Img_Show_Managent</name>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="55"/>
+        <location filename="../Function/img_show_managent.cpp" line="52"/>
         <source>图像显示管理</source>
         <translation>圖像顯示管理</translation>
     </message>
@@ -2938,27 +2958,37 @@
         <translation>算法啟用</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="20"/>
+        <location filename="../Function/img_show_managent.cpp" line="16"/>
         <source>工位图静态</source>
         <translation>工位圖靜態</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="20"/>
+        <location filename="../Function/img_show_managent.cpp" line="16"/>
         <source>工位图动态</source>
         <translation>工位圖動態</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="30"/>
+        <location filename="../Function/img_show_managent.cpp" line="20"/>
+        <source>抽样压缩关闭</source>
+        <translation>抽樣壓縮關閉</translation>
+    </message>
+    <message>
+        <location filename="../Function/img_show_managent.cpp" line="20"/>
+        <source>抽样压缩开启</source>
+        <translation>抽樣壓縮開啟</translation>
+    </message>
+    <message>
+        <location filename="../Function/img_show_managent.cpp" line="26"/>
         <source>确定</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="34"/>
+        <location filename="../Function/img_show_managent.cpp" line="30"/>
         <source>取消</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../Function/img_show_managent.cpp" line="38"/>
+        <location filename="../Function/img_show_managent.cpp" line="34"/>
         <source>静态图设置</source>
         <translation>靜態圖設置</translation>
     </message>
@@ -2984,7 +3014,7 @@
     </message>
     <message>
         <location filename="../Function/img_show_managent.cpp" line="101"/>
-        <location filename="../Function/img_show_managent.cpp" line="129"/>
+        <location filename="../Function/img_show_managent.cpp" line="136"/>
         <source>设置成功</source>
         <translation>設置成功</translation>
     </message>
@@ -3011,7 +3041,7 @@
 <context>
     <name>cfhs_mainwindows_img</name>
     <message>
-        <location filename="../cfhs_mainwindows_img.cpp" line="206"/>
+        <location filename="../cfhs_mainwindows_img.cpp" line="212"/>
         <source>保存路径...</source>
         <translation>保存路徑...</translation>
     </message>

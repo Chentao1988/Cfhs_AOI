@@ -23,13 +23,15 @@ public:
 private slots:
     void button_yes_click();
     void button_no_click();
-    void algorithm_open_button_clicked();
+    void sample_open_button_clicked();
     void station_open_button_clicked();
+    void algorithm_open_button_clicked();
     void button_static_img_clicked();
 
 private:
-    switch_button *algorithm_open_button;
-    switch_button *station_open_button;
+    switch_button *algorithm_open_button;  //算法开关
+    switch_button *station_open_button;  //工位图来源
+    switch_button *sample_open_button;  //抽样压缩开关
     QPushButton *button_yes;
     QPushButton *button_no;
     QPushButton *button_static_img;

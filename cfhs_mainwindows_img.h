@@ -59,9 +59,12 @@ public slots:
     void showLightPoint(const QPoint &point);
 
     void setEnable(bool enable_flg);
+    //设置是否开启九宫格压缩 true为压缩，false为不压缩
+    void setPyr(bool PYR_flg);
 
     static QString getFunctionButtonStyle(const QString& name);
     QPushButton *getButton(const QString &name);
+    //下载保存
     void Clicked_DownLoad();
 
 
@@ -91,9 +94,11 @@ private:
     QHBoxLayout* pLayout;
     QButtonGroup *pButtonGroup;
     QList<QPoint> save_list;
+    ChangeImage * change_drawimg;
     QColor Gray_show;   //左上角显示的RGB颜色
     bool gridview_flg;  //九宫格开启flag
     bool alphabet_flg;  //反向图片flag
+    bool pyr_flg;       //金字塔压缩flag
     int set_x_gridview; //九宫格行数
     int set_y_gridview; //九宫格列数
     int Up_Down_num;    //选择放大倍数

@@ -138,6 +138,7 @@ void Cfhs_ProgramConfig::init()
     //日志
     m_statusBar = nullptr;
     setCurProgramName("");
+    qDebug()<<__FUNCTION__<<this->size();
 }
 
 void Cfhs_ProgramConfig::setWindowStyle()
@@ -649,6 +650,7 @@ void Cfhs_ProgramConfig::on_stationSetPushButton_clicked()
     }
     m_stationSetWidget->setStationList(stationList);
     m_stationSetWidget->exec();
+    m_stationSetWidget->resize(1020, 740);
     //更新工位信息
     stationList = m_stationSetWidget->getStationList();
     if(stationList.size() != m_stationList.size())

@@ -8,6 +8,7 @@ cfhs_mainwindows_img::cfhs_mainwindows_img(QWidget *parent)
     resize(800,600);
     pLayout = new QHBoxLayout();
     pButtonGroup = new QButtonGroup(this);
+    change_drawimg = new ChangeImage();
     DownLoad_Button = getButton("load");
 //    pLayout->addStretch();
     pLayout->setSpacing(10);
@@ -40,9 +41,9 @@ void cfhs_mainwindows_img::AddLabel()
     QFont font;
     font.setPointSize(16);
     painter_text.setFont(font);
-    QString xpoint = QString("X : %1").arg(point_show.x());
+    QString xpoint = QString("X : %1").arg(point_show.x()*static_cast<int>(pyr_flg+1));
     painter_text.drawText(10,30,xpoint);
-    QString ypoint = QString("Y : %1 ").arg(point_show.y());
+    QString ypoint = QString("Y : %1 ").arg(point_show.y()*static_cast<int>(pyr_flg+1));
     painter_text.drawText(10,60,ypoint);
     QString gary_R = QString("R : %1").arg(Gray_show.red());
     painter_text.drawText(10,90,gary_R);
@@ -81,8 +82,7 @@ void cfhs_mainwindows_img::setImage(const QImage img)
 
 void cfhs_mainwindows_img::setImage(const QImage img, QList<itoPoint> list_point, const ShapeType &shape)
 {
-    time.start();
-    save_map= ChangeImage::AddPoint_Draw(img,list_point,shape);
+    save_map= change_drawimg->AddPoint_Draw(img,list_point,shape,pyr_flg);
     *right_label_map = save_map;
     *gridview_map = save_map;
     *result_map = save_map;
@@ -176,11 +176,17 @@ void cfhs_mainwindows_img::setEnable(bool enable_flg)
     DownLoad_Button->setEnabled(enable_flg);
 }
 
+void cfhs_mainwindows_img::setPyr(bool PYR_flg)
+{
+    pyr_flg = PYR_flg;
+}
+
 QString cfhs_mainwindows_img::getFunctionButtonStyle(const QString &name)
 {
     QString style = QString("QPushButton{image:url(:/%1_normal.png);"
             "background:transparent; border:none;}"
-            "QPushButton:pressed{image:url(:/%2_press.png)}").arg(name).arg(name);
+            "QPushButton:pressed{image:url(:/%2_press.png)}"
+            "border: 1px solid red}").arg(name).arg(name).arg(name);
     return style;
 }
 
@@ -201,7 +207,7 @@ void cfhs_mainwindows_img::Clicked_DownLoad()
 {
     QTime time_s;
     time_s.start();
-    save_img = ChangeImage::addPoint(save_map,save_list);
+    save_img = change_drawimg->addPoint(save_map,save_list,pyr_flg);
     qDebug()<<time_s.elapsed();
     QString file_path = QFileDialog::getSaveFileName(this, tr("保存路径..."),"", "*.jpg\n *.bmp\n *.png\n");
     saveImage(file_path);
@@ -237,7 +243,7 @@ void cfhs_mainwindows_img::paintEvent(QPaintEvent *event)
     if(gridview_flg)//九宫格开启
         CDrawFourPoint();
     painter.end();
-    //qDebug()<<time.elapsed();
+//    qDebug()<<time.elapsed();
 }
 
 void cfhs_mainwindows_img::CRect()
@@ -254,7 +260,9 @@ void cfhs_mainwindows_img::CDrawPoint()
     if(save_list.size()<1)
         return;
     for (int i=0;i<save_list.size();i++) {
-        QPoint save_point = save_list[i];
+        QPoint save_point;
+        save_point.setX(save_list[i].x()/static_cast<int>(pyr_flg+1));
+        save_point.setY(save_list[i].y()/static_cast<int>(pyr_flg+1));
         QPoint point_da = imgtothis(save_point);
         QPainter pp(this);
         if(save_point == p_light_point)
@@ -277,8 +285,8 @@ void cfhs_mainwindows_img::CDrawPoint()
 void cfhs_mainwindows_img::CDrawFourPoint()
 {
     QPoint A,D;
-    A = imgtothis(p_left_top);
-    D = imgtothis(p_right_bottom);
+    A = imgtothis(QPoint(p_left_top.x()/static_cast<int>(pyr_flg+1),p_left_top.y()/static_cast<int>(pyr_flg+1)));
+    D = imgtothis(QPoint(p_right_bottom.x()/static_cast<int>(pyr_flg+1),p_right_bottom.y()/static_cast<int>(pyr_flg+1)));
     int x,y;
     x = set_x_gridview;
     y = set_y_gridview;
@@ -394,7 +402,7 @@ void cfhs_mainwindows_img::init()
     set_y_gridview = 3;
     gridview_flg = false;
     alphabet_flg = false;
-
+    pyr_flg = true;
     p_left_top = QPoint(0, 0);
     p_right_bottom = QPoint(0, 0);
     p_light_point = QPoint(0, 0);

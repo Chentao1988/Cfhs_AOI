@@ -54,7 +54,6 @@ public:
     static QString getFunctionButtonStyle(const QString& name, const bool& hasDisable = false);
     bool ReadProgram();
 
-
 protected:
     bool eventFilter(QObject* obj, QEvent* event);
     void keyPressEvent(QKeyEvent *event);
@@ -116,6 +115,10 @@ signals:
     //iStationNo:工位号
     //iConnState:连接状态(取值：1代表已连接,2代表未连接,3代表待机)
     void sig_ShowStationStatus(int iStationNo, int iConnState);
+    //设置大图抽样压缩状态
+    //输入
+    //isStatus 状态，true：开启, false：关闭
+    void sig_ShowBigImageSampleStatus(bool isStatus);
 
 public slots:
     //---显示弹框信息

@@ -16,8 +16,8 @@ class ChangeImage
 {
 public:
     ChangeImage();
-    static QPixmap AddPoint_Draw(const QImage &img,QList<itoPoint>List_Point, const ShapeType &shape = Line);
-    static QPixmap addPoint(QPixmap &map,QList<QPoint> point);
+    QPixmap AddPoint_Draw(const QImage &img,QList<itoPoint>List_Point, const ShapeType &shape = Line,bool pyr_flg = false);
+    QPixmap addPoint(const QPixmap &map,const QList<QPoint> point,bool pyr_flg = false);
 };
 
 #endif // CHANGEIMAGE_H

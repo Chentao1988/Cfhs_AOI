@@ -8,22 +8,18 @@
 Img_Show_Managent::Img_Show_Managent(QWidget *parent) :
     QDialog(parent)
 {
-    //算法执行
+    //算法开关
     algorithm_open_button = new switch_button(tr("算法禁用"), tr("算法启用"), this);
     connect(algorithm_open_button, &switch_button::sig_button_clicked,
             this, &Img_Show_Managent::algorithm_open_button_clicked);
-    QHBoxLayout *algorithmLayout = new QHBoxLayout;
-    algorithmLayout->addStretch();
-    algorithmLayout->addWidget(algorithm_open_button);
-    algorithmLayout->addStretch();
     //工位图来源
-    station_open_button = new switch_button(tr("工位图静态"),tr("工位图动态"),this);
+    station_open_button = new switch_button(tr("工位图静态"), tr("工位图动态"), this);
     connect(station_open_button, &switch_button::sig_button_clicked,
             this, &Img_Show_Managent::station_open_button_clicked);
-    QHBoxLayout *stationLayout = new QHBoxLayout;
-    stationLayout->addStretch();
-    stationLayout->addWidget(station_open_button);
-    stationLayout->addStretch();
+    //抽样压缩
+    sample_open_button = new switch_button(tr("抽样压缩关闭"), tr("抽样压缩开启"), this);
+    connect(sample_open_button, &switch_button::sig_button_clicked,
+            this, &Img_Show_Managent::sample_open_button_clicked);
     //button init
     button_yes = new QPushButton(this);
     button_yes->setDefault(true);
@@ -45,8 +41,9 @@ Img_Show_Managent::Img_Show_Managent(QWidget *parent) :
     layout_button->addWidget(button_yes, 0, Qt::AlignCenter);
     //总layout
     QVBoxLayout *layout_all = new QVBoxLayout();
-    layout_all->addLayout(algorithmLayout);
-    layout_all->addLayout(stationLayout);
+    layout_all->addWidget(algorithm_open_button, 0, Qt::AlignCenter);
+    layout_all->addWidget(station_open_button, 0, Qt::AlignCenter);
+    layout_all->addWidget(sample_open_button, 0, Qt::AlignCenter);
     layout_all->addLayout(layout_button);
     layout_all->setContentsMargins(9,9,9,20);
     layout_all->setSpacing(20);
@@ -73,6 +70,8 @@ int Img_Show_Managent::DialogShow()
     algorithm_open_button->Set_Switch(stConf.bAlgorithmOnOrOff);
     //工位图来源
     station_open_button->Set_Switch(stConf.bStationDynamic);
+    //抽样压缩
+    sample_open_button->Set_Switch(stConf.bSamplingCompressedImg);
     //获取工位数
     QString strAllStation;
     if(!m_logicInterface->GetAllStationNo(m_curProgramName, strAllStation, strInfo))
@@ -93,6 +92,7 @@ void Img_Show_Managent::button_yes_click()
     //设置方案信息
     stConf.bAlgorithmOnOrOff = algorithm_open_button->Get_Switch();
     stConf.bStationDynamic = station_open_button->Get_Switch();
+    stConf.bSamplingCompressedImg = sample_open_button->Get_Switch();
     if(!m_logicInterface->SetConfigInfo(stConf, strInfo))
     {
         QMessageBox::warning(this, " ", strInfo);
@@ -107,11 +107,11 @@ void Img_Show_Managent::button_no_click()
     this->reject();
 }
 
-void Img_Show_Managent::algorithm_open_button_clicked()
+void Img_Show_Managent::sample_open_button_clicked()
 {
-    bool isOpen = algorithm_open_button->Get_Switch();
+    bool isOpen = sample_open_button->Get_Switch();
     isOpen = !isOpen;
-    algorithm_open_button->Set_Switch(isOpen);
+    sample_open_button->Set_Switch(isOpen);
 }
 
 void Img_Show_Managent::station_open_button_clicked()
@@ -119,6 +119,13 @@ void Img_Show_Managent::station_open_button_clicked()
     bool isOpen = station_open_button->Get_Switch();
     isOpen = !isOpen;
     station_open_button->Set_Switch(isOpen);
+}
+
+void Img_Show_Managent::algorithm_open_button_clicked()
+{
+    bool isOpen = algorithm_open_button->Get_Switch();
+    isOpen = !isOpen;
+    algorithm_open_button->Set_Switch(isOpen);
 }
 
 void Img_Show_Managent::button_static_img_clicked()

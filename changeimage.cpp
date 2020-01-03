@@ -5,7 +5,7 @@ ChangeImage::ChangeImage()
 
 }
 
-QPixmap ChangeImage::AddPoint_Draw(const QImage &img,QList<itoPoint>List_Point, const ShapeType &shape)
+QPixmap ChangeImage::AddPoint_Draw(const QImage &img, QList<itoPoint> List_Point, const ShapeType &shape, bool pyr_flg)
 {
     QPixmap re_img(100,100);
     if(img.isNull())
@@ -14,7 +14,6 @@ QPixmap ChangeImage::AddPoint_Draw(const QImage &img,QList<itoPoint>List_Point, 
     }
     re_img = QPixmap::fromImage(img);
     QPainter paint;
-    //paint.setRenderHint(QPainter::HighQualityAntialiasing, true);
     int len =0;
     while(len<List_Point.size()){
         if(paint.begin(&re_img)){
@@ -23,31 +22,37 @@ QPixmap ChangeImage::AddPoint_Draw(const QImage &img,QList<itoPoint>List_Point, 
             paint.setPen(pen);
             switch (shape) {
             case Line:
-                paint.drawLine(List_Point[len].Start.x(),List_Point[len].Start.y(),List_Point[len].End.x(),List_Point[len].End.y());
+                paint.drawLine(List_Point[len].Start.x()/(static_cast<int>(pyr_flg+1)),List_Point[len].Start.y()/(static_cast<int>(pyr_flg+1))
+                               ,List_Point[len].End.x()/(static_cast<int>(pyr_flg+1)),List_Point[len].End.y()/(static_cast<int>(pyr_flg+1)));
                 break;
             case Rect:
-                paint.drawRect(List_Point[len].Start.x(),List_Point[len].Start.y(),List_Point[len].End.x(),List_Point[len].End.y());
+                paint.drawRect(List_Point[len].Start.x()/(static_cast<int>(pyr_flg+1)),List_Point[len].Start.y()/(static_cast<int>(pyr_flg+1))
+                               ,List_Point[len].End.x()/(static_cast<int>(pyr_flg+1)),List_Point[len].End.y()/(static_cast<int>(pyr_flg+1)));
                 break;
             case Ellipse:
-                paint.drawEllipse(List_Point[len].Start.x(),List_Point[len].Start.y(),List_Point[len].End.x(),List_Point[len].End.y());
+                paint.drawEllipse(List_Point[len].Start.x()/(static_cast<int>(pyr_flg+1)),List_Point[len].Start.y()/(static_cast<int>(pyr_flg+1))
+                                  ,List_Point[len].End.x()/(static_cast<int>(pyr_flg+1)),List_Point[len].End.y()/(static_cast<int>(pyr_flg+1)));
+                break;
+            default:
                 break;
             }
             paint.end();
         }
         else {
-            //qDebug()<<"Can not Painter";
+            qDebug()<<"Can not Painter";
             return re_img;
         }
         len++;
     }
-    //qDebug()<<"Add Point To Image Success!";
+    qDebug()<<"Add Point To Image Success!";
     return  re_img;
 }
 
-QPixmap ChangeImage::addPoint(QPixmap &map,QList<QPoint> point)
+
+QPixmap ChangeImage::addPoint(const QPixmap &map,QList<QPoint> point,bool pyr_flg)
 {
     QPixmap newmap(100,100);
-    newmap = map;
+    newmap = map.copy();
     const int number = 300;
     int max = newmap.width()>newmap.height()?newmap.width():newmap.height();
     QPainter paint;
@@ -55,14 +60,17 @@ QPixmap ChangeImage::addPoint(QPixmap &map,QList<QPoint> point)
     while(len<point.size()){
         if(paint.begin(&newmap)){
             paint.setBrush(Qt::red);
-            paint.drawEllipse(point[len].x()-max/number/2,point[len].y()-max/number/2,max/number,max/number);
+            paint.drawEllipse((point[len].x()/(static_cast<int>(pyr_flg+1))-max/number/2)
+                              ,(point[len].y()/(static_cast<int>(pyr_flg+1))-max/number/2)
+                              ,max/number,max/number);
             paint.end();
         }
         else {
-            //qDebug()<<"Can not Painter";
+            qDebug()<<"Can not Painter";
             return map;
         }
         len++;
     }
     return newmap;
+
 }

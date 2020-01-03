@@ -146,6 +146,7 @@ void Cfhs_StationSet::init()
             m_ngFilterWidget, &Cfhs_DefectInfoTable::editOneRow);
     connect(m_defectInfoWidget, &Cfhs_DefectInfoWidget::sig_deleteOneRow,
             m_ngFilterWidget, &Cfhs_DefectInfoTable::delOneRow);
+    qDebug()<<__FUNCTION__<<this->size();
 }
 
 void Cfhs_StationSet::setStationEnable(const bool& isEnable)

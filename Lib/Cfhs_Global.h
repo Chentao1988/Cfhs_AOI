@@ -44,6 +44,8 @@ typedef struct Config
 
     bool bSaveCompressedNGImg;
 
+    bool bSamplingCompressedImg;
+
     bool bStationDynamic;
 
     bool bAlgorithmOnOrOff;
