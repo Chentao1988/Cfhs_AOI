@@ -533,7 +533,7 @@ void Cfhs_MainWindow::showBigImagePoints(const QPolygon &vectorPoint)
 
 void Cfhs_MainWindow::showBigImage(const QImage &image, const QList<itoPoint> &list)
 {
-    m_bigImageWidget->setImage(image, list);
+    m_bigImageWidget->setImage(image, list, None);
 }
 
 void Cfhs_MainWindow::showBigImageTotal(const QPolygon &vectorPoint, const QImage &image,
@@ -878,7 +878,6 @@ QString Cfhs_MainWindow::getFunctionButtonStyle(const QString &name, const bool 
                             .arg(normalPath)
                             .arg(pressPath)
                             .arg(disablePath);
-
 
     return style;
 }
@@ -1408,8 +1407,12 @@ void Cfhs_MainWindow::createData()
     //大图、缺陷点
     QPolygon listPoint;
     listPoint.append(QPoint(9470, 3200));
-    listPoint.append(QPoint(3600, 8560));
+    listPoint.append(QPoint(9470, 3000));
     listPoint.append(QPoint(5840, 17820));
+    listPoint.append(QPoint(9270, 3000));
+    listPoint.append(QPoint(9670, 3100));
+    listPoint.append(QPoint(9570, 3300));
+    listPoint.append(QPoint(9770, 3330));
     showBigImageTotal(listPoint, m_resultImg);
     //缺陷小图
     //1
@@ -1441,7 +1444,7 @@ void Cfhs_MainWindow::createData()
     //m_featureTable->addData(strFeat1);
     //m_featureTable->addData(strFeat2);
     //m_featureTable->addData(strFeat3);
-    QString strFeat1 = "1910091809#2#黑点#0,0#3600,8560#10000";
+    QString strFeat1 = "1910091809#2#黑点#9470,3200#3200,8560#10000@1910091808#1#黑点#9470,3000#3200,8560#10000";
     slot_ShowFeatureData(1, strFeat1);
     //良率表
     QString strHour = "7#8#9#10#11#12#13#14#15#16#17#18";
@@ -1532,6 +1535,7 @@ bool Cfhs_MainWindow::getFeatureData(const QString &strFeature,
     listFeature = realFeatureList;
     return true;
 }
+
 
 void Cfhs_MainWindow::on_readCodePushButton_clicked()
 {

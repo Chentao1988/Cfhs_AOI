@@ -8,7 +8,6 @@ cfhs_mainwindows_img::cfhs_mainwindows_img(QWidget *parent)
     resize(800,600);
     pLayout = new QHBoxLayout();
     pButtonGroup = new QButtonGroup(this);
-    change_drawimg = new ChangeImage();
     DownLoad_Button = getButton("load");
 //    pLayout->addStretch();
     pLayout->setSpacing(10);
@@ -16,6 +15,7 @@ cfhs_mainwindows_img::cfhs_mainwindows_img(QWidget *parent)
     this->init();
     this->setWindowStyle();
     setMouseTracking(true);
+    changeimg = new ChangeImage();
     gridview_map = new QPixmap();
     result_map = new QPixmap();
     right_label_map = new QPixmap();
@@ -82,7 +82,12 @@ void cfhs_mainwindows_img::setImage(const QImage img)
 
 void cfhs_mainwindows_img::setImage(const QImage img, QList<itoPoint> list_point, const ShapeType &shape)
 {
-    save_map= change_drawimg->AddPoint_Draw(img,list_point,shape,pyr_flg);
+    if(shape != None){
+        save_map= changeimg->AddPoint_Draw(img,list_point,shape,pyr_flg);
+    }
+    else {
+        save_map = QPixmap::fromImage(img);
+    }
     *right_label_map = save_map;
     *gridview_map = save_map;
     *result_map = save_map;
@@ -207,9 +212,9 @@ void cfhs_mainwindows_img::Clicked_DownLoad()
 {
     QTime time_s;
     time_s.start();
-    save_img = change_drawimg->addPoint(save_map,save_list,pyr_flg);
+    save_img = changeimg->addPoint(save_map,save_list,pyr_flg);
     qDebug()<<time_s.elapsed();
-    QString file_path = QFileDialog::getSaveFileName(this, tr("保存路径..."),"", "*.jpg\n *.bmp\n *.png\n");
+    QString file_path = QFileDialog::getSaveFileName(this, tr("保存路径..."),"",tr("*.jpg\n *.bmp\n *.png\n"));
     saveImage(file_path);
 }
 
@@ -259,26 +264,30 @@ void cfhs_mainwindows_img::CDrawPoint()
 {
     if(save_list.size()<1)
         return;
+    bool isDrawed = false;
+
+    QPainter pp(this);
+    pp.setPen(Qt::red);//设置画笔颜色
+    pp.setBrush(Qt::red);
     for (int i=0;i<save_list.size();i++) {
         QPoint save_point;
         save_point.setX(save_list[i].x()/static_cast<int>(pyr_flg+1));
         save_point.setY(save_list[i].y()/static_cast<int>(pyr_flg+1));
         QPoint point_da = imgtothis(save_point);
-        QPainter pp(this);
+
         if(save_point == p_light_point)
         {
             //高亮显示绿色
-            pp.setPen(Qt::green);
-            pp.setBrush(Qt::green);
+            isDrawed = true;
         }
-        else
-        {
-            pp.setPen(Qt::red);//设置画笔颜色
-            pp.setBrush(Qt::red);
-        }
-
         pp.drawEllipse(point_da.x()-2,point_da.y()-2,4,4);
-        pp.end();
+    }
+    if(isDrawed)
+    {
+        pp.setPen(Qt::green);//设置画笔颜色
+        pp.setBrush(Qt::green);
+        QPoint point_da = imgtothis(p_light_point);
+        pp.drawEllipse(point_da.x()-2,point_da.y()-2,4,4);
     }
 }
 

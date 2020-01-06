@@ -67,6 +67,7 @@ void Cfhs_TaskInfoWidget::setTask(const int &stationNum)
 
     //默认显示分析工位
     m_curTaskIndex = AnalysisTask;
+    //m_curTaskIndex = 1;
     m_analysisButton->setChecked(true);
 
     m_curStationNum = stationNum;

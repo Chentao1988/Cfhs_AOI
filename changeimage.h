@@ -5,7 +5,7 @@
 #include <QImage>
 #include<QDebug>
 
-enum ShapeType{Line, Rect, Ellipse};
+enum ShapeType{None,Line, Rect, Ellipse};
 
 typedef struct _itoPoint{
     QPoint Start;
@@ -16,8 +16,9 @@ class ChangeImage
 {
 public:
     ChangeImage();
-    QPixmap AddPoint_Draw(const QImage &img,QList<itoPoint>List_Point, const ShapeType &shape = Line,bool pyr_flg = false);
     QPixmap addPoint(const QPixmap &map,const QList<QPoint> point,bool pyr_flg = false);
+
+    QPixmap AddPoint_Draw(const QImage &img,QList<itoPoint>List_Point, const ShapeType &shape = Line,bool pyr_flg = false);
 };
 
 #endif // CHANGEIMAGE_H

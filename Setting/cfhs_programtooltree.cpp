@@ -169,13 +169,13 @@ void Cfhs_ProgramToolTree::addImagePartitionModule()
     toolPosition = Cfhs_OriginalRegionConfig::getToolPosition();
     QTreeWidgetItem *originalRegionItem = getItem(showName, iconPath, tip, toolPosition);
     partitionRootItem->addChild(originalRegionItem);
-  ////手动Roi
-  //showName = Cfhs_RoiConfig::getShowName();
-  //iconPath = Cfhs_RoiConfig::getIconPath();
-  //tip = Cfhs_RoiConfig::getToolTip();
-  //toolPosition = Cfhs_RoiConfig::getToolPosition();
-  //QTreeWidgetItem *roiItem = getItem(showName, iconPath, tip, toolPosition);
-  //partitionRootItem->addChild(roiItem);
+    //手动Roi
+    showName = Cfhs_RoiConfig::getShowName();
+    iconPath = Cfhs_RoiConfig::getIconPath();
+    tip = Cfhs_RoiConfig::getToolTip();
+    toolPosition = Cfhs_RoiConfig::getToolPosition();
+    QTreeWidgetItem *roiItem = getItem(showName, iconPath, tip, toolPosition);
+    partitionRootItem->addChild(roiItem);
 
     //添加到tree上
     this->addTopLevelItem(partitionRootItem);

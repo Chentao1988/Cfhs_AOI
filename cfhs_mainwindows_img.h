@@ -93,8 +93,8 @@ private:
     QPushButton *DownLoad_Button;
     QHBoxLayout* pLayout;
     QButtonGroup *pButtonGroup;
+    ChangeImage *changeimg;
     QList<QPoint> save_list;
-    ChangeImage * change_drawimg;
     QColor Gray_show;   //左上角显示的RGB颜色
     bool gridview_flg;  //九宫格开启flag
     bool alphabet_flg;  //反向图片flag

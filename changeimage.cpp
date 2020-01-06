@@ -51,8 +51,13 @@ QPixmap ChangeImage::AddPoint_Draw(const QImage &img, QList<itoPoint> List_Point
 
 QPixmap ChangeImage::addPoint(const QPixmap &map,QList<QPoint> point,bool pyr_flg)
 {
+
     QPixmap newmap(100,100);
     newmap = map.copy();
+    if(newmap.isNull()){
+        qDebug()<<"copy failed!";
+        return map;
+    }
     const int number = 300;
     int max = newmap.width()>newmap.height()?newmap.width():newmap.height();
     QPainter paint;
@@ -70,7 +75,9 @@ QPixmap ChangeImage::addPoint(const QPixmap &map,QList<QPoint> point,bool pyr_fl
             return map;
         }
         len++;
+
     }
+    qDebug()<<"Add Point Success!";
     return newmap;
 
 }

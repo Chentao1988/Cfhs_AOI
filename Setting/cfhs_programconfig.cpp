@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QStatusBar>
 #include <QFile>
+#include <QDir>
 
 class Cfhs_ShowStatusBar : public QStatusBar
 {
