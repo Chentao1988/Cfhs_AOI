@@ -172,7 +172,10 @@ void cfhs_mainwindows_img::getGridView(bool &open_gridview, int &x_gridview, int
 
 void cfhs_mainwindows_img::showLightPoint(const QPoint &point)
 {
-    p_light_point = point;
+    qDebug()<<__FUNCTION__<<point;
+
+    p_light_point.setX(point.x()/static_cast<int>(pyr_flg+1));
+    p_light_point.setY(point.y()/static_cast<int>(pyr_flg+1));
     this->update();
 }
 
@@ -269,24 +272,29 @@ void cfhs_mainwindows_img::CDrawPoint()
     QPainter pp(this);
     pp.setPen(Qt::red);//设置画笔颜色
     pp.setBrush(Qt::red);
+    qDebug()<<__FUNCTION__<<"light_point1" << p_light_point;
     for (int i=0;i<save_list.size();i++) {
         QPoint save_point;
         save_point.setX(save_list[i].x()/static_cast<int>(pyr_flg+1));
         save_point.setY(save_list[i].y()/static_cast<int>(pyr_flg+1));
         QPoint point_da = imgtothis(save_point);
-
+        qDebug()<<__FUNCTION__<<"save_point" << save_point;
         if(save_point == p_light_point)
         {
             //高亮显示绿色
             isDrawed = true;
+            qDebug()<<__FUNCTION__<<"isDrawed"<<isDrawed;
         }
         pp.drawEllipse(point_da.x()-2,point_da.y()-2,4,4);
     }
+
     if(isDrawed)
     {
+        qDebug()<<__FUNCTION__<<"light_point2" << p_light_point;
         pp.setPen(Qt::green);//设置画笔颜色
         pp.setBrush(Qt::green);
         QPoint point_da = imgtothis(p_light_point);
+        qDebug()<<__FUNCTION__<<"point_da" << point_da;
         pp.drawEllipse(point_da.x()-2,point_da.y()-2,4,4);
     }
 }

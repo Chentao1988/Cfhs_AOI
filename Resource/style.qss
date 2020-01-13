@@ -67,7 +67,7 @@ QHeaderView
 /* 标题栏样式 */
 QHeaderView::section
 {
-    font-size:14px;
+    font-size:18px;
     font-family:"Microsoft YaHei";
     color:#0077FF;
     background:#0C3497;
@@ -464,7 +464,7 @@ QTreeView
 {
     background: #000A19;
     border:none;
-    font-size: 16px;
+    font-size: 20px;
     font-family: Mircosoft Yahei;
     show-decoration-selected: 1;
 }
@@ -475,6 +475,7 @@ QTreeView::item
     border: none;;
     height: 30px;
     color: #0077FF;
+    padding: 1px 1px;
 }
 
 QTreeView::item:hover

@@ -18,6 +18,7 @@
 #include <QActionGroup>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QCloseEvent>
 #include "cfhs_tablewidget.h"
 #include "cfhs_statusbar.h"
 #include "cfhs_productresultwidget.h"
@@ -35,8 +36,6 @@
 #include "cfhs_showzoomimage.h"
 #include "cfhs_taskinfowidget.h"
 #include "Function/imgsubset.h"
-
-
 
 namespace Ui {
 class Cfhs_MainWindow;
@@ -57,6 +56,7 @@ public:
 protected:
     bool eventFilter(QObject* obj, QEvent* event);
     void keyPressEvent(QKeyEvent *event);
+    void closeEvent(QCloseEvent *event);
 
 private:
     void controlInit();  //控制模块初始化

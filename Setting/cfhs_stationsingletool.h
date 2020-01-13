@@ -10,6 +10,8 @@
 #include "cfhs_defectconfig_hjh.h"
 #include "cfhs_originalregionconfig.h"
 #include "cfhs_itodetectconfig.h"
+#include "cfhs_calibrationconfig.h"
+#include "cfhs_lightfenceconfig.h"
 #include <QListWidgetItem>
 
 typedef struct _StationTool{

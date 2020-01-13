@@ -121,5 +121,10 @@
         <file>move_normal.png</file>
         <file>move_press.png</file>
         <file>image_tool/ito_config.png</file>
+        <file>image_tool/camera_mindvision.png</file>
+        <file>image_tool/camera_do3think.png</file>
+        <file>image_tool/camera_i-tek.png</file>
+        <file>image_tool/calibration_config.png</file>
+        <file>image_tool/light_fence_config.png</file>
     </qresource>
 </RCC>

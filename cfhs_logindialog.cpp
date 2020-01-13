@@ -339,7 +339,7 @@ void Cfhs_LoginDialog::on_loginButton_clicked()
         QString strInfo;
         if(!m_logicInterface->Login(pd, strInfo))
         {
-            QMessageBox::warning(this, " ", strInfo);
+            QMessageBox::warning(this, " ", tr("密码输入错误"));
             return;
         }
     }

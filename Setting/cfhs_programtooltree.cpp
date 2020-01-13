@@ -212,6 +212,20 @@ void Cfhs_ProgramToolTree::addAlgorithmModule()
     toolPosition = Cfhs_ItoDetectConfig::getToolPosition();
     QTreeWidgetItem *itoItem = getItem(showName, iconPath, tip, toolPosition);
     algorithmRootItem->addChild(itoItem);
+    //光栅检测
+    showName = Cfhs_LightFenceConfig::getShowName();
+    iconPath = Cfhs_LightFenceConfig::getIconPath();
+    tip = Cfhs_LightFenceConfig::getToolTip();
+    toolPosition = Cfhs_LightFenceConfig::getToolPosition();
+    QTreeWidgetItem *lightFenceItem = getItem(showName, iconPath, tip, toolPosition);
+    algorithmRootItem->addChild(lightFenceItem);
+    //相机标定
+    showName = Cfhs_CalibrationConfig::getShowName();
+    iconPath = Cfhs_CalibrationConfig::getIconPath();
+    tip = Cfhs_CalibrationConfig::getToolTip();
+    toolPosition = Cfhs_CalibrationConfig::getToolPosition();
+    QTreeWidgetItem *calibrationItem = getItem(showName, iconPath, tip, toolPosition);
+    algorithmRootItem->addChild(calibrationItem);
    ////膨胀滤波
    //showName = Cfhs_WaveFilterConfig::getShowName();
    //iconPath = Cfhs_WaveFilterConfig::getIconPath();

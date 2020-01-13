@@ -521,6 +521,7 @@ void Cfhs_MainWindow::setResultMode(const int &mode)
 
 void Cfhs_MainWindow::showBigImagePoints(const QPolygon &vectorPoint)
 {
+    qDebug()<<__FUNCTION__<<vectorPoint;
     m_bigImageWidget->ClearPoint();
     //添加坐标
     int size = vectorPoint.size();
@@ -573,6 +574,7 @@ void Cfhs_MainWindow::slot_ShowMesRate(const QString &strInfo)
 
 void Cfhs_MainWindow::slot_ShowFeatureData(const int &stationNo, const QString &strData)
 {
+    qDebug()<<__FUNCTION__<<strData<<","<<stationNo;
     if(m_mapStationFeature.contains(stationNo))
         m_mapStationFeature[stationNo] = strData;
     else
@@ -637,6 +639,7 @@ void Cfhs_MainWindow::slot_ShowStationImagePoint(int iStation, const QImage &ima
                                                  const QImage &imageSmall2, const QImage &imageSmall3,
                                                  const QString &strPoint)
 {
+    qDebug()<<__FUNCTION__<<iStation<<","<<strPoint;
     //保存大图
     if(m_mapStationImg.contains(iStation))
         m_mapStationImg[iStation] = imageBig;
@@ -1080,6 +1083,24 @@ void Cfhs_MainWindow::keyPressEvent(QKeyEvent *event)
         delete msg;
         msg = nullptr;
     }
+}
+
+void Cfhs_MainWindow::closeEvent(QCloseEvent *event)
+{
+    QString strInfo = QString(tr("是否确定关闭软件?"));
+    QPointer<QMessageBox> msg = new QMessageBox(QMessageBox::Information,
+                                                tr("提示"),
+                                                strInfo,
+                                                QMessageBox::Yes|
+                                                QMessageBox::No,
+                                                this);
+    msg->setButtonText(QMessageBox::Yes, tr("是"));
+    msg->setButtonText(QMessageBox::No, tr("否"));
+    msg->setDefaultButton(QMessageBox::Yes);
+    if(msg->exec() == QMessageBox::Yes)
+        event->accept();
+    else
+        event->ignore();
 }
 
 void Cfhs_MainWindow::on_closePushButton_clicked()

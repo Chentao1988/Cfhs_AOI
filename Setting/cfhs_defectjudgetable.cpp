@@ -135,7 +135,7 @@ bool Cfhs_DefectJudgeTable::saveData(QString& defectInfo)
     QString strInfo;
     if(!m_logicInterface->FormatCheck(m_curProgramName, m_curStationNo, defectInfo, strInfo))
     {
-        QMessageBox::warning(this, " ", strInfo);
+        QMessageBox::warning(this, " ", tr("判断语句不合法，请重新设置"));
         return false;
     }
     //刷新“当前结果”项

@@ -19,7 +19,7 @@ Cfhs_CameraConfig::Cfhs_CameraConfig(QWidget *parent)
     //相机
     m_cameraTree = new QTreeWidget(this);
     m_cameraTree->setHeaderLabel(tr("相机选择"));
-    m_cameraTree->setIconSize(QSize(30,30));
+    m_cameraTree->setIconSize(QSize(90,30));
     connect(m_cameraTree, &QTreeWidget::itemClicked,
             this, &Cfhs_CameraConfig::on_cameraTree_itemClicked);
     //CCF配置文件
@@ -55,7 +55,7 @@ Cfhs_CameraConfig::Cfhs_CameraConfig(QWidget *parent)
     mainLayout->setContentsMargins(6, 10, 6, 20);
     this->setLayout(mainLayout);
     this->setWindowTitle(tr("相机设置"));
-    this->resize(500, 460);
+    this->resize(600, 650);
 }
 
 Cfhs_CameraConfig::~Cfhs_CameraConfig()

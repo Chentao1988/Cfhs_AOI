@@ -26,7 +26,9 @@ HEADERS += \
     $$PWD/cfhs_autoregionconfig_hjh.h \
     $$PWD/cfhs_defectconfig_hjh.h \
     $$PWD/cfhs_originalregionconfig.h \
-    $$PWD/cfhs_itodetectconfig.h
+    $$PWD/cfhs_itodetectconfig.h \
+    $$PWD/cfhs_calibrationconfig.h \
+    $$PWD/cfhs_lightfenceconfig.h
 
 SOURCES += \
     $$PWD/cfhs_programconfig.cpp \
@@ -52,4 +54,6 @@ SOURCES += \
     $$PWD/cfhs_autoregionconfig_hjh.cpp \
     $$PWD/cfhs_defectconfig_hjh.cpp \
     $$PWD/cfhs_originalregionconfig.cpp \
-    $$PWD/cfhs_itodetectconfig.cpp
+    $$PWD/cfhs_itodetectconfig.cpp \
+    $$PWD/cfhs_calibrationconfig.cpp \
+    $$PWD/cfhs_lightfenceconfig.cpp

@@ -35,7 +35,7 @@ public slots:
     //载入图片
     void setImage(const QString& path);
     void setImage(const QImage img);
-    void setImage(const QImage img,QList<itoPoint>list_point, const ShapeType &shape = Line);
+    void setImage(const QImage img, QList<itoPoint>list_point, const ShapeType &shape = Line);
 
     //清除旧坐标点
     void ClearPoint();
@@ -66,7 +66,6 @@ public slots:
     QPushButton *getButton(const QString &name);
     //下载保存
     void Clicked_DownLoad();
-
 
 protected:
     void paintEvent(QPaintEvent *event);

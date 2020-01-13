@@ -41,6 +41,10 @@ QString Cfhs_StationSingleTool::getIconPath(const QString &toolPosition)
         iconPath = Cfhs_ItoDetectConfig::getIconPath();
     else if(toolPosition == Cfhs_RoiConfig::getToolPosition())
         iconPath = Cfhs_RoiConfig::getIconPath();
+    else if(toolPosition == Cfhs_LightFenceConfig::getToolPosition())
+        iconPath = Cfhs_LightFenceConfig::getIconPath();
+    else if(toolPosition == Cfhs_CalibrationConfig::getToolPosition())
+        iconPath = Cfhs_CalibrationConfig::getIconPath();
 
     return iconPath;
 }
@@ -64,6 +68,10 @@ QString Cfhs_StationSingleTool::getToolTip(const QString &toolPosition)
         tip = Cfhs_ItoDetectConfig::getToolTip();
     else if(toolPosition == Cfhs_RoiConfig::getToolPosition())
         tip = Cfhs_RoiConfig::getToolTip();
+    else if(toolPosition == Cfhs_LightFenceConfig::getToolPosition())
+        tip = Cfhs_LightFenceConfig::getToolTip();
+    else if(toolPosition == Cfhs_CalibrationConfig::getToolPosition())
+        tip = Cfhs_CalibrationConfig::getToolTip();
 
     return tip;
 }
@@ -87,7 +95,10 @@ QString Cfhs_StationSingleTool::getShowName(const QString &toolPosition)
         showName = Cfhs_ItoDetectConfig::getShowName();
     else if(toolPosition == Cfhs_RoiConfig::getToolPosition())
         showName = Cfhs_RoiConfig::getShowName();
-
+    else if(toolPosition == Cfhs_LightFenceConfig::getToolPosition())
+        showName = Cfhs_LightFenceConfig::getShowName();
+    else if(toolPosition == Cfhs_CalibrationConfig::getToolPosition())
+        showName = Cfhs_CalibrationConfig::getShowName();
 
     return showName;
 }
