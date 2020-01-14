@@ -1,9 +1,8 @@
 ﻿#include "cfhs_calibrationconfig.h"
-#include "../cfhs_global.h"
-
 
 
 Cfhs_CalibrationConfig::Cfhs_CalibrationConfig(QWidget *parent)
+    : Cfhs_ToolBase(parent)
 {
 
 }
@@ -43,4 +42,47 @@ QString Cfhs_CalibrationConfig::getToolParaDefault()
     QString strPara;
 
     return strPara;
+}
+
+QString Cfhs_CalibrationConfig::getParaConfig()
+{
+    QMap<QString, QString> map;
+    QString strInfo;
+    getMapFromJson(m_strConfig, map, strInfo);
+    if(map.isEmpty())
+        return getToolParaDefault();
+    else
+        return m_strConfig;
+}
+
+bool Cfhs_CalibrationConfig::setParaConfig(const QString &strConfig)
+{
+    QMap<QString, QString> map;
+    QString strInfo;
+    getMapFromJson(strConfig, map, strInfo);
+    if(map.isEmpty())
+    {
+        //数据错误，使用默认数据
+        QString strDefault = getToolParaDefault();
+        getMapFromJson(strDefault, map, strInfo);
+        m_strConfig = strDefault;
+    }
+    int row = 0;
+    foreach(ParaInfo info, m_vectorPara)
+    {
+        if(map.contains(info.m_toolName))
+        {
+            QString strValue = map.value(info.m_toolName);
+            row = info.m_index - 1;
+            QTableWidgetItem *item = m_algoTable->item(row, 1);
+            if(!item)
+            {
+                item = new QTableWidgetItem;
+                m_algoTable->setItem(row, 1, item);
+            }
+            item->setText(strValue);
+        }
+    }
+
+    return true;
 }

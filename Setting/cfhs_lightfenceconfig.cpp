@@ -1,8 +1,8 @@
 ﻿#include "cfhs_lightfenceconfig.h"
-#include "../cfhs_global.h"
 
 
 Cfhs_LightFenceConfig::Cfhs_LightFenceConfig(QWidget *parent)
+    : Cfhs_ToolBase(parent)
 {
 
 }
@@ -42,4 +42,47 @@ QString Cfhs_LightFenceConfig::getToolParaDefault()
     QString strPara;
 
     return strPara;
+}
+
+QString Cfhs_LightFenceConfig::getParaConfig()
+{
+    QMap<QString, QString> map;
+    QString strInfo;
+    getMapFromJson(m_strConfig, map, strInfo);
+    if(map.isEmpty())
+        return getToolParaDefault();
+    else
+        return m_strConfig;
+}
+
+bool Cfhs_LightFenceConfig::setParaConfig(const QString &strConfig)
+{
+    QMap<QString, QString> map;
+    QString strInfo;
+    getMapFromJson(strConfig, map, strInfo);
+    if(map.isEmpty())
+    {
+        //数据错误，使用默认数据
+        QString strDefault = getToolParaDefault();
+        getMapFromJson(strDefault, map, strInfo);
+        m_strConfig = strDefault;
+    }
+    int row = 0;
+    foreach(ParaInfo info, m_vectorPara)
+    {
+        if(map.contains(info.m_toolName))
+        {
+            QString strValue = map.value(info.m_toolName);
+            row = info.m_index - 1;
+            QTableWidgetItem *item = m_algoTable->item(row, 1);
+            if(!item)
+            {
+                item = new QTableWidgetItem;
+                m_algoTable->setItem(row, 1, item);
+            }
+            item->setText(strValue);
+        }
+    }
+
+    return true;
 }

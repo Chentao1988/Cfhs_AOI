@@ -28,7 +28,8 @@ HEADERS += \
     $$PWD/cfhs_originalregionconfig.h \
     $$PWD/cfhs_itodetectconfig.h \
     $$PWD/cfhs_calibrationconfig.h \
-    $$PWD/cfhs_lightfenceconfig.h
+    $$PWD/cfhs_lightfenceconfig.h \
+    $$PWD/cfhs_toolbase.h
 
 SOURCES += \
     $$PWD/cfhs_programconfig.cpp \
@@ -56,4 +57,5 @@ SOURCES += \
     $$PWD/cfhs_originalregionconfig.cpp \
     $$PWD/cfhs_itodetectconfig.cpp \
     $$PWD/cfhs_calibrationconfig.cpp \
-    $$PWD/cfhs_lightfenceconfig.cpp
+    $$PWD/cfhs_lightfenceconfig.cpp \
+    $$PWD/cfhs_toolbase.cpp
